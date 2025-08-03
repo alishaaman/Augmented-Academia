@@ -1,0 +1,3188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Augmented Academia Workbook 1 - University of Glasgow GenAI Training</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Interactive workshop companion for University of Glasgow GenAI training. Learn reference checking, calendar automation, and batch renaming with AI tools.">
+    <meta name="author" content="Dr Alisha Aman, University of Glasgow">
+    <meta name="copyright" content="© 2025 University of Glasgow. All rights reserved.">
+    <meta name="license" content="All Rights Reserved - University of Glasgow Proprietary Material">
+    <meta name="creation-date" content="2025-08-03">
+    <meta name="version" content="1.8">
+    <meta name="institutional-affiliation" content="University of Glasgow">
+    <meta name="robots" content="index, follow">
+    <!-- 
+    COPYRIGHT NOTICE:
+    This work is protected by copyright and is the exclusive property of the University of Glasgow.
+    Author: Dr Alisha Aman
+    Created: August 2025
+    All rights reserved. No part of this publication may be reproduced, distributed, or transmitted 
+    in any form or by any means without the prior written permission of the University of Glasgow.
+    -->
+    <style>
+        :root {
+            --primary: #21808d;
+            --accent: #fbc02d;
+            --bg: #f5f7fa;
+            --header: #2c3e50;
+            --gray: #7f8c8d;
+            --error: #e74c3c;
+            --success: #27ae60;
+            --font-main: 'Segoe UI', Arial, sans-serif;
+            --sidebar-bg: #f8f9fa;
+            --sidebar-width: 260px;
+            --sidebar-right-width: 320px;
+            --main-bg: #fff;
+            --border-radius: 8px;
+            --shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+        html {
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            margin: 0;
+            font-family: var(--font-main);
+            background: var(--bg);
+            color: var(--header);
+            overflow-x: auto;
+            padding: 0 0 2em 0;
+            min-width: 320px; /* Ensure minimum width to prevent cutoff */
+        }
+        .app-container {
+            width: 100%;
+            min-height: 100vh;
+        }
+        .top-nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: #011451;
+            color: white;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            padding: 9px 30px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            z-index: 1000;
+            height: 57px;
+            min-height: 57px;
+        }
+        .top-nav-left {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+        .top-nav-center {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            flex: 1;
+            margin: 0 20px;
+        }
+        .top-nav-header {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+        .top-nav-header h2 {
+            margin: 0;
+            color: white;
+            font-size: 1.8em;
+        }
+        .top-nav-header .subtitle {
+            font-size: 0.8em;
+            color: rgba(255,255,255,0.85);
+            margin-top: 2px;
+        }
+        .nav-tabs-horizontal {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+        .nav-tab {
+            background: white;
+            border: 1px solid #ddd;
+            color: #011451;
+            border-radius: 4px;
+            padding: 3px 10px;
+            font-size: 0.8em;
+            cursor: pointer;
+            transition: background 0.2s, color 0.2s;
+            white-space: nowrap;
+        }
+        .nav-tab:hover {
+            background: #011451;
+            color: white;
+        }
+        .nav-tab:focus {
+            outline: 3px solid #fbc02d;
+            outline-offset: 2px;
+            background: #011451;
+            color: white;
+        }
+        .nav-tab.active {
+            background: #011451;
+            color: white;
+            font-weight: bold;
+        }
+        .tab-content {
+            display: none;
+        }
+        .tab-content.active {
+            display: block;
+        }
+        
+        /* Ensure all tab contents are hidden by default */
+        #guide-tab, #workflow1-tab, #workflow2-tab, #workflow3-tab {
+            display: none;
+        }
+        
+        /* Show only active tab */
+        #guide-tab.active, #workflow1-tab.active, #workflow2-tab.active, #workflow3-tab.active {
+            display: block;
+        }
+        
+        .main-content {
+            margin-top: 75px; /* Space for top nav */
+            padding: 20px 40px 20px 40px; /* Increased left and right padding */
+            max-width: 100%;
+            min-height: calc(100vh - 75px);
+            position: relative;
+            width: 100%;
+            box-sizing: border-box;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .uog-logo {
+            height: 51px;
+            width: auto;
+            z-index: 1002;
+        }
+        .accessibility-badge {
+            background: rgba(255, 255, 255, 0.95);
+            color: #011451;
+            padding: 3px 8px;
+            border-radius: 8px;
+            font-size: 0.7em;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 3px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+            z-index: 1001;
+        }
+        .accessibility-badge::before {
+            content: '♿';
+            font-size: 0.9em;
+        }
+        
+        /* Skip navigation link for screen readers */
+        .skip-nav {
+            position: absolute;
+            top: -40px;
+            left: 6px;
+            background: #011451;
+            color: white;
+            padding: 8px;
+            text-decoration: none;
+            z-index: 9999;
+            border-radius: 0 0 4px 4px;
+            font-weight: 600;
+        }
+        .skip-nav:focus {
+            top: 0;
+        }
+        
+        /* Screen reader only content */
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border: 0;
+        }
+        
+        h1, h2, h3, h4, h5, h6 {
+            color: #011451;
+        }
+        .workflow-header {
+            color: #011451;
+            margin-top: 0;
+        }
+        hr {
+            border: none;
+            border-top: 1px solid #eee;
+            margin: 32px 0;
+        }
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            background: #fff;
+            margin-bottom: 0;
+            border: 2px solid #011451; /* Strong outer border */
+            border-radius: 8px;
+            overflow: hidden; /* Ensures border radius works with table */
+        }
+        th, td {
+            border: 1px solid #d1d5db; /* More visible cell borders */
+            padding: 12px 16px;
+            text-align: left;
+            vertical-align: top;
+        }
+        th {
+            background: #011451;
+            color: white; /* White text for better contrast */
+            font-weight: 600;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            border-bottom: 2px solid #011451; /* Strong border below header */
+        }
+        tr:nth-child(even) {
+            background-color: #f8f9fa;
+        }
+        tr:hover {
+            background-color: #e3f2fd;
+            transition: background-color 0.2s ease;
+        }
+        .scrollable-table {
+            max-height: 400px;
+            overflow-x: auto;
+            overflow-y: auto;
+            margin-bottom: 24px;
+            border-radius: 12px;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.15); /* Stronger shadow */
+            border: 3px solid #011451; /* Thick, distinct border */
+            transition: box-shadow 0.2s ease;
+            background: #ffffff; /* Ensure white background */
+            position: relative;
+        }
+        .scrollable-table:hover {
+            box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+            transform: translateY(-1px); /* Slight lift on hover */
+        }
+        /* Styling for standalone tables (not in scrollable containers) */
+        table:not(.scrollable-table table) {
+            margin: 20px 0;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            border-radius: 8px;
+        }
+        /* Ensure code container tables also have clear boundaries */
+        .code-container table {
+            border: 2px solid #21808d !important;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        /* Table copy button styling - positioned above tables */
+        .table-copy-container {
+            position: relative;
+            margin: 20px 0 0 0;
+        }
+        .table-copy-button {
+            position: absolute;
+            top: -40px;
+            right: 0;
+            background: #011451;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.8em;
+            font-weight: 600;
+            opacity: 0.9;
+            transition: all 0.2s ease;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+            z-index: 25;
+            pointer-events: auto;
+        }
+        .table-copy-button:hover {
+            opacity: 1;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+        /* Ensure scrollable tables have space for copy button */
+        .scrollable-table {
+            margin-top: 50px;
+        }
+        blockquote {
+            background: #f7f7fa;
+            border-left: 4px solid var(--primary);
+            margin: 16px 0;
+            padding: 12px 16px;
+            font-style: italic;
+        }
+        pre, code {
+            background: #ffffff;
+            color: #011451;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 16px;
+            font-family: 'Fira Mono', 'Consolas', 'Monaco', 'Source Code Pro', monospace;
+            font-size: 0.9em;
+            line-height: 1.6;
+            overflow-x: auto;
+            overflow-y: auto;
+            white-space: pre;
+            word-wrap: normal;
+            max-width: 100%;
+            max-height: 400px;
+            box-sizing: border-box;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+            transition: box-shadow 0.2s ease;
+        }
+        pre:hover {
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        code {
+            padding: 4px 8px;
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 6px;
+            font-size: 0.85em;
+            color: #011451;
+            white-space: nowrap;
+            max-height: none;
+            overflow: visible;
+        }
+        .code-container {
+            position: relative;
+            margin: 20px 0;
+            overflow: hidden;
+            border-radius: 10px;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .code-container:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.12);
+        }
+        .code-container pre {
+            margin: 0;
+            padding: 20px;
+            border: none;
+            border-radius: 10px;
+            background: #ffffff;
+            color: #011451;
+            overflow-x: auto;
+            overflow-y: auto;
+            white-space: pre;
+            word-wrap: normal;
+            max-width: 100%;
+            max-height: 450px;
+            box-sizing: border-box;
+            line-height: 1.6;
+            font-size: 0.9em;
+        }
+        .code-container pre code {
+            background: transparent;
+            border: none;
+            padding: 0;
+            color: inherit;
+            font-size: inherit;
+            white-space: pre;
+            max-height: none;
+            overflow: visible;
+        }
+        .copy-button {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            background: #011451;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.8em;
+            font-weight: 600;
+            opacity: 0.9;
+            transition: all 0.2s ease;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+            z-index: 10;
+            pointer-events: auto;
+        }
+        .copy-button:hover {
+            opacity: 1;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+        .copy-button:focus {
+            outline: 3px solid #fbc02d;
+            outline-offset: 2px;
+        }
+        .table-copy-button:focus {
+            outline: 3px solid #fbc02d;
+            outline-offset: 2px;
+        }
+        
+        /* Ensure copy button stays visible when textarea is focused */
+        .code-container:focus-within .copy-button {
+            opacity: 1;
+            z-index: 10;
+        }
+        
+        /* Modern text area styling */
+        .notes-area, textarea {
+            width: 100%;
+            min-height: 120px;
+            max-height: 300px;
+            resize: vertical;
+            background: #ffffff;
+            border: 2px solid #e9ecef;
+            border-radius: 12px;
+            padding: 16px;
+            font-size: 0.95em;
+            font-family: var(--font-main);
+            line-height: 1.6;
+            margin-bottom: 8px;
+            box-sizing: border-box;
+            overflow-y: auto;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+        }
+        .notes-area:focus, textarea:focus {
+            outline: none;
+            border-color: #011451;
+            box-shadow: 0 4px 16px rgba(0,56,101,0.15);
+            transform: translateY(-2px);
+            position: relative;
+            z-index: 1;
+        }
+        .notes-area:hover, textarea:hover {
+            border-color: #21808d;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+        }
+        details {
+            background: #f7f7fa;
+            border-radius: 12px;
+            padding: 16px 20px;
+            margin-bottom: 20px;
+            border: 2px solid #e9ecef;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+            transition: all 0.2s ease;
+        }
+        details:hover {
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            transform: translateY(-1px);
+        }
+        details[open] {
+            background: #ffffff;
+            border-color: #011451;
+        }
+        summary {
+            cursor: pointer;
+            font-weight: 600;
+            color: #011451;
+            padding: 8px 0;
+            transition: color 0.2s ease;
+        }
+        summary:hover {
+            color: #21808d;
+        }
+        .sidebar-right {
+            width: var(--sidebar-right-width);
+            background: var(--sidebar-bg);
+            box-shadow: var(--shadow);
+            padding: 24px 16px 16px 16px;
+            display: flex;
+            flex-direction: column;
+        }
+        @media (max-width: 1200px) {
+            .main-content {
+                padding: 16px 24px 16px 24px; /* Maintain left padding */
+                margin-top: 70px;
+            }
+            .top-nav {
+                padding: 7px 24px;
+                height: 54px;
+            }
+            .nav-tabs-horizontal {
+                gap: 6px;
+            }
+            .nav-tab {
+                padding: 3px 8px;
+                font-size: 0.75em;
+            }
+            .uog-logo {
+                height: 45px;
+            }
+            .accessibility-badge {
+                font-size: 0.65em;
+                padding: 2px 6px;
+            }
+        }
+        @media (max-width: 900px) {
+            .top-nav {
+                flex-direction: row;
+                height: 57px;
+                padding: 9px 18px;
+                gap: 8px;
+            }
+            .top-nav-left {
+                order: 1;
+                flex-shrink: 0;
+            }
+            .top-nav-center {
+                order: 2;
+                margin: 0 8px;
+                gap: 4px;
+            }
+            .top-nav-header h2 {
+                font-size: 1.6em;
+            }
+            .accessibility-badge {
+                order: 3;
+                flex-shrink: 0;
+            }
+            .main-content {
+                margin-top: 75px;
+                padding: 12px 20px 12px 20px; /* Maintain left padding */
+            }
+            .uog-logo {
+                height: 42px;
+            }
+        }
+        @media (max-width: 600px) {
+            .top-nav {
+                height: 51px;
+                padding: 6px 12px;
+            }
+            .top-nav-left {
+                flex: 0 0 auto;
+            }
+            .top-nav-center {
+                flex: 1;
+                gap: 3px;
+            }
+            .top-nav-right {
+                flex: 0 0 auto;
+            }
+            .accessibility-badge {
+                padding: 2px 4px;
+                font-size: 0.6em;
+            }
+            .nav-tabs-horizontal {
+                justify-content: center;
+                flex-wrap: nowrap;
+                gap: 3px;
+                overflow-x: auto;
+            }
+            .nav-tab {
+                flex: 0 0 auto;
+                text-align: center;
+                min-width: 55px;
+                padding: 2px 4px;
+                font-size: 0.65em;
+                white-space: nowrap;
+            }
+            .main-content {
+                padding: 8px 16px 8px 16px; /* Maintain left padding even on mobile */
+                margin-top: 66px;
+            }
+            .uog-logo {
+                height: 36px;
+            }
+            .top-nav-header h2 {
+                font-size: 1.4em;
+                margin: 0;
+            }
+        }
+        
+        /* Text alignment utilities */
+        .text-center {
+            text-align: center;
+        }
+        .text-left {
+            text-align: left;
+        }
+        .text-right {
+            text-align: right;
+        }
+        .text-justify {
+            text-align: justify;
+        }
+        
+        /* Script toggle tabs */
+        .script-toggle-container {
+            margin: 16px 0;
+        }
+        .script-toggle-tabs {
+            display: flex;
+            gap: 0;
+            margin-bottom: 0;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        .script-toggle-tab {
+            background: #f8f9fa;
+            border: 1px solid #e0e0e0;
+            border-bottom: none;
+            color: #011451;
+            padding: 8px 16px;
+            cursor: pointer;
+            font-size: 0.9em;
+            font-weight: 500;
+            transition: all 0.2s;
+            border-radius: 4px 4px 0 0;
+        }
+        .script-toggle-tab:hover {
+            background: #e9ecef;
+        }
+        .script-toggle-tab.active {
+            background: #ffffff;
+            color: #011451;
+            font-weight: 600;
+            border-bottom: 1px solid #ffffff;
+            margin-bottom: -1px;
+        }
+        .script-toggle-content {
+            display: none;
+            border: 1px solid #e0e0e0;
+            border-top: none;
+            background: #ffffff;
+            border-radius: 0 0 4px 4px;
+            margin-top: 0;
+        }
+        .script-toggle-content.active {
+            display: block;
+        }
+        .script-toggle-content .code-container {
+            margin: 0;
+            border: none;
+        }
+        .script-toggle-content .code-container pre {
+            border: none;
+            border-radius: 0 0 4px 4px;
+            margin: 0;
+        }
+        
+        /* Table of Contents Sidebar */
+        .toc-sidebar {
+            position: fixed;
+            top: 75px;
+            left: -320px;
+            width: 320px;
+            height: calc(100vh - 75px);
+            background: #ffffff;
+            border-right: 2px solid #011451;
+            box-shadow: 2px 0 8px rgba(0,0,0,0.1);
+            z-index: 999;
+            transition: left 0.3s ease;
+            overflow-y: auto;
+            padding: 0;
+        }
+        
+        .toc-sidebar.open {
+            left: 0;
+        }
+        
+        .toc-header {
+            background: #011451;
+            color: white;
+            padding: 16px 20px;
+            font-weight: 600;
+            font-size: 1.1em;
+            border-bottom: 2px solid #fbc02d;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        
+        .toc-content {
+            padding: 20px;
+        }
+        
+        .toc-tab-section {
+            margin-bottom: 24px;
+        }
+        
+        .toc-tab-title {
+            font-weight: 600;
+            color: #011451;
+            font-size: 1em;
+            margin-bottom: 12px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #e9ecef;
+        }
+        
+        .toc-links {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        
+        .toc-links li {
+            margin-bottom: 6px;
+        }
+        
+        .toc-link {
+            display: block;
+            color: #495057;
+            text-decoration: none;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 0.9em;
+            line-height: 1.4;
+            transition: all 0.2s ease;
+            border-left: 3px solid transparent;
+        }
+        
+        .toc-link:hover {
+            background: #f8f9fa;
+            color: #011451;
+            border-left-color: #fbc02d;
+            text-decoration: none;
+        }
+        
+        .toc-link.active {
+            background: #e7f3ff;
+            color: #011451;
+            border-left-color: #011451;
+            font-weight: 500;
+        }
+        
+        .toc-link.level-2 {
+            font-weight: 500;
+            color: #011451;
+        }
+        
+        .toc-link.level-3 {
+            padding-left: 24px;
+            font-size: 0.85em;
+        }
+        
+        .toc-link.level-4 {
+            padding-left: 36px;
+            font-size: 0.8em;
+            color: #6c757d;
+        }
+        
+        /* Toggle Button - Now in navigation bar */
+        .toc-toggle {
+            background: transparent;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 8px;
+            cursor: pointer;
+            font-size: 1.2em;
+            font-weight: normal;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 12px;
+            width: 40px;
+            height: 40px;
+        }
+        
+        .toc-toggle:hover {
+            background: rgba(255,255,255,0.1);
+            transform: scale(1.05);
+        }
+        
+        .toc-toggle:focus {
+            outline: 2px solid #fbc02d;
+            outline-offset: 2px;
+            background: rgba(255,255,255,0.1);
+        }
+        
+        .toc-icon {
+            transition: transform 0.3s ease;
+            font-size: 1.1em;
+        }
+        
+        .toc-toggle.open .toc-icon {
+            transform: rotate(90deg);
+        }
+        
+        /* Adjust main content when TOC is open */
+        .main-content.toc-open {
+            margin-left: 320px;
+            transition: margin-left 0.3s ease;
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .toc-sidebar {
+                width: 280px;
+                left: -280px;
+            }
+            
+            .main-content.toc-open {
+                margin-left: 0;
+            }
+            
+            .toc-sidebar.open {
+                box-shadow: 0 0 20px rgba(0,0,0,0.3);
+            }
+            
+            .toc-toggle {
+                font-size: 0.7em;
+                padding: 6px 10px;
+                margin-left: 8px;
+            }
+        }
+        
+        /* Scroll indicator for active section */
+        .toc-link::before {
+            content: '';
+            width: 4px;
+            height: 4px;
+            background: transparent;
+            border-radius: 50%;
+            display: inline-block;
+            margin-right: 8px;
+            transition: background 0.2s ease;
+        }
+        
+        .toc-link.active::before {
+            background: #011451;
+        }
+    </style>
+    <style>
+      .analogy-details {
+        border: 2px dashed #fbc02d;
+        background: #fffbe7;
+        margin-bottom: 18px;
+        margin-top: 8px;
+        padding-left: 6px;
+      }
+      .analogy-heading {
+        font-size: 1em;
+        font-weight: bold;
+        color: #fbc02d;
+        margin-bottom: 0.2em;
+      }
+    </style>
+</head>
+<body>
+    <!-- Table of Contents Sidebar -->
+    <nav class="toc-sidebar" id="toc-sidebar" role="navigation" aria-label="Table of contents">
+        <div class="toc-header">
+            📚 Table of Contents
+            <div style="font-size: 0.7em; font-weight: normal; margin-top: 4px; opacity: 0.9;">
+                Press Ctrl+T to toggle
+            </div>
+        </div>
+        <div class="toc-content">
+            <!-- Guide Tab TOC -->
+            <div class="toc-tab-section" id="toc-guide">
+                <div class="toc-tab-title">📘 Guide</div>
+                <ul class="toc-links">
+                    <li><a href="#usage-heading" class="toc-link level-2" onclick="showTabAndNavigate('guide', 'usage-heading')">How to Use This Workbook</a></li>
+                    <li><a href="#genai-tools-intro" class="toc-link level-2" onclick="showTabAndNavigate('guide', 'genai-tools-intro')">Introductory Guide to GenAI Tools</a></li>
+                    <li><a href="#genai-heading" class="toc-link level-3" onclick="showTabAndNavigate('guide', 'genai-heading')">🧠 What is GenAI?</a></li>
+                    <li><a href="#ai-assistants" class="toc-link level-3" onclick="showTabAndNavigate('guide', 'ai-assistants')">Understanding AI Assistants</a></li>
+                    <li><a href="#ethical-considerations" class="toc-link level-3" onclick="showTabAndNavigate('guide', 'ethical-considerations')">Ethical Considerations</a></li>
+                    <li><a href="#prompt-heading" class="toc-link level-2" onclick="showTabAndNavigate('guide', 'prompt-heading')">Prompt Writing</a></li>
+                    <li><a href="#what-are-prompts" class="toc-link level-3" onclick="showTabAndNavigate('guide', 'what-are-prompts')">🎯 What Are Prompts?</a></li>
+                    <li><a href="#prompt-output-relationship" class="toc-link level-4" onclick="showTabAndNavigate('guide', 'prompt-output-relationship')">🎭 Prompt-Output Relationship</a></li>
+                    <li><a href="#vague-vs-clear" class="toc-link level-4" onclick="showTabAndNavigate('guide', 'vague-vs-clear')">Vague vs Clear Prompts</a></li>
+                    <li><a href="#prompt-frameworks" class="toc-link level-3" onclick="showTabAndNavigate('guide', 'prompt-frameworks')">Prompt Frameworks</a></li>
+                </ul>
+            </div>
+            
+            <!-- Workflow 1 Tab TOC -->
+            <div class="toc-tab-section" id="toc-workflow1" style="display: none;">
+                <div class="toc-tab-title">🔍 Reference Checking</div>
+                <ul class="toc-links">
+                    <li><a href="#workflow1" class="toc-link level-2" onclick="showTabAndNavigate('workflow1', 'workflow1')">🧠 Workflow 1: Reference Checking</a></li>
+                    <li><a href="#scenario-overview-1" class="toc-link level-3" onclick="showTabAndNavigate('workflow1', 'scenario-overview-1')">📋 Scenario Overview</a></li>
+                    <li><a href="#mock-essay-section" class="toc-link level-3" onclick="showTabAndNavigate('workflow1', 'mock-essay-section')">📝 Mock Essay</a></li>
+                    <li><a href="#mock-essay" class="toc-link level-4" onclick="showTabAndNavigate('workflow1', 'mock-essay')">📄 Essay Content</a></li>
+                    <li><a href="#practice-prompt" class="toc-link level-3" onclick="showTabAndNavigate('workflow1', 'practice-prompt')">✍️ Practice: Improve the Prompt</a></li>
+                    <li><a href="#prompt-practice" class="toc-link level-4" onclick="showTabAndNavigate('workflow1', 'prompt-practice')">🎯 Reference Table</a></li>
+                </ul>
+            </div>
+            
+            <!-- Workflow 2 Tab TOC -->
+            <div class="toc-tab-section" id="toc-workflow2" style="display: none;">
+                <div class="toc-tab-title">📅 Calendar Automation</div>
+                <ul class="toc-links">
+                    <li><a href="#workflow2" class="toc-link level-2" onclick="showTabAndNavigate('workflow2', 'workflow2')">📅 Workflow 2: Calendar Automation</a></li>
+                    <li><a href="#scenario-overview-2" class="toc-link level-3" onclick="showTabAndNavigate('workflow2', 'scenario-overview-2')">📋 Scenario Overview</a></li>
+                    <li><a href="#copilot-prompt" class="toc-link level-3" onclick="showTabAndNavigate('workflow2', 'copilot-prompt')">Excel Copilot Prompt</a></li>
+                    <li><a href="#outlook-import" class="toc-link level-3" onclick="showTabAndNavigate('workflow2', 'outlook-import')">Import to Outlook</a></li>
+                </ul>
+            </div>
+            
+            <!-- Workflow 3 Tab TOC -->
+            <div class="toc-tab-section" id="toc-workflow3" style="display: none;">
+                <div class="toc-tab-title">🗂️ Batch Renaming</div>
+                <ul class="toc-links">
+                    <li><a href="#workflow3" class="toc-link level-2" onclick="showTabAndNavigate('workflow3', 'workflow3')">🗂️ Workflow 3: Batch Renaming</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Copyright and Legal Notice -->
+    <div id="copyright-notice" style="background: #011451; color: white; padding: 12px 20px; font-size: 11px; border-bottom: 2px solid #fbc02d; display: none;" role="banner" aria-label="Copyright notice">
+        <div style="max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+            <div>
+                <strong>© 2025 University of Glasgow.</strong> All rights reserved. This material is protected by copyright and may not be reproduced, distributed, or modified without express written permission.
+            </div>
+            <button onclick="document.getElementById('copyright-notice').style.display='none'" style="background: transparent; border: 1px solid white; color: white; padding: 4px 8px; cursor: pointer; border-radius: 4px; font-size: 10px;" aria-label="Close copyright notice">✕</button>
+        </div>
+    </div>
+
+    <!-- Detailed Legal Disclaimer (Hidden by default, shown on first visit) -->
+    <div id="legal-disclaimer" style="background: #f8f9fa; border: 2px solid #011451; margin: 20px; padding: 20px; border-radius: 8px; display: none;" role="dialog" aria-labelledby="disclaimer-title">
+        <h3 id="disclaimer-title" style="color: #011451; margin-top: 0;">Copyright & Usage Notice</h3>
+        
+        <div style="margin-bottom: 15px;">
+            <strong>Copyright © 2025 University of Glasgow. All Rights Reserved.</strong>
+        </div>
+        
+        <div style="margin-bottom: 15px;">
+            <strong>Author:</strong> Dr Alisha Aman<br>
+            <strong>Institution:</strong> University of Glasgow<br>
+            <strong>Created:</strong> August 2025<br>
+            <strong>Version:</strong> 1.8
+        </div>
+
+        <h4 style="color: #011451; margin-bottom: 8px;">Terms of Use:</h4>
+        <ul style="margin-bottom: 15px; line-height: 1.5;">
+            <li><strong>Prohibited:</strong> Reproduction, distribution, modification, or commercial use without explicit written permission</li>
+            <li><strong>Academic Use:</strong> Limited use for educational purposes only</li>
+            <li><strong>Attribution Required:</strong> Any permitted use must include full attribution to the author and institution</li>
+            <li><strong>No Derivatives:</strong> Creating modified versions or derivatives is strictly prohibited</li>
+        </ul>
+
+        <h4 style="color: #011451; margin-bottom: 8px;">Legal Protection:</h4>
+        <p style="margin-bottom: 15px; line-height: 1.5; font-size: 12px;">
+            This work is protected by UK copyright law and international treaties. Unauthorised copying, sharing, or claiming authorship constitutes copyright infringement and may result in legal action. The development history and original authorship are documented in version control systems with timestamped evidence.
+        </p>
+
+        <div style="background: #fff3cd; border: 1px solid #ffc107; padding: 10px; border-radius: 4px; margin-bottom: 15px;">
+            <strong>⚠️ Plagiarism Warning:</strong> This material cannot be submitted as original work by others. Academic integrity violations will be reported to appropriate authorities.
+        </div>
+
+        <div style="text-align: right;">
+            <button onclick="document.getElementById('legal-disclaimer').style.display='none'; document.getElementById('copyright-notice').style.display='block'; localStorage.setItem('uog-disclaimer-seen', 'true');" style="background: #011451; color: white; border: none; padding: 8px 16px; border-radius: 4px; cursor: pointer;">I Understand</button>
+        </div>
+    </div>
+
+    <div class="app-container">
+        <!-- Skip Navigation Link -->
+        <a href="#main-content" class="skip-nav">Skip to main content</a>
+        
+        <!-- Top Navigation Bar -->
+        <nav class="top-nav" role="banner" aria-label="Main navigation">
+            <div class="top-nav-left">
+                <!-- Table of Contents Toggle Button -->
+                <button class="toc-toggle" onclick="toggleTOC()" aria-label="Toggle table of contents">
+                    <span class="toc-icon">☰</span>
+                </button>
+                <img src="https://sfdora.org/wp-content/uploads/2024/03/UoG_keyline.png" alt="University of Glasgow Logo" class="uog-logo" />
+            </div>
+            <div class="top-nav-center">
+                <div class="top-nav-header">
+                    <h2>Augmented Academia</h2>
+                </div>
+                <div class="nav-tabs-horizontal" role="navigation" aria-label="Workflow navigation">
+                    <button class="nav-tab active" onclick="showTab('guide')" aria-label="Navigate to Guide section">Guide</button>
+                    <button class="nav-tab" onclick="showTab('workflow1')" aria-label="Navigate to Workflow 1 - Reference Checking">Reference Checking</button>
+                    <button class="nav-tab" onclick="showTab('workflow2')" aria-label="Navigate to Workflow 2 - Calendar Automation">Calendar Automation</button>
+                    <button class="nav-tab" onclick="showTab('workflow3')" aria-label="Navigate to Workflow 3 - Batch Renaming">Batch Renaming</button>
+                </div>
+            </div>
+            <div class="accessibility-badge" title="This workbook includes comprehensive ARIA labels for screen readers and assistive technologies">
+                ARIA Accessible
+            </div>
+        </nav>
+        
+        <!-- Main Content -->
+        <main class="main-content" role="main" aria-label="Workshop content" id="main-content">
+            <!-- Screen reader instructions -->
+            <div class="sr-only" aria-live="polite">
+                <p>Welcome to the Augmented Academia Workshop. This page contains interactive tabs for different workflows. Use the tab navigation above to switch between sections, or use the skip navigation link to jump to main content.</p>
+            </div>
+
+            <p class="text-center">Welcome to the <strong>Augmented Academia</strong> <br>
+                This workbook is your practical companion during the workshop and a handy reference for later use. 
+                You can work directly in Copilot or other AI tools while following along.<br>
+                <em><strong>This workbook includes accessibility features and ARIA labels for an inclusive learning experience.</strong></em></p>
+            <hr>
+            <section aria-labelledby="usage-heading">
+                <h2 id="usage-heading">How to Use This Workbook</h2>
+            <ol>
+                <li><strong>Open Side-by-Side:</strong> Keep this file open next to your Copilot window.</li>
+                <li><strong>Type Directly:</strong> You can write practice prompts directly in the text blocks.</li>
+                <li><strong>Copy Prompts:</strong> All prompts and text have a copy button on the top right. Just paste directly into Copilot chat.</li>
+            </ol>
+            </section>
+            <hr>
+            
+            <!-- Guide Tab Content -->
+            <div id="guide-tab" class="tab-content active">
+            <!-- =========================== -->
+<!-- INTRODUCTORY GUIDES SECTION -->
+<!-- =========================== -->
+<h2 id="genai-tools-intro">Introductory Guide to GenAI Tools</h2>
+
+<section aria-labelledby="genai-heading"> 
+
+  <h2 id="genai-heading" class="workflow-header">🧠 What is GenAI?</h2>
+  <p>Generative Artificial Intelligence (GenAI) is the technology behind tools like ChatGPT, Claude, and Gemini. These tools can create new content based on your instructions.
+    This content can be text, images, code, video, or audio.</p>
+   
+    <p>GenAI tools that produce text are called Large Language Models (LLMs). An LLM is a huge neural network that understands and generates human-like text. 
+        <em>Here's a helpful comparison: imagine a neural network as a team of university staff working together to solve a problem. Each staff member (neuron) has their own expertise—teaching, admissions, admin, or student support. 
+    When a question arrives, it moves through each team member. Each person adds their knowledge, improves the answer, and passes it on. 
+    The final result is a well-informed, detailed response—just like a neural network combines many neurons to create a final answer.</em></p>
+
+    <p>LLMs are trained on huge amounts of text data to do one main job: <em>predict the most likely next word.</em> This simple process—powered by billions of parameters—lets them create coherent and often impressive text.
+         Think of them as a <strong>super-advanced autocomplete</strong> that has read vast amounts of content and can write essays, stories, or code based on your prompts.</p>
+         <p> Although GenAI tools like ChatGPT were classed as LLMs historically, they have evolved to include more advanced capabilities, such as understanding context, generating images, and even creating music. So, these tools are classed as <strong>"Multi-Modal LLMs"</strong> nowadays.</p>
+         <br>
+  <blockquote>
+  <p class="center">To put it simply, GenAI is <strong>🧠✨ Your Intelligent Partner in Progress</strong></p>
+
+<p>GenAI is not just a tool, it’s a creative co-author, a strategic collaborator, and a thinking partner that enhances your professional capabilities.
+     Like a productivity assistant, it handles routine tasks, drafts content, and sparks new ideas, freeing you to focus on insight and impact. 
+     It serves as an idea navigator, helping you explore unfamiliar territory, uncover patterns, and generate fresh perspectives. 
+     And as a cognitive toolkit, it equips you with flexible, adaptive capabilities, from writing and analysis to design and coding, tailored to your goals.
+
+<strong>Rather than replacing expertise, GenAI amplifies it, offering a dynamic partnership that evolves with your needs and empowers your work.</strong></p>
+  </blockquote>
+
+</section>
+
+  <section aria-labelledby="genai-analogies-heading">
+    <h3 id="ai-assistants">Understanding AI Assistants</h3>
+    <div style="background: #fffbea; border: 2px solid #fbc02d; border-radius: 12px; padding: 20px; margin: 20px 0;">
+      <p style="font-style: italic; margin-bottom: 15px;">A practical look at working with AI assistants:</p>
+      
+      <ul style="list-style-type: disc; padding-left: 20px;">
+        <li><strong>The Enthusiastic Research Assistant:</strong> Like a PhD student who has read every journal. Ask for a summary and they deliver one instantly—usually accurate, but occasionally citing sources that don't exist. Excellent output, but always verify the references.</li>
+        
+        <li><strong>The Conference Networking Expert:</strong> This colleague recalls every presentation they've attended. Mention medieval literature and they'll connect it to quantum physics and afternoon tea. Their connections can be brilliant—or puzzling—so provide clear context.</li>
+        
+        <li><strong>The Library Expert:</strong> They can find the 1987 proceedings on Underwater Basket Weaving faster than you can say "DOI", but ask for bus directions and they'll suggest a hot air balloon. Extensive knowledge, but limited real-world context.</li>
+        
+        <li><strong>The Department Editor:</strong> Creates beautifully structured essays with perfect logic—while citing journals from an alternate universe. The format and structure are excellent; the facts need checking.</li>
+        
+        <li><strong>The Helpful Admin:</strong> Ask them to book a seminar room and they'll reserve the cathedral, order catering for 500, and invite the Vice-Chancellor. Keen and proactive, but sometimes too much so. Be specific with your requests.</li>
+      </ul>
+    </div>
+</section>
+<br><br>
+
+  <h3 id="ethical-considerations">Ethical Considerations</h3>
+  <p>When using GenAI tools, keep these ethical principles in mind. 
+    These guidelines help you use AI responsibly and in line with higher education values.</p>
+  <p><em>Following these principles ensures AI serves as a positive force in academic work.</em></p>
+  <br>  
+  
+  <ul>
+<li>🕵️‍♀️ <strong><em>Privacy:</em></strong> Never input confidential student or institutional data into public AI tools</li>
+<li>🔍 <strong><em>Transparency:</em></strong> Always disclose when AI tools have been used in work or decision-making</li>
+<li>📏 <strong><em>Accuracy:</em></strong> Verify AI outputs for factual correctness and bias</li>
+<li>⚖️ <strong><em>Equity:</em></strong> Ensure AI applications don't disadvantage any groups</li>
+<li>🧠 <strong><em>Human Oversight:</em></strong> Maintain human judgment in all critical decisions</li>
+<li>📚 <strong><em>Academic Integrity:</em></strong> Use AI as a tool to enhance, not replace, human expertise</li>
+<li>🔄 <strong><em>Continuous Learning:</em></strong> Stay updated on AI capabilities, limitations, and institutional policies</li>
+<li>🧠 <strong><em>Information Literacy:</em></strong> Teach students to critically evaluate AI-generated content</li>
+<li>🧰 <strong><em>Tool Awareness:</em></strong> Know which tools are approved, secure, and appropriate for your task</li>
+<li>🧙‍♂️ <strong><em>Contextual Use:</em></strong> Use GenAI with clear academic purpose—not just convenience</li>
+    </ul>
+    <br>
+
+
+<section aria-labelledby="prompt-heading">
+  <h2 id="prompt-heading" class="workflow-header">Prompt Writing</h2>
+
+  <h3 id="what-are-prompts">🎯 What Are Prompts and Why Do They Matter?</h3>
+  
+  <p>A <strong>prompt</strong> is the instructions, questions, or requests you give to an AI system. 
+    Think of it as how you communicate what you want the AI to do. 
+    The quality and clarity of your prompt directly affects how useful the AI's response will be.</p>
+
+  <blockquote>
+    <p><strong>Remember:</strong> Good input equals good output. A vague prompt gives you a vague answer; a clear prompt gives you exactly what you need.</p>
+  </blockquote>
+
+  <h4 id="prompt-output-relationship">🎭 The Prompt-Output Relationship</h4>
+  
+  <p>Like in everyday situations, AI responds best when you:</p>
+  <ul>
+    <li><strong>🎯 Be specific</strong> - Say exactly what you want, not just the general area</li>
+    <li><strong>📏 Set boundaries</strong> - Give word limits, format preferences, style requirements</li>
+    <li><strong>🎪 Provide context</strong> - Explain who the audience is and what the purpose is</li>
+    <li><strong>📋 Request format</strong> - Ask for lists, tables, paragraphs, or specific structures</li>
+    <li><strong>🔄 Iterate</strong> - Refine your prompt based on what you get back</li>
+  </ul>
+<h4 id="vague-vs-clear">Key Differences Between Vague and Clear Prompts</h4>
+
+<p>Understanding how to write prompts is essential for getting reliable, relevant, and efficient results from any GenAI tool.</p>
+
+
+  <div class="table-copy-container">
+    <button class="table-copy-button" onclick="copyTableData(this)" aria-label="Copy detailed comparison table to clipboard">Copy Table</button>
+    <div class="scrollable-table" role="region" aria-label="Comparison of vague versus clear prompts with examples" tabindex="0">
+      <table role="table" aria-label="Vague vs Clear Prompts Comparison with Examples">
+        <thead>
+          <tr role="row">
+            <th>Aspect</th>
+            <th>Vague Prompt</th>
+            <th>Clear Prompt</th>
+            <th>Example Context</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Clarity of Instruction</strong></td>
+            <td>"Summarize this article."</td>
+            <td>"Summarize the key findings of the attached 2024 Lancet Neurology article in plain English, for first-year med students, in 100 words or fewer."</td>
+            <td>Article summarization</td>
+          </tr>
+          <tr>
+            <td><strong>Relevance & Output Accuracy</strong></td>
+            <td>"Export my timetable."</td>
+            <td>"Using the attached Excel sheet, generate an .ics calendar file for BIO101, showing only Monday and Wednesday sessions, using Europe/London timezone, suitable for importing into Outlook."</td>
+            <td>Timetable automation</td>
+          </tr>
+          <tr>
+            <td><strong>Efficiency & Time Saved</strong></td>
+            <td>"My computer isn't working."</td>
+            <td>"My Lenovo laptop running Windows 11 can't open Outlook; I get error code 0x80040119 since this morning's update."</td>
+            <td>IT support request</td>
+          </tr>
+          <tr>
+            <td><strong>Level of Customization</strong></td>
+            <td>"Write about the environment."</td>
+            <td>"Draft a two-paragraph summary of Scotland's renewable energy initiatives for undergraduate Environmental Science students, focusing on wind and solar power developments since 2020, using accessible language."</td>
+            <td>Educational content creation</td>
+          </tr>
+          <tr>
+            <td><strong>Risk of AI "Hallucination"</strong></td>
+            <td>"Tell me about recent studies on climate change."</td>
+            <td>"List 5 peer-reviewed studies from 2023-2024 on climate change impacts in Scotland, published in journals with impact factor >2.0, include DOI and brief methodology for each."</td>
+            <td>Research verification</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+
+  <hr style="margin: 32px 0;">  
+  <h3 id="prompt-frameworks"><strong>Prompt Frameworks</strong></h3>
+  <p>Frameworks are structured ways to write prompts that help you get the best results. 
+    They provide a template for what to include in your prompt, making it easier to remember the key components.</p>
+    <p>Here are the 5 most effective frameworks for university staff:</p>
+  <div class="table-copy-container">
+    <button class="table-copy-button" onclick="copyTableData(this)" aria-label="Copy prompt frameworks table to clipboard">Copy Table</button>
+    <div class="scrollable-table" role="region" aria-label="Prompt framework cheat-sheet" tabindex="0">
+        <table>
+          <thead>
+            <tr>
+              <th>Framework</th>
+              <th>Components <br>(expansion)</th>
+              <th>Best Use Case</th>
+              <th>Example Prompt</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td><strong>P-T-C-F</strong></td><td>Persona · Task · Context · Format</td><td>Structured academic tasks</td><td>Persona: Writing specialist.<br>Task: Summarise lit review.<br>Context: Postgrad audience.<br>Format: APA bullets ≤100 words.</td></tr>
+            <tr><td><strong>CLEAR</strong></td><td>Context · Logic · Examples · Actionable · Refine</td><td>Educational content creation</td><td>Context: 1st-year biology. Logic: Bloom’s taxonomy. Examples: Provide quiz items. Actionable: Add practice exercises. Refine: Review clarity.</td></tr>
+            <tr><td><strong>RAPID</strong></td><td>Role · Action · Purpose · Input · Deliverable</td><td>Structured project briefs</td><td>Role: Project manager.<br>Action: Create timeline.<br>Purpose: Align team.<br>Input: Existing Gantt chart.<br>Deliverable: 2-page report.</td></tr>
+            <tr><td><strong>RACE</strong></td><td>Role · Action · Context · Expectation</td><td>Role-play scenarios & everyday tasks</td><td>Role: Career advisor.<br>Action: Recommend 3 skills.<br>Context: Final-year students.<br>Expectation: ≤120 words.</td></tr>
+            <tr><td><strong>Few-Shot</strong></td><td>Example-based cues</td><td>Pattern recognition</td><td>Here are 2 sample abstracts… Now draft a similar 150-word abstract on topic X.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+<!-- ================================ -->
+<!-- END OF ADDITIONAL CONTENT        -->
+<!-- ================================ -->
+            </div>
+            
+            <!-- Workflow 1 Tab Content -->
+            <div id="workflow1-tab" class="tab-content">
+            <section aria-labelledby="workflow1">
+                <h2 class="workflow-header" id="workflow1">🧠 Workflow 1: Reference Checking</h2>
+                
+                <!-- Workflow Overview -->
+                <div style="background: #f0f9ff; border: 2px solid #0284c7; border-radius: 12px; padding: 20px; margin: 20px 0;">
+                    <h3 style="margin-top: 0; color: #0284c7;">📋 Workflow Overview</h3>
+                    <p><strong>Key outcome:</strong> Use GenAI tools to verify the authenticity and credibility of academic references in student coursework.</p>
+                                   
+<br>     
+                   <p><strong>Why this matters:</strong></p>
+                    <p>In higher education, credible references are essential for scholarly rigour and maintaining trust. 
+                        With the rise of AI-generated content and predatory publishing, it's increasingly difficult to identify legitimate sources.</p>
+                    <p>This workflow provides a structured approach to quickly verify references in student work, ensuring they meet academic standards. 
+                        It helps staff use GenAI tools to verify citations, flag questionable journals, and ensure students reference real, reliable research.
+                        Whether you're supporting academic integrity, preparing materials for external examiners, or auditing Moodle content, this process helps you maintain quality without spending hours manually checking each reference.</p>
+                </div>
+
+                <!-- Tools Used Section -->
+                <h3>🛠️ Tools Used in This Workflow</h3>
+                <div class="table-copy-container">
+                    <button class="table-copy-button" onclick="copyTableData(this)" aria-label="Copy tools table to clipboard">Copy Table</button>
+                    <div class="scrollable-table" role="region" aria-label="Tools used in reference checking workflow" tabindex="0">
+                        <table role="table" aria-label="Tools for reference checking workflow">
+                            <thead>
+                                <tr role="row">
+                                    <th>Tool</th>
+                                    <th>What It Is</th>
+                                    <th>Where to Find It</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>Microsoft 365 Copilot (Word or Chat)</strong></td>
+                                    <td>An AI assistant that helps you analyse and summarise documents</td>
+                                    <td>Built into Word or available via Microsoft 365 Chat</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>EndNote</strong></td>
+                                    <td>A reference manager that stores, formats, and verifies citations</td>
+                                    <td>Installed via University of Glasgow software portal or IT Services</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Excel</strong></td>
+                                    <td>Spreadsheet tool to organise and export results</td>
+                                    <td>Part of Microsoft 365</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Cabells / CrossRef (optional)</strong></td>
+                                    <td>Online tools to check journal legitimacy and DOI accuracy</td>
+                                    <td>crossref.org, cabells.com</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <br>
+
+
+            <h2 id="scenario-overview-1">Scenario Overview</h2>
+            <p>You need to evaluate the academic integrity of your students' work and verify the legitimacy of their references. 
+                Doing this manually can be time-consuming and challenging, especially with many references and students to mark.</p>
+            <p><strong>Using GenAI tools, you can quickly verify reference authenticity, identify potential predatory journals, and ensure students are citing real, credible research.</strong></p>
+                                
+            <p><strong>Task:</strong> This is a mock essay with some real and some fake references. Your task is to identify which references are legitimate and which are not.</p>
+            <p><em>You can copy and paste this essay into a Word document, save it, and then upload it to Copilot chat with the prompt.</em></p>
+            <p><strong>Remember: only upload or paste student work into your university-approved GenAI platform that is protected by enterprise license.</strong></p>
+
+            <h3 id="mock-essay-section">Mock Essay</h3>
+            <div class="code-container" role="region" aria-label="Mock essay about polygenic risk scores in dementia" id="mock-essay">
+                <button class="copy-button" onclick="copyEssayText(this)" aria-label="Copy mock essay to clipboard">Copy</button>
+                <div style="padding: 20px; background: #ffffff; border-radius: 10px; line-height: 1.6; font-family: var(--font-main); color: #011451; max-height: 450px; overflow-y: auto; border: 2px solid #e9ecef;">
+                    <h4 style="margin-top: 0; color: #011451;">Polygenic Risk Scores in Dementia and troublesome data</h4>
+                    
+                    <p>Polygenic risk scores (PRS) are rapidly becoming significant tools for predicting susceptibility to complex disorders such as dementia. By aggregating the effects of multiple genetic variants, PRS provide a quantitative measure of an individual's inherited risk for conditions like Alzheimer's disease, going beyond single-gene risk assessments (Khera et al., 2018; Lambert et al., 2019).</p>
+
+                    <p>Recent advances indicate that those with high PRS have an increased likelihood of earlier onset and accelerated progression of Alzheimer's, supporting their potential in identifying at-risk individuals for early intervention (Nguyen & Lee, 2021). As PRS are integrated with conventional risk models incorporating cardiovascular, lifestyle, and comorbidity data, their predictive capacity improves and becomes more clinically relevant.</p>
+
+                    <p>However, considerable challenges remain. PRS constructed in one ancestry often underperform in others due to genetic heterogeneity, raising questions about their universal applicability (Lambert et al., 2019). Ethical concerns also emerge, with some authors cautioning about the psychological effects of high-risk scores and the risk of stigma when such information is delivered without adequate support (Patel et al., 2024; Doe et al., 2024).</p>
+
+                    <p>Another growing issue is the integrity of the underlying genetic studies. The expansion of scientific publishing has led to references from sources with questionable peer review or unclear standards. The use of data from articles published in journals such as the International Journal of Pharmacy and Pharmaceutical Sciences or Current Biotica can contaminate PRS models if the original research lacks scientific rigor (Blackwell et al., 2022; Miller et al., 2023). The ability to distinguish between thoroughly peer-reviewed literature and less reliable sources is therefore critical for clinicians and researchers using PRS as part of dementia risk assessment.</p>
+
+                    <p>Meta-analyses that combine PRS with environmental and lifestyle factors show promise for more robust prediction models (Wang & Garcia, 2024; Lopez et al., 2025). Nevertheless, rigorous vetting of sources is called for, as research published in predatory or indeterminate journals may carry misleading or non-validated conclusions.</p>
+
+                    <p>In summary, polygenic risk scores are a promising addition to personalized medicine for dementia, offering opportunities for early identification and intervention. However, successful integration into clinical practice depends on the reliable validation of underlying research, critical evaluation of reference sources, and clear communication of both potential and limitations to patients and the scientific community.</p>
+
+                    <h5 style="color: #011451; margin-top: 20px;">References</h5>
+
+                    <ol style="padding-left: 20px;">
+                        <li>Khera, A.V., Chaffin, M., Aragam, K.G., et al. (2018). Genome-wide polygenic scores for common diseases identify individuals with risk equivalent to monogenic mutations. Nature Genetics, 50(9), 1219-1224.</li>
+                        <li>Lambert, J.C., Ibrahim-Verbaas, C.A., Harold, D., et al. (2019). Meta-analysis of 74,046 individuals identifies 11 new susceptibility loci for Alzheimer's disease. Nature Genetics, 51(3), 414-430.</li>
+                        <li>Nguyen, T., & Lee, J. (2021). Improved dementia risk prediction with polygenic scores and cardiovascular factors. International Journal of Neuroepidemiology, 7(3), 200-212.</li>
+                        <li>Doe, J., Smith, A., & Zhang, W. (2024). Investigating Genetic Markers in Early-Onset Dementia. Journal of Unverified Science, 2(1), 15-28.</li>
+                        <li>Miller, K., O'Brien, L., & Gupta, R. (2023). Polygenic Risk Scores in Diverse Populations: Ethical Considerations. Current Biotica, 5(3), 45-59.</li>
+                        <li>Lopez, M., Evans, T., & Kumar, S. (2025). Clinical Applications of Genome-Wide Association Studies in Alzheimer's Disease. International Journal of Pure & Applied Bioscience, 8(4), 101-115.</li>
+                        <li>Patel, N., Singh, V., & Chen, Y. (2024). Reevaluating Dementia Risk Scores in Underrepresented Ethnic Groups. Herbert Open Access Journals, 10(2), 130-142.</li>
+                        <li>Blackwell, P., Turner, S., & Hawkins, M. (2022). Issues in GWAS data integrity impacting dementia polygenic risk scores. PredatorGenomics Journal, 4(1), 50-57.</li>
+                        <li>The Editorial Board. (2023). Evaluating the challenges of open access publishing: A case study. International Journal of Pharmacognosy, 6(2), 75-88.</li>
+                        <li>Wang, L., & Garcia, M. (2024). Recent trends in pharmaceutical bioinformatics research. International Journal of Pharmacy and Pharmaceutical Sciences, 12(1), 5-19.</li>
+                        <li>Kumar, R., & Silva, H. (2023). Advances in molecular pathology and gene expression analysis. Journal of Molecular Pathology, 11(3), 45-59.</li>
+                    </ol>
+                </div>
+                <!-- Hidden text for copying -->
+                <textarea style="position: absolute; left: -9999px; opacity: 0;" id="essay-copy-text">Polygenic Risk Scores in Dementia and troublesome data
+
+Polygenic risk scores (PRS) are rapidly becoming significant tools for predicting susceptibility to complex disorders such as dementia. By aggregating the effects of multiple genetic variants, PRS provide a quantitative measure of an individual's inherited risk for conditions like Alzheimer's disease, going beyond single-gene risk assessments (Khera et al., 2018; Lambert et al., 2019).
+
+Recent advances indicate that those with high PRS have an increased likelihood of earlier onset and accelerated progression of Alzheimer's, supporting their potential in identifying at-risk individuals for early intervention (Nguyen & Lee, 2021). As PRS are integrated with conventional risk models incorporating cardiovascular, lifestyle, and comorbidity data, their predictive capacity improves and becomes more clinically relevant.
+
+However, considerable challenges remain. PRS constructed in one ancestry often underperform in others due to genetic heterogeneity, raising questions about their universal applicability (Lambert et al., 2019). Ethical concerns also emerge, with some authors cautioning about the psychological effects of high-risk scores and the risk of stigma when such information is delivered without adequate support (Patel et al., 2024; Doe et al., 2024).
+
+Another growing issue is the integrity of the underlying genetic studies. The expansion of scientific publishing has led to references from sources with questionable peer review or unclear standards. The use of data from articles published in journals such as the International Journal of Pharmacy and Pharmaceutical Sciences or Current Biotica can contaminate PRS models if the original research lacks scientific rigor (Blackwell et al., 2022; Miller et al., 2023). The ability to distinguish between thoroughly peer-reviewed literature and less reliable sources is therefore critical for clinicians and researchers using PRS as part of dementia risk assessment.
+
+Meta-analyses that combine PRS with environmental and lifestyle factors show promise for more robust prediction models (Wang & Garcia, 2024; Lopez et al., 2025). Nevertheless, rigorous vetting of sources is called for, as research published in predatory or indeterminate journals may carry misleading or non-validated conclusions.
+
+In summary, polygenic risk scores are a promising addition to personalized medicine for dementia, offering opportunities for early identification and intervention. However, successful integration into clinical practice depends on the reliable validation of underlying research, critical evaluation of reference sources, and clear communication of both potential and limitations to patients and the scientific community.
+
+References
+
+1. Khera, A.V., Chaffin, M., Aragam, K.G., et al. (2018). Genome-wide polygenic scores for common diseases identify individuals with risk equivalent to monogenic mutations. Nature Genetics, 50(9), 1219-1224.
+
+2. Lambert, J.C., Ibrahim-Verbaas, C.A., Harold, D., et al. (2019). Meta-analysis of 74,046 individuals identifies 11 new susceptibility loci for Alzheimer's disease. Nature Genetics, 51(3), 414-430.
+
+3. Nguyen, T., & Lee, J. (2021). Improved dementia risk prediction with polygenic scores and cardiovascular factors. International Journal of Neuroepidemiology, 7(3), 200-212.
+
+4. Doe, J., Smith, A., & Zhang, W. (2024). Investigating Genetic Markers in Early-Onset Dementia. Journal of Unverified Science, 2(1), 15-28.
+
+5. Miller, K., O'Brien, L., & Gupta, R. (2023). Polygenic Risk Scores in Diverse Populations: Ethical Considerations. Current Biotica, 5(3), 45-59.
+
+6. Lopez, M., Evans, T., & Kumar, S. (2025). Clinical Applications of Genome-Wide Association Studies in Alzheimer's Disease. International Journal of Pure & Applied Bioscience, 8(4), 101-115.
+
+7. Patel, N., Singh, V., & Chen, Y. (2024). Reevaluating Dementia Risk Scores in Underrepresented Ethnic Groups. Herbert Open Access Journals, 10(2), 130-142.
+
+8. Blackwell, P., Turner, S., & Hawkins, M. (2022). Issues in GWAS data integrity impacting dementia polygenic risk scores. PredatorGenomics Journal, 4(1), 50-57.
+
+9. The Editorial Board. (2023). Evaluating the challenges of open access publishing: A case study. International Journal of Pharmacognosy, 6(2), 75-88.
+
+10. Wang, L., & Garcia, M. (2024). Recent trends in pharmaceutical bioinformatics research. International Journal of Pharmacy and Pharmaceutical Sciences, 12(1), 5-19.
+
+11. Kumar, R., & Silva, H. (2023). Advances in molecular pathology and gene expression analysis. Journal of Molecular Pathology, 11(3), 45-59.</textarea>
+            </div>
+
+            <p>Now, you want to check if the references used in the essay are legitimate and used correctly. We can easily do this using GenAI.</p>
+            <p>To do this, you can use the <strong>Persona → Task → Context → Format</strong> (P-T-C-F) prompt structure. This helps you create clear and effective prompts for AI tools.</p>
+            
+            <h3 id="practice-prompt">Practice: Improve the Prompt</h3>
+            <p>Here is an example prompt following the P-T-C-F structure to get you started:</p>
+
+            <blockquote>
+                <p      <h3>3·4&nbsp;Sample P-T-C-F Prompt</h3>
+    <div class="code-container" role="region" aria-label="Sample P-T-C-F prompt">
+    <button class="copy-button" onclick="copyCode(this)" aria-label="Copy P-T-C-F prompt to clipboard">Copy</button>
+<pre><code>Role: Comms writer
+Persona: Academic writing specialist  
+Task: Summarise Chapter 4 focusing on methodology  
+Context: Post-graduate audience; APA 7th; 2,500-word chapter supplied below  
+Format: Bullet list ≤100 words with 5 key citations</code></pre>
+</p>
+            </blockquote>
+            <p><strong>This prompt is specific, clear, and actionable.</strong> It tells the AI your role, what you want to do (the task), the context you're working in, and how you want the output formatted.</p>
+
+            <p id="prompt-practice"><strong>Practice:</strong> Now, write your own prompt using the same structure to complete the reference evaluation task.
+                 You want your output to look something like this:</p>
+            <div class="table-copy-container">
+                <button class="table-copy-button" onclick="copyTableData(this)" aria-label="Copy reference verification table to clipboard">Copy Table</button>
+                <div class="scrollable-table" role="region" aria-label="Example reference verification table" tabindex="0" id="reference-table">
+                <table role="table" aria-label="Reference verification results with authenticity, journal legitimacy, and context usage">
+                    <thead>
+                        <tr role="row">
+                            <th>Reference</th>
+                            <th>Authenticity</th>
+                            <th>Journal Legitimacy</th>
+                            <th>Journal Name</th>
+                            <th>DOI</th>
+                            <th>Used Correctly in Context</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Khera et al. (2018)</td>
+                            <td>✅</td>
+                            <td>✅ Legitimate</td>
+                            <td>Nature Genetics</td>
+                            <td>10.1038/s41588-018-0183-z</td>
+                            <td>✅ Yes</td>
+                        </tr>
+                        <tr>
+                            <td>Lambert et al. (2019)</td>
+                            <td>✅</td>
+                            <td>✅ Legitimate</td>
+                            <td>Nature Genetics</td>
+                            <td>10.1038/s41588-019-0358-2</td>
+                            <td>✅ Yes</td>
+                        </tr>
+                        <tr>
+                            <td>Nguyen & Lee (2021)</td>
+                            <td>❌</td>
+                            <td>❌ Not found</td>
+                            <td>International Journal of Neuroepidemiology</td>
+                            <td>N/A</td>
+                            <td>❌ Possibly fabricated</td>
+                        </tr>
+                        <tr>
+                            <td>Doe et al. (2024)</td>
+                            <td>❌</td>
+                            <td>❌ Predatory</td>
+                            <td>Journal of Unverified Science</td>
+                            <td>N/A</td>
+                            <td>❌ No</td>
+                        </tr>
+                        <tr>
+                            <td>Miller et al. (2023)</td>
+                            <td>✅</td>
+                            <td>❌ Predatory</td>
+                            <td>Current Biotica</td>
+                            <td>N/A</td>
+                            <td>⚠️ Yes, but from questionable source</td>
+                        </tr>
+                        <tr>
+                            <td>Lopez et al. (2025)</td>
+                            <td>✅</td>
+                            <td>⚠️ Possibly predatory</td>
+                            <td>Int. J. of Pure & Applied Bioscience</td>
+                            <td>N/A</td>
+                            <td>✅ Yes</td>
+                        </tr>
+                        <tr>
+                            <td>Patel et al. (2024)</td>
+                            <td>✅</td>
+                            <td>❌ Predatory</td>
+                            <td>Herbert Open Access Journals</td>
+                            <td>N/A</td>
+                            <td>⚠️ Yes, but questionable source</td>
+                        </tr>
+                        <tr>
+                            <td>Blackwell et al. (2022)</td>
+                            <td>❌</td>
+                            <td>❌ Predatory</td>
+                            <td>PredatorGenomics Journal</td>
+                            <td>N/A</td>
+                            <td>❌ No</td>
+                        </tr>
+                        <tr>
+                            <td>The Editorial Board (2023)</td>
+                            <td>✅</td>
+                            <td>⚠️ Possibly predatory</td>
+                            <td>International Journal of Pharmacognosy</td>
+                            <td>N/A</td>
+                            <td>⚠️ Yes, but questionable source</td>
+                        </tr>
+                    </tbody>
+                </table>
+                </div>
+            </div><br><br>
+
+            <p><strong>Rewrite this prompt using P-T-C-F structure: Persona, Task, Context, Format:</strong></p>
+            <p>Once you have improved your prompt, you can paste it in Copilot chat to check the references in the essay along with the Word document (or just copy-pasting the essay - but not recommended).</p>
+            <div class="code-container" role="region" aria-label="Prompt improvement text area">
+                <button class="copy-button" onclick="copyTextArea('prompt-improve-workflow1')" aria-label="Copy text area content to clipboard">Copy</button>
+                <textarea class="notes-area" id="prompt-improve-workflow1" rows="6" placeholder="Type your improved prompt here..." aria-label="Prompt  text area - rewrite the prompt using Persona, Task, Context, Format structure" aria-describedby="status-prompt-improve-workflow1"></textarea>
+            </div>
+            <div class="notes-status" id="status-prompt-improve-workflow1" role="status" aria-live="polite"></div>
+            <br><br>
+
+            <h3>Prompt used to generate the reference table</h3>
+            <details aria-expanded="false" aria-labelledby="example-prompt-summary" id="example-prompt">
+                <summary id="example-prompt-summary"><strong>Show example prompt</strong></summary><br>
+
+                <p>Here is the prompt used to generate the reference table above!</p>
+                <div class="code-container" role="region" aria-label="Example prompt code block">
+                    <button class="copy-button" onclick="copyCode(this)" aria-label="Copy example prompt to clipboard">Copy</button>
+                    <pre><code>Persona: Academic integrity assistant
+Task: For each reference in these 10 essays produce a table with:
+ StudentID | Reference | DOI/PMID | Journal | 2024 Impact Factor | URL | Predatory? (Yes/No + reason) | 1-sentence summary| Used Correctly in Context
+Context: StudentID is in the filename; if IF unknown write NA
+Format: Markdown table</code></pre>
+                </div>
+            </details>
+
+            <hr>
+
+            <h3>🔧 How to Modify This Workflow</h3>
+            <ul>
+                <li>✅ <strong>Use EndNote:</strong> Export your EndNote library and ask Copilot to compare citations against it.</li>
+                <li>✅ <strong>Upload 50 essays at once:</strong> Place all essays in a folder and ask Copilot to extract references from each file.</li>
+                <li>✅ <strong>Export to Excel:</strong> Ask Copilot to format the output as a Markdown or CSV table and paste into Excel.</li>
+                <li>✅ <strong>Include citation context:</strong> Ask Copilot to check how each reference is used in the essay.</li>
+                <li>✅ <strong>Add hallucination detection:</strong> Modify the prompt to include a column that flags whether each reference is real or fabricated.</li>
+            </ul>
+
+            <h4>🧪 Hallucination Detection: Prompt Enhancement</h4>
+            <p>To detect hallucinated references, add this column to your output table:</p>
+            <ul>
+                <li><strong>Column Name:</strong> Possible Hallucination?</li>
+                <li><strong>Logic:</strong> Ask Copilot to check each reference against EndNote or CrossRef. If not found, mark as "Yes".</li>
+            </ul>
+
+            <h5>Prompt Example:</h5>
+            <div class="code-container" role="region" aria-label="Enhanced prompt for hallucination detection">
+                <button class="copy-button" onclick="copyCode(this)" aria-label="Copy enhanced prompt to clipboard">Copy</button>
+                <pre><code>Persona: Academic integrity assistant
+Task: For each reference in these 50 essays, generate a table with:
+
+Student ID (from filename)
+Reference
+DOI
+Journal
+Predatory? (Yes/No + reason)
+Used correctly in context?
+Exists in EndNote library?
+Possible Hallucination?
+
+Context: Essays are stored in a folder. EndNote export is available.
+Format: Excel-compatible table</code></pre>
+            </div>
+
+            <h3>⚠️ What Could Go Wrong?</h3>
+            <div class="table-copy-container">
+                <button class="table-copy-button" onclick="copyTableData(this)" aria-label="Copy troubleshooting table to clipboard">Copy Table</button>
+                <div class="scrollable-table" role="region" aria-label="Troubleshooting table for reference checking workflow" tabindex="0">
+                    <table role="table" aria-label="Common issues and solutions for reference checking workflow">
+                        <thead>
+                            <tr role="row">
+                                <th>Issue</th>
+                                <th>What It Means</th>
+                                <th>How to Fix It</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>❌ Copilot invents references</td>
+                                <td>AI may generate fake DOIs or journals</td>
+                                <td>Always verify with EndNote or CrossRef</td>
+                            </tr>
+                            <tr>
+                                <td>❌ File format not supported</td>
+                                <td>Copilot struggles with PDFs or scanned docs</td>
+                                <td>Use Word or plain text format</td>
+                            </tr>
+                            <tr>
+                                <td>❌ EndNote library not updated</td>
+                                <td>Missing recent references</td>
+                                <td>Sync EndNote with latest sources</td>
+                            </tr>
+                            <tr>
+                                <td>❌ Copilot misreads citation style</td>
+                                <td>APA vs MLA confusion</td>
+                                <td>Specify the style in your prompt</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <h3>🚀 Next Steps: Advanced Options</h3>
+
+            <h4>🔹 Excel Script Integration</h4>
+            <p>Use Excel Copilot to:</p>
+            <ul>
+                <li>Highlight missing DOIs</li>
+                <li>Flag duplicate references</li>
+                <li>Add conditional formatting for predatory journals</li>
+                <li>Create pivot tables to summarize citation patterns</li>
+            </ul>
+
+            <h4>🔹 Power Automate Integration</h4>
+            <ul>
+                <li>Automatically trigger reference checking when essays are uploaded to SharePoint or OneDrive.</li>
+                <li>Auto-email flagged reports</li>
+                <li>Log citation quality scores into a central dashboard.</li>
+            </ul>
+
+            <h4>🔹 Build a Citation Dashboard</h4>
+            <p>Use Excel + Power BI to visualise:</p>
+            <ul>
+                <li>Most cited journals</li>
+                <li>Frequency of predatory sources</li>
+                <li>Citation accuracy trends across modules</li>
+            </ul>
+            </section>
+            </div>
+
+            <!-- Workflow 2 Tab Content -->
+            <div id="workflow2-tab" class="tab-content">
+            <section aria-labelledby="workflow2">
+                <h2 class="workflow-header" id="workflow2">📅 Workflow 2: Calendar Automation</h2>
+                
+                <!-- Workflow Overview -->
+                <div style="background: #f0fdf4; border: 2px solid #16a34a; border-radius: 12px; padding: 20px; margin: 20px 0;">
+                    <h3 style="margin-top: 0; color: #16a34a;">📅 Workflow Overview</h3>
+                    <p><strong>Key outcome:</strong> Automate the creation of calendar events for your timetables and schedules in Outlook.</p>
+                    <br>
+                    <p><strong>Why it matters:</strong></p>
+
+                    <p>Managing academic schedules manually is time-consuming and error-prone. Whether you're creating timetables, booking rooms, or scheduling revision sessions, converting Excel data into calendar events can save hours of admin work.
+                        This workflow shows how to use GenAI tools to automate calendar creation from structured data, helping staff generate .ics (calendar) files that can be imported into Outlook, Teams, or Google Calendar. </p>
+                        <br>
+                        <p><strong>In this workflow, you will learn how to:</strong></p>
+                        <ul>
+                            <li>Prepare your Excel file with the correct data structure for calendar events</li>
+                            <li>Use Microsoft 365 Copilot to generate .ics files</li>
+                            <li>Import the generated .ics files into your calendar application</li>
+                        </ul>
+                </div>
+
+                <!-- Tools Used Section -->
+                <h3>🛠️ Tools Used in This Workflow</h3>
+                <div class="table-copy-container">
+                    <button class="table-copy-button" onclick="copyTableData(this)" aria-label="Copy tools table to clipboard">Copy Table</button>
+                    <div class="scrollable-table" role="region" aria-label="Tools used in calendar automation workflow" tabindex="0">
+                        <table role="table" aria-label="Tools for calendar automation workflow">
+                            <thead>
+                                <tr role="row">
+                                    <th>Tool</th>
+                                    <th>What It Is</th>
+                                    <th>Where to Find It</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>Microsoft Excel</strong></td>
+                                    <td>Spreadsheet tool to store timetable data</td>
+                                    <td>Part of Microsoft 365</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Microsoft 365 Copilot (Excel or Chat)</strong></td>
+                                    <td>AI assistant that can read Excel and generate calendar files</td>
+                                    <td>Built into Excel or available via Microsoft 365 Chat</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Outlook Calendar</strong></td>
+                                    <td>Calendar app to manage events and schedules</td>
+                                    <td>Built into Microsoft 365</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>.ics File Format</strong></td>
+                                    <td>Universal calendar file format</td>
+                                    <td>Can be opened in Outlook, Google Calendar, Apple Calendar</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+<h3 id="scenario-overview-2">Scenario Overview</h3>
+<p>You’ve just finalised your teaching or meeting schedule for the next few months. It includes dozens of sessions: lectures, labs, tutorials, or admin meetings. Now you need to add them all to Outlook or Teams. 
+    Instead of creating each event manually, this workflow shows you how to use Excel and Copilot to generate a calendar file that you can import in seconds.</p>
+            <p>In this workflow, we will:
+                <ol>
+                    <li>Prepare your timetable data in Excel</li>
+                    <li>Use Copilot to generate a .ics calendar file</li>
+                    <li>Import the .ics file into Outlook or Teams</li>
+                </ol>
+            </p>
+           <details>
+               <summary>What is an .ics file?</summary>
+               <p>An .ics file is a universal calendar file format used to store event information like date, time, location, and attendees. It works across most calendar applications, including Outlook, Google Calendar, Apple Calendar, and Teams. 
+                When you open or import an .ics file, it automatically adds all the events to your calendar. This makes it perfect for sharing timetables, meeting schedules, or teaching plans without having to create each event manually.
+            <p><em>Here is a sample .ics file for reference:</em></p>
+            <div class="code-container" role="region" aria-label="Sample .ics file content">
+                <button class="copy-button" onclick="copyCode(this)" aria-label="Copy sample .ics file to clipboard">Copy</button>
+                <pre><code>BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Your Organization//Your Product//EN
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+X-WR-CALNAME:Your Calendar Name
+X-WR-TIMEZONE:Your Timezone
+BEGIN:VEVENT
+UID:unique-event-id
+DTSTAMP:20230922T090000Z
+DTSTART:20230922T090000Z
+DTEND:20230922T100000Z
+SUMMARY:Event Title
+LOCATION:Event Location
+DESCRIPTION:Event Description
+END:VEVENT
+END:VCALENDAR
+            </code></pre>
+            </div>
+            <p>In this example, the .ics file contains a single event scheduled for September 22, 2023, from 9:00 AM to 10:00 AM. You can add multiple events by repeating the <code>BEGIN:VEVENT</code> and <code>END:VEVENT</code> blocks.</p>
+              </details>
+            <br>
+
+            <h3>📊 Prepare Your Excel File</h3>
+            <p id="excel-setup"> Your schedule first needs to be prepared in Excel. Ensure columns exactly as below otherwise the .ics file may fail.<br>
+                <em>You can also just copy the table below and paste it on Excel or directly into Copilot</em>:</p>
+
+            <h4>Sample Timetable</h4>
+            <div class="table-copy-container">
+                <button class="table-copy-button" onclick="copyTableData(this)" aria-label="Copy Excel structure table to clipboard">Copy Table</button>
+                <div class="scrollable-table" role="region" aria-label="Sample timetable with course schedule" tabindex="0">
+                <table role="table" aria-label="Excel file structure example with Date, StartTime, EndTime, Course, and Room columns">
+                    <thead>
+                        <tr role="row">
+                            <th>Date</th>
+                            <th>StartTime</th>
+                            <th>EndTime</th>
+                            <th>Course</th>
+                            <th>Room</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>2025-09-22</td>
+                            <td>09:00</td>
+                            <td>10:00</td>
+                            <td>BIO101</td>
+                            <td>Lab 1</td>
+                        </tr>
+                        <tr>
+                            <td>2025-09-22</td>
+                            <td>10:00</td>
+                            <td>11:00</td>
+                            <td>CHE102</td>
+                            <td>Lab 2</td>
+                        </tr>
+                        <tr>
+                            <td>2025-09-22</td>
+                            <td>11:00</td>
+                            <td>12:00</td>
+                            <td>PHY103</td>
+                            <td>Lecture Hall A</td>
+                        </tr>
+                        <tr>
+                            <td>2025-09-22</td>
+                            <td>13:00</td>
+                            <td>14:00</td>
+                            <td>MTH104</td>
+                            <td>Room 201</td>
+                        </tr>
+                        <tr>
+                            <td>2025-09-22</td>
+                            <td>14:00</td>
+                            <td>15:00</td>
+                            <td>ENG105</td>
+                            <td>Room 202</td>
+                        </tr>
+                        <tr>
+                            <td>2025-09-23</td>
+                            <td>09:00</td>
+                            <td>10:00</td>
+                            <td>BIO101</td>
+                            <td>Lab 1</td>
+                        </tr>
+                        <tr>
+                            <td>2025-09-23</td>
+                            <td>10:00</td>
+                            <td>11:00</td>
+                            <td>CHE102</td>
+                            <td>Lab 2</td>
+                        </tr>
+                        <tr>
+                            <td>2025-09-23</td>
+                            <td>11:00</td>
+                            <td>12:00</td>
+                            <td>PHY103</td>
+                            <td>Lecture Hall A</td>
+                        </tr>
+                        <tr>
+                            <td>2025-09-23</td>
+                            <td>13:00</td>
+                            <td>14:00</td>
+                            <td>MTH104</td>
+                            <td>Room 201</td>
+                        </tr>
+                        <tr>
+                            <td>2025-09-23</td>
+                            <td>14:00</td>
+                            <td>15:00</td>
+                            <td>ENG105</td>
+                            <td>Room 202</td>
+                        </tr>
+                        <tr>
+                            <td>2025-09-24</td>
+                            <td>09:00</td>
+                            <td>10:00</td>
+                            <td>BIO101</td>
+                            <td>Lab 1</td>
+                        </tr>
+                        <tr>
+                            <td>2025-09-24</td>
+                            <td>10:00</td>
+                            <td>11:00</td>
+                            <td>CHE102</td>
+                            <td>Lab 2</td>
+                        </tr>
+                        <tr>
+                            <td>2025-09-24</td>
+                            <td>11:00</td>
+                            <td>12:00</td>
+                            <td>PHY103</td>
+                            <td>Lecture Hall A</td>
+                        </tr>
+                        <tr>
+                            <td>2025-09-24</td>
+                            <td>13:00</td>
+                            <td>14:00</td>
+                            <td>MTH104</td>
+                            <td>Room 201</td>
+                        </tr>
+                        <tr>
+                            <td>2025-09-24</td>
+                            <td>14:00</td>
+                            <td>15:00</td>
+                            <td>ENG105</td>
+                            <td>Room 202</td>
+                        </tr>
+                    </tbody>
+                </table>
+                </div>
+            </div>
+
+
+            <h3 id="copilot-prompt">Excel Copilot Prompt</h3>
+
+            <h4>Prompt Structure</h4>
+            <p>To create an effective prompt for Excel Copilot, we can try the P-T-C-F structure. Below, try crafting the prompt to generate an .ics file from the provided table:</p>
+
+            <div class="code-container" role="region" aria-label="Prompt improvement text area">
+                <button class="copy-button" onclick="copyTextArea('prompt-improve-workflow2')" aria-label="Copy text area content to clipboard">Copy</button>
+                <textarea class="notes-area" id="prompt-improve-workflow2" rows="3" placeholder="Type your  prompt here..." aria-label="Prompt  text area - rewrite the prompt using Persona, Task, Context, Format structure" aria-describedby="status-prompt-improve-workflow2"></textarea>
+            </div>
+            <div class="notes-status" id="status-prompt-improve-workflow2" role="status" aria-live="polite"></div>
+            <br><br>
+<details>
+    <summary>Output .ics file <br>
+        <em>Very confusing so don't try to understand or read it fully.</em></summary>
+
+            <p> Your output .ics file will look like this (open it with a text editor like Notepad to view):</p>
+            <div class="code-container" role="region" aria-label="Generated .ics file content">
+                <button class="copy-button" onclick="copyCode(this)" aria-label="Copy generated .ics file content to clipboard">Copy</button>
+                <pre><code>BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//University of Glasgow//Calendar Automation//EN
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+BEGIN:VEVENT
+UID:BIO101-2025-09-22-0900-glasgow.ac.uk
+DTSTAMP:20250802T125002Z
+DTSTART;TZID=Europe/London:20250922T090000
+DTEND;TZID=Europe/London:20250922T100000
+SUMMARY:BIO101
+LOCATION:Lab 1
+END:VEVENT
+BEGIN:VEVENT
+UID:CHE102-2025-09-22-1000-glasgow.ac.uk
+DTSTAMP:20250802T125002Z
+DTSTART;TZID=Europe/London:20250922T100000
+DTEND;TZID=Europe/London:20250922T110000
+SUMMARY:CHE102
+LOCATION:Lab 2
+END:VEVENT
+BEGIN:VEVENT
+UID:PHY103-2025-09-22-1100-glasgow.ac.uk
+DTSTAMP:20250802T125002Z
+DTSTART;TZID=Europe/London:20250922T110000
+DTEND;TZID=Europe/London:20250922T120000
+SUMMARY:PHY103
+LOCATION:Lecture Hall A
+END:VEVENT
+BEGIN:VEVENT
+UID:MTH104-2025-09-22-1300-glasgow.ac.uk
+DTSTAMP:20250802T125002Z
+DTSTART;TZID=Europe/London:20250922T130000
+DTEND;TZID=Europe/London:20250922T140000
+SUMMARY:MTH104
+LOCATION:Room 201
+END:VEVENT
+BEGIN:VEVENT
+UID:ENG105-2025-09-22-1400-glasgow.ac.uk
+DTSTAMP:20250802T125002Z
+DTSTART;TZID=Europe/London:20250922T140000
+DTEND;TZID=Europe/London:20250922T150000
+SUMMARY:ENG105
+LOCATION:Room 202
+END:VEVENT
+BEGIN:VEVENT
+UID:BIO101-2025-09-23-0900-glasgow.ac.uk
+DTSTAMP:20250802T125002Z
+DTSTART;TZID=Europe/London:20250923T090000
+DTEND;TZID=Europe/London:20250923T100000
+SUMMARY:BIO101
+LOCATION:Lab 1
+END:VEVENT
+BEGIN:VEVENT
+UID:CHE102-2025-09-23-1000-glasgow.ac.uk
+DTSTAMP:20250802T125002Z
+DTSTART;TZID=Europe/London:20250923T100000
+DTEND;TZID=Europe/London:20250923T110000
+SUMMARY:CHE102
+LOCATION:Lab 2
+END:VEVENT
+BEGIN:VEVENT
+UID:PHY103-2025-09-23-1100-glasgow.ac.uk
+DTSTAMP:20250802T125002Z
+DTSTART;TZID=Europe/London:20250923T110000
+DTEND;TZID=Europe/London:20250923T120000
+SUMMARY:PHY103
+LOCATION:Lecture Hall A
+END:VEVENT
+BEGIN:VEVENT
+UID:MTH104-2025-09-23-1300-glasgow.ac.uk
+DTSTAMP:20250802T125002Z
+DTSTART;TZID=Europe/London:20250923T130000
+DTEND;TZID=Europe/London:20250923T140000
+SUMMARY:MTH104
+LOCATION:Room 201
+END:VEVENT
+BEGIN:VEVENT
+UID:ENG105-2025-09-23-1400-glasgow.ac.uk
+DTSTAMP:20250802T125002Z
+DTSTART;TZID=Europe/London:20250923T140000
+DTEND;TZID=Europe/London:20250923T150000
+SUMMARY:ENG105
+LOCATION:Room 202
+END:VEVENT
+BEGIN:VEVENT
+UID:BIO101-2025-09-24-0900-glasgow.ac.uk
+DTSTAMP:20250802T125002Z
+DTSTART;TZID=Europe/London:20250924T090000
+DTEND;TZID=Europe/London:20250924T100000
+SUMMARY:BIO101
+LOCATION:Lab 1
+END:VEVENT
+BEGIN:VEVENT
+UID:CHE102-2025-09-24-1000-glasgow.ac.uk
+DTSTAMP:20250802T125002Z
+DTSTART;TZID=Europe/London:20250924T100000
+DTEND;TZID=Europe/London:20250924T110000
+SUMMARY:CHE102
+LOCATION:Lab 2
+END:VEVENT
+BEGIN:VEVENT
+UID:PHY103-2025-09-24-1100-glasgow.ac.uk
+DTSTAMP:20250802T125002Z
+DTSTART;TZID=Europe/London:20250924T110000
+DTEND;TZID=Europe/London:20250924T120000
+SUMMARY:PHY103
+LOCATION:Lecture Hall A
+END:VEVENT
+BEGIN:VEVENT
+UID:MTH104-2025-09-24-1300-glasgow.ac.uk
+DTSTAMP:20250802T125002Z
+DTSTART;TZID=Europe/London:20250924T130000
+DTEND;TZID=Europe/London:20250924T140000
+SUMMARY:MTH104
+LOCATION:Room 201
+END:VEVENT
+BEGIN:VEVENT
+UID:ENG105-2025-09-24-1400-glasgow.ac.uk
+DTSTAMP:20250802T125002Z
+DTSTART;TZID=Europe/London:20250924T140000
+DTEND;TZID=Europe/London:20250924T150000
+SUMMARY:ENG105
+LOCATION:Room 202
+END:VEVENT
+END:VCALENDAR
+                </code></pre>
+            </div>
+            <p><em>Note:</em> The <code>UID</code> field is a unique identifier for each event, which can be based on the course code, date, and time.</p>
+
+</details>
+<br><br>
+
+<details>
+    <summary>View Prompt used to generate the above .ics file</summary>
+    <div class="code-container" role="region" aria-label="Excel Copilot prompt code block">
+        <button class="copy-button" onclick="copyCode(this)" aria-label="Copy Excel Copilot prompt to clipboard">Copy</button>
+        <pre><code>Persona: Calendar automation specialist
+Task: Generate a full .ics file from this table
+Context: Time zone Europe/London
+Format: Return only plain-text .ics</code></pre>
+            </div>
+            <h3 id="outlook-import">Import to Outlook</h3>
+            <p> Copilot chat would have given you a link to download the .ics file. Download it and then import it into your Outlook calendar.</p>
+            <p><em>If the output was rather displayed, you can Copy output ➜ save as</em> <code>semester.ics</code></p>
+            <p><em> These steps are for Outlook New version</em></p>
+            <ol>
+                <li>Calendar tab ▷ Add Calendar (bottom left panel) ▷ Upload from file ▷ Add your .ics file
+                </li>
+                <li>Choose <strong>Add to existing calendar</strong></li>
+                <li>Spot-check three random events</li>
+            </ol>
+
+            <hr>
+
+            <h3>🔧 How to Modify This Workflow</h3>
+            <ul>
+                <li>✅ <strong>Add event descriptions:</strong> Include lecture topics, module codes, or links.</li>
+                <li>✅ <strong>Add reminders:</strong> Ask Copilot to include alerts (e.g., 15 minutes before).</li>
+                <li>✅ <strong>Add recurring events:</strong> Use logic like "every Monday for 10 weeks".</li>
+                <li>✅ <strong>Include Teams links:</strong> Add meeting URLs for hybrid sessions.<br>
+                <em> FYI: You can just add a reusable link for the Teams meeting that can be the same. See below for more info</em></li>
+                <li>✅ <strong>Auto-email invites:</strong> Use Power Automate to send .ics files to students or staff.</li>
+            </ul>
+            <h4>🧩 Enhanced Copilot Prompt for Calendar Automation</h4>
+            <p> You can modify your excel file to include additional columns for event descriptions, reminders, and Teams links. Here is an example: </p>
+
+            <div class="table-copy-container">
+                <button class="table-copy-button" onclick="copyTableData(this)" aria-label="Copy enhanced Excel structure table to clipboard">Copy Table</button>
+                <div class="scrollable-table" role="region" aria-label="Enhanced timetable with additional columns" tabindex="0">
+                    <table role="table" aria-label="Enhanced Excel file structure with Description, TeamsLink, Attendees, and Recurrence columns">
+                        <thead>
+                            <tr role="row">
+                                <th>Date</th>
+                                <th>StartTime</th>
+                                <th>EndTime</th>
+                                <th>Course</th>
+                                <th>Room</th>
+                                <th>Description</th>
+                                <th>TeamsLink</th>
+                                <th>Attendees</th>
+                                <th>Recurrence</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>2025-09-22</td>
+                                <td>09:00</td>
+                                <td>10:00</td>
+                                <td>BIO101</td>
+                                <td></td>
+                                <td>Introduction to Biology</td>
+                                <td></td>
+                                <td>student1@glasgow.ac.uk;student2@glasgow.ac.uk</td>
+                                <td>Weekly for 10 weeks</td>
+                            </tr>
+                            <tr>
+                                <td>2025-09-22</td>
+                                <td>11:00</td>
+                                <td>12:00</td>
+                                <td>CHE102</td>
+                                <td>Lab 2</td>
+                                <td>Organic Chemistry Lab</td>
+                                <td></td>
+                                <td>student3@glasgow.ac.uk</td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>2025-09-23</td>
+                                <td>10:00</td>
+                                <td>11:00</td>
+                                <td>PHY103</td>
+                                <td></td>
+                                <td>Quantum Mechanics Lecture</td>
+                                <td>https://teams.microsoft.com/l/meetup-join/abc123</td>
+                                <td>student4@glasgow.ac.uk;student5@glasgow.ac.uk</td>
+                                <td>Weekly for 8 weeks</td>
+                            </tr>
+                            <tr>
+                                <td>2025-09-23</td>
+                                <td>13:00</td>
+                                <td>14:00</td>
+                                <td>MTH104</td>
+                                <td>Room 201</td>
+                                <td>Calculus II</td>
+                                <td></td>
+                                <td>student6@glasgow.ac.uk</td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>2025-09-24</td>
+                                <td>09:00</td>
+                                <td>10:00</td>
+                                <td>ENG105</td>
+                                <td></td>
+                                <td>Shakespeare Seminar</td>
+                                <td></td>
+                                <td>student7@glasgow.ac.uk</td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>2025-09-24</td>
+                                <td>11:00</td>
+                                <td>12:00</td>
+                                <td>BIO101</td>
+                                <td></td>
+                                <td>Genetics Overview</td>
+                                <td>https://teams.microsoft.com/l/meetup-join/def456</td>
+                                <td>student1@glasgow.ac.uk;student2@glasgow.ac.uk</td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>2025-09-25</td>
+                                <td>14:00</td>
+                                <td>15:00</td>
+                                <td>CHE102</td>
+                                <td>Lab 2</td>
+                                <td>Spectroscopy Lab</td>
+                                <td></td>
+                                <td>student3@glasgow.ac.uk</td>
+                                <td>Weekly for 6 weeks</td>
+                            </tr>
+                            <tr>
+                                <td>2025-09-26</td>
+                                <td>10:00</td>
+                                <td>11:00</td>
+                                <td>PHY103</td>
+                                <td></td>
+                                <td>Relativity Theory</td>
+                                <td></td>
+                                <td>student4@glasgow.ac.uk</td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>2025-09-26</td>
+                                <td>12:00</td>
+                                <td>13:00</td>
+                                <td>MTH104</td>
+                                <td></td>
+                                <td>Linear Algebra</td>
+                                <td>https://teams.microsoft.com/l/meetup-join/ghi789</td>
+                                <td>student6@glasgow.ac.uk</td>
+                                <td>Weekly for 5 weeks</td>
+                            </tr>
+                            <tr>
+                                <td>2025-09-27</td>
+                                <td>09:00</td>
+                                <td>10:00</td>
+                                <td>ENG105</td>
+                                <td>Room 202</td>
+                                <td>Poetry Workshop</td>
+                                <td></td>
+                                <td>student7@glasgow.ac.uk</td>
+                                <td></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <p>Now, Here is a more detailed prompt to do the above:</p>
+            <div class="code-container" role="region" aria-label="Enhanced Copilot prompt for calendar automation">
+                <button class="copy-button" onclick="copyCode(this)" aria-label="Copy enhanced Copilot prompt to clipboard">Copy</button>
+                <pre><code> 
+Persona: Calendar automation specialist
+Task: Generate a .ics calendar file from this Excel timetable
+Context: Time zone Europe/London; each row represents a separate event
+Additional Instructions:
+    Add event descriptions: Include lecture topics, module codes, or links from the Excel table
+    Add reminders: Include a 15-minute alert before each event
+    Add recurring events: Use logic like “every Monday for 10 weeks” where applicable
+    Include Teams links: Add a Microsoft Teams meeting URL to each event
+    Invite attendees: Add email addresses from the Excel table to send calendar invites
+Format: Return only plain-text .ics content, ready to be saved and imported into Outlook</p>
+            </pre></code>
+            </div>  
+<br>
+<h4>🧩 Reusable Teams Meeting Link</h4>
+            <p>To create a reusable Teams meeting link:</p>
+            <ol>
+                <li>Schedule a new Teams meeting in your calendar.</li>
+                <li>Copy the meeting link from the meeting details.</li>
+                <li>Use this link for all relevant events in your .ics file.</li>
+            </ol>
+            <p> <em>Note:</em> We are doing this because Copilot cannot automatically generate a Teams link. When you manually create a meeting in Outlook and toggle “Teams Meeting”, Outlook uses Microsoft Graph API in the background to generate a secure, unique Teams link.
+                Copilot (in Excel or Chat) can’t currently access that API directly to generate a real Teams link unless it’s integrated with Power Automate or Outlook’s backend services. </p><br>
+
+            <h3>🧪 Hallucination Safeguards</h3>
+            <p>While Copilot is reliable with structured data, it may occasionally misinterpret time zones, duplicate events, or format .ics files incorrectly. To reduce errors:</p>
+
+            <p>✅ <strong>Always specify the time zone:</strong><br>
+            "Time zone: Europe/London"</p>
+
+            <p>✅ <strong>Ask Copilot to return plain-text .ics only:</strong><br>
+            "Do not include HTML or formatting."</p>
+
+            <p>✅ <strong>Spot-check 3–5 events manually before importing.</strong><br>
+            ✅ <strong>Use Excel formulas to validate time formats before prompting Copilot.</strong></p>
+
+            <h3>⚠️ What Could Go Wrong?</h3>
+            <div class="table-copy-container">
+                <button class="table-copy-button" onclick="copyTableData(this)" aria-label="Copy troubleshooting table to clipboard">Copy Table</button>
+                <div class="scrollable-table" role="region" aria-label="Troubleshooting table for calendar automation workflow" tabindex="0">
+                    <table role="table" aria-label="Common issues and solutions for calendar automation workflow">
+                        <thead>
+                            <tr role="row">
+                                <th>Issue</th>
+                                <th>What It Means</th>
+                                <th>How to Fix It</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>❌ Wrong time zone</td>
+                                <td>Events show up at odd hours</td>
+                                <td>Always specify "Europe/London"</td>
+                            </tr>
+                            <tr>
+                                <td>❌ Excel format mismatch</td>
+                                <td>Copilot can't read the table</td>
+                                <td>Use exact column headers: Date, StartTime, EndTime, Course, Room</td>
+                            </tr>
+                            <tr>
+                                <td>❌ Copilot adds HTML</td>
+                                <td>Outlook can't read it</td>
+                                <td>Ask for "plain-text .ics only"</td>
+                            </tr>
+                            <tr>
+                                <td>❌ Events don't import</td>
+                                <td>File is corrupted or misformatted</td>
+                                <td>Open .ics in Notepad to check</td>
+                            </tr>
+                            <tr>
+                                <td>❌ Overlapping events</td>
+                                <td>Copilot doesn't detect conflicts</td>
+                                <td>Use Excel filters or conditional formatting to check manually</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <h3>🚀 Next Steps: Advanced Options</h3>
+
+            <h4>🔹 Excel Script Integration</h4>
+            <p>Use Excel Copilot to:</p>
+            <ul>
+                <li>Validate time formats</li>
+                <li>Highlight overlapping events</li>
+                <li>Auto-generate .ics content per row</li>
+                <li>Create a "Week View" summary</li>
+            </ul>
+
+            <h4>🔹 Power Automate Integration</h4>
+            <ul>
+                <li>Automatically send calendar invites when a new timetable is uploaded.</li>
+                <li>Sync .ics files with Outlook or Teams calendars.</li>
+                <li>Trigger reminders or room booking confirmations.</li>
+               <li>Trigger calendar creation when a new Excel file is uploaded to SharePoint.</li>
+               <li>Automatically create Outlook events with Teams links.</li>
+               <li>Send invites to students or staff based on Excel data.</li>
+            </ul>
+
+            <h4>🔹 Combine with Room Booking Systems</h4>
+            <ul>
+                <li>Link timetable data to Microsoft Bookings or SharePoint room calendars.</li>
+                <li>Auto-check room availability and suggest alternatives.</li>
+            </ul>
+
+            <h4>🔹 Build a Scheduling Dashboard</h4>
+            <p>Use Excel + Power BI to visualise:</p>
+            <ul>
+                <li>Room usage</li>
+                <li>Course overlaps</li>
+                <li>Staff availability</li>
+            </ul>
+            </section>
+            </div>
+
+            <!-- Workflow 3 Tab Content -->
+            <div id="workflow3-tab" class="tab-content">
+            <section aria-labelledby="workflow3">
+                <h2 class="workflow-header" id="workflow3">🗂️ Workflow 3: Batch Renaming & Structuring folders</h2>
+                
+                <!-- Workflow Overview -->
+                <div style="background: #fef7ff; border: 2px solid #a855f7; border-radius: 12px; padding: 20px; margin: 20px 0;">
+                    <h3 style="margin-top: 0; color: #a855f7;">🔄 Workflow Overview</h3>
+                    <p><strong>Key outcome:</strong> Automate the tedious process of batch renaming and organising multiple files.</p>
+                    <p><strong>Why this matters:</strong></p>
+                    <p>Renaming and organising hundreds of student files manually is tedious, error-prone, and time-consuming. This workflow shows how to use GenAI tools to generate scripts that automate file renaming, rubric duplication, and folder creation — saving hours of admin work.</p>
+                    <p>Whether you're preparing files for archiving, organizing submissions, or sharing with external collaborators, this process ensures consistency, accuracy, and speed.</p>
+                    
+                    <p><strong>In this workflow, you will learn how to:</strong></p>
+                    <ul>    
+                        <li>Write structured prompts using the CLEAR framework to generate scripts</li>
+                        <li>Use Microsoft 365 Copilot to create PowerShell and Bash scripts</li>
+                        <li>Automate file renaming, rubric duplication, and folder organisation</li>
+                        <li>Run scripts on Windows and macOS to streamline file management</li>
+                    </ul>
+                    <p>By the end, you'll have practical scripts ready to automate your file organisation tasks, making your workflow more efficient and less error-prone.</p>
+                </div>
+
+                <!-- Tools Used Section -->
+                <h3>🛠️ Tools Used in This Workflow</h3>
+                <div class="table-copy-container">
+                    <button class="table-copy-button" onclick="copyTableData(this)" aria-label="Copy tools table to clipboard">Copy Table</button>
+                    <div class="scrollable-table" role="region" aria-label="Tools used in batch renaming workflow" tabindex="0">
+                        <table role="table" aria-label="Tools for batch renaming workflow">
+                            <thead>
+                                <tr role="row">
+                                    <th>Tool</th>
+                                    <th>What It Is</th>
+                                    <th>Where to Find It</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Microsoft 365 Copilot (Chat)</td>
+                                    <td>AI assistant that can generate scripts based on your instructions</td>
+                                    <td>Available via Microsoft 365 Chat</td>
+                                </tr>
+                                <tr>
+                                    <td>PowerShell (Windows)</td>
+                                    <td>A scripting tool to automate tasks</td>
+                                    <td>Right-click folder → "Open PowerShell window here"</td>
+                                </tr>
+                                <tr>
+                                    <td>Terminal (macOS)</td>
+                                    <td>Command-line tool to run Bash scripts</td>
+                                    <td>Use Spotlight (Cmd + Space → type "Terminal")</td>
+                                </tr>
+                                <tr>
+                                    <td>File Explorer / Finder</td>
+                                    <td>File management interface</td>
+                                    <td>Built into Windows/macOS</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- PowerShell and Bash Explanation Box -->
+                <div style="background: #f0f9ff; border: 2px solid #0ea5e9; border-radius: 12px; padding: 20px; margin: 20px 0;">
+                    <h3 style="margin-top: 0; color: #0ea5e9;">💻 What are PowerShell and Bash?</h3>
+                    <p>Think of <strong>PowerShell</strong> and <strong>Bash</strong> as your computer's personal assistants that can follow written instructions to perform tasks automatically.</p>
+                    
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin: 16px 0;">
+                        <div style="background: rgba(255,255,255,0.8); padding: 15px; border-radius: 8px; border-left: 4px solid #3b82f6;">
+                            <h4 style="margin-top: 0; color: #3b82f6;">🪟 PowerShell (Windows)</h4>
+                            <p style="margin-bottom: 8px;"><strong>What it is:</strong> A command-line tool built into Windows that can automate repetitive tasks.</p>
+                            <p style="margin-bottom: 8px;"><strong>Think of it like:</strong> A very efficient digital assistant that can rename hundreds of files, create folders, or copy documents in seconds instead of hours.</p>
+                            <p style="margin-bottom: 0;"><strong>Common tasks:</strong> Rename files, create folders, copy/move files, organise documents, generate reports.</p>
+                        </div>
+                        
+                        <div style="background: rgba(255,255,255,0.8); padding: 15px; border-radius: 8px; border-left: 4px solid #10b981;">
+                            <h4 style="margin-top: 0; color: #10b981;">🍎 Bash (Mac/Linux)</h4>
+                            <p style="margin-bottom: 8px;"><strong>What it is:</strong> A command-line shell (like PowerShell) but for Mac and Linux computers.</p>
+                            <p style="margin-bottom: 8px;"><strong>Think of it like:</strong> The Mac equivalent of PowerShell - your digital assistant for automating file operations and system tasks.</p>
+                            <p style="margin-bottom: 0;"><strong>Common tasks:</strong> Same as PowerShell - file management, folder creation, batch operations, text processing.</p>
+                        </div>
+                    </div>
+                    
+                    <h4 style="color: #0ea5e9; margin-bottom: 8px;">🎯 Why Use Them Instead of Manual Work?</h4>
+                    <ul style="margin-bottom: 16px;">
+                        <li><strong>Speed:</strong> Rename 100 files in 2 seconds vs. 30 minutes manually</li>
+                        <li><strong>Accuracy:</strong> No typos or missed files</li>
+                        <li><strong>Consistency:</strong> Same naming pattern applied to every file</li>
+                        <li><strong>Repeatability:</strong> Save the script and use it again for next semester</li>
+                    </ul>
+                    
+                    <p style="margin-bottom: 0;"><strong>💡 The best part:</strong> You don't need to learn these languages. GenAI tools like Copilot can write the scripts for you — you just describe what you want done in plain English, and it creates the commands automatically.</p>
+                </div>
+
+  <p id="scenario-description">
+    <strong>Scenario:</strong> You receive 100 student essays stored in 
+    <code>Downloads\Essays\</code>. Each is named like <code>Surname 12345678 Essay.docx</code>.  
+    You must:  
+  </p>
+  <ol>
+    <li>Rename every essay to <code>&lt;CourseCode&gt;_&lt;StudentID&gt;_Essay.docx</code>, e.g., <code>BIO101_12345678_Essay.docx</code>.</li>
+    <li>Duplicate a template rubric file (<code>Rubric.docx</code>) for each student and rename it to <code>&lt;CourseCode&gt;_&lt;StudentID&gt;_Rubric.docx</code>.</li>
+    <li>Create a folder called <code>&lt;StudentID&gt;_&lt;CourseCode&gt;</code> and move both files inside.</li>
+  </ol>
+  <p>
+    Doing this manually would take hours—let’s use <strong>Microsoft 365&nbsp;Copilot</strong> to generate a
+    PowerShell script that automates everything in seconds.
+  </p>
+
+ 
+  <!-- Exercise block -->
+             <p id="clear-prompt-practice"><strong>Write this prompt using the CLEAR framework:</strong></p>
+            <div class="code-container" role="region" aria-label="Prompt improvement text area">
+                <button class="copy-button" onclick="copyTextArea('prompt-improve-workflow3')" aria-label="Copy text area content to clipboard">Copy</button>
+                <textarea class="notes-area" id="prompt-improve-workflow3" rows="3" placeholder="Type your prompt here..." aria-label="Prompt improvement text area - rewrite the prompt using CLEAR framework" aria-describedby="status-prompt-improve-workflow3"></textarea>
+            </div>
+            <div class="notes-status" id="status-prompt-improve-workflow3" role="status" aria-live="polite"></div>
+            <details aria-expanded="false" aria-labelledby="example-prompt-summary">
+                <summary id="example-prompt-summary"><strong>Solution</strong></summary>
+                <p>Here is one of the prompts you can use:</p>
+                <div class="code-container" role="region" aria-label="Example prompt code block">
+                    <button class="copy-button" onclick="copyCode(this)" aria-label="Copy example prompt to clipboard">Copy</button>
+                    <pre><code><strong>Context:</strong><br>
+I have a folder of student essays named in the format Surname_ID_Essay.docx.<br>
+I need to rename each file to ABC123_ID_Assignment1.docx, where ABC123 is the course code and Assignment1 is the assignment name.<br>
+I also have a file called rubric_template.docx that should be copied and renamed for each student as ABC123_ID_Rubric.docx.<br>
+Both the renamed essay and rubric should be placed into a folder named ID_CourseName, where CourseName is the name of the course.
+
+<strong>Limitations:</strong><br>
+The solution must work without requiring additional tools or services.<br>
+
+<strong>Format:</strong><br>
+Return a PowerShell script for Windows (OR a Bash script for macOS).</code></pre>
+                </div>
+            </details>
+            <div class="script-toggle-container" id="generated-scripts">
+                <div class="script-toggle-tabs">
+                    <button class="script-toggle-tab active" onclick="showScriptTab('windows')" aria-label="Show Windows PowerShell script">Windows (PowerShell)</button>
+                    <button class="script-toggle-tab" onclick="showScriptTab('macos')" aria-label="Show macOS Bash script">macOS (Bash)</button>
+                </div>
+                
+                <div id="windows-script" class="script-toggle-content active">
+                    <div class="code-container" role="region" aria-label="PowerShell script for batch renaming">
+                        <button class="copy-button" onclick="copyCode(this)" aria-label="Copy PowerShell script to clipboard">Copy</button>
+                        <pre><code class="language-powershell"># PowerShell Script: organize_essays.ps1
+
+$courseCode = "ABC123"
+$courseName = "CourseName"
+$assignmentName = "Assignment1"
+$sourceFolder = "essays"
+$outputFolder = "organized_essays"
+$rubricTemplate = "rubric_template.docx"
+
+New-Item -ItemType Directory -Force -Path $outputFolder
+
+Get-ChildItem -Path $sourceFolder -Filter "*_Essay.docx" | ForEach-Object {
+    $parts = $_.BaseName -split "_"
+    $studentID = $parts[1]
+    $studentFolder = "$outputFolder\$studentID" + "_$courseName"
+    New-Item -ItemType Directory -Force -Path $studentFolder
+
+    $newEssayName = "$courseCode" + "_$studentID" + "_$assignmentName.docx"
+    $newRubricName = "$courseCode" + "_$studentID" + "_Rubric.docx"
+
+    Copy-Item $_.FullName -Destination "$studentFolder\$newEssayName"
+    Copy-Item "$sourceFolder\$rubricTemplate" -Destination "$studentFolder\$newRubricName"
+}
+
+Write-Host "✅ All files have been renamed and organised."</code></pre>
+                    </div>
+                </div>
+                
+                <div id="macos-script" class="script-toggle-content">
+                    <div class="code-container" role="region" aria-label="Bash script for batch renaming">
+                        <button class="copy-button" onclick="copyCode(this)" aria-label="Copy Bash script to clipboard">Copy</button>
+                        <pre><code class="language-bash">#!/bin/bash
+
+course_code="ABC123"
+course_name="CourseName"
+assignment_name="Assignment1"
+source_folder="essays"
+output_folder="organized_essays"
+rubric_template="rubric_template.docx"
+
+mkdir -p "$output_folder"
+
+for file in "$source_folder"/*_Essay.docx; do
+    filename=$(basename "$file")
+    IFS='_' read -r surname student_id rest <<< "$filename"
+
+    student_folder="$output_folder/${student_id}_${course_name}"
+    mkdir -p "$student_folder"
+
+    new_essay_name="${course_code}_${student_id}_${assignment_name}.docx"
+    new_rubric_name="${course_code}_${student_id}_Rubric.docx"
+
+    cp "$file" "$student_folder/$new_essay_name"
+    cp "$source_folder/$rubric_template" "$student_folder/$new_rubric_name"
+done
+
+echo "✅ All files have been renamed and organised."</code></pre>
+                    </div>
+                </div>
+            </div>
+ 
+
+   <!-- How to run the script -->
+  <h3>Running the Script</h3>
+  <p><strong>Save the script</strong> from Copilot as <code>organize_essays.ps1</code> (Windows) or <code>organize_essays.sh</code> (macOS) in the same folder as your essay files.</p>
+
+  <div class="script-toggle-container">
+    <div class="script-toggle-tabs">
+        <button class="script-toggle-tab active" onclick="showInstructionTab('windows-instructions')" aria-label="Show Windows PowerShell instructions">🪟 Windows Instructions</button>
+        <button class="script-toggle-tab" onclick="showInstructionTab('macos-instructions')" aria-label="Show macOS Bash instructions">🍎 macOS Instructions</button>
+    </div>
+    
+    <div id="windows-instructions" class="script-toggle-content active">
+        <h4 style="margin-top: 16px;">PowerShell (Windows)</h4>
+        <p>Follow these steps to run the PowerShell script:</p>
+        <ol>
+            <li>Save the PowerShell script as <code>organize_essays.ps1</code> in the same folder as your essay files.</li>
+            <li>Right-click the folder containing essays and <code>rubric_template.docx</code> → <strong>"Open PowerShell window here"</strong>. <em>You may instead have "Open in Terminal" - just use that.</em></li>
+            <li>Run the script:
+                <div class="code-container" role="region" aria-label="PowerShell execution command">
+                    <button class="copy-button" onclick="copyCode(this)" aria-label="Copy PowerShell command to clipboard">Copy</button>
+                    <pre><code>.\organize_essays.ps1</code></pre>
+                </div>
+            </li>
+            <li>Verify that each essay and rubric now resides in its own folder.</li>
+        </ol>
+        <p><strong>💡 Tip:</strong> If you get an execution policy error, run this command first:</p>
+        <div class="code-container" role="region" aria-label="PowerShell execution policy command">
+            <button class="copy-button" onclick="copyCode(this)" aria-label="Copy execution policy command to clipboard">Copy</button>
+            <pre><code>Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser</code></pre>
+        </div>
+    </div>
+    
+    <div id="macos-instructions" class="script-toggle-content">
+        <h4 style="margin-top: 16px;">Bash (Mac/Linux)</h4>
+        <p>Follow these steps to run the Bash script:</p>
+        <ol>
+            <li>Save the Bash script as <code>organize_essays.sh</code> in the same folder as your essay files.</li>
+            <li>Right-click inside the folder and choose <strong>"New Terminal at Folder"</strong> (or open Terminal and navigate to the folder using <code>cd</code>).</li>
+            <li>Make the script executable and run it:
+                <div class="code-container" role="region" aria-label="Bash setup and execution commands">
+                    <button class="copy-button" onclick="copyCode(this)" aria-label="Copy Bash commands to clipboard">Copy</button>
+                    <pre><code>chmod +x organize_essays.sh
+./organize_essays.sh</code></pre>
+                </div>
+            </li>
+            <li>Verify that each essay and rubric now resides in its own folder.</li>
+        </ol>
+        <p><strong>💡 Alternative:</strong> If you cannot right-click for Terminal, open Terminal and navigate manually:</p>
+        <div class="code-container" role="region" aria-label="Manual navigation command">
+            <button class="copy-button" onclick="copyCode(this)" aria-label="Copy navigation command to clipboard">Copy</button>
+            <pre><code>cd /path/to/your/essay/folder</code></pre>
+        </div>
+    </div>
+  </div>
+
+  <p><em><strong>⚠️ Important:</strong> Test on a small subset first (for example, 5 files) before running on the full batch.</em></p>
+   <details>
+    <summary><strong>What Could Go Wrong?</strong></summary>
+    <ul>
+      <li>Incorrect path—script can’t find files </li>
+      <li>Filenames with different student ID format may break the pattern.</li>
+      <li>Script runs twice and overwrites renamed files.</li>
+    </ul>
+  </details>
+
+  <h3>🔧 How to Modify This Workflow</h3>
+  <ul>
+    <li>✅ <strong>Log actions:</strong> Add a CSV log that records renamed files and timestamps.</li>
+    <li>✅ <strong>Zip folders:</strong> Compress each student folder for upload or archiving.</li>
+    <li>✅ <strong>Add error handling:</strong> Skip files with missing or malformed IDs.</li>
+    <li>✅ <strong>Include date stamps:</strong> Add submission date to filenames for version control.</li>
+  </ul>
+
+  <h4>🧩 Enhanced Prompt</h4>
+  <div class="code-container" role="region" aria-label="Enhanced workflow prompt">
+    <button class="copy-button" onclick="copyCode(this)" aria-label="Copy enhanced workflow prompt to clipboard">Copy</button>
+    <pre><code><strong>Context:</strong>
+I have a folder of student essays named in the format Surname_ID_Essay.docx.
+I need to rename each file to ABC123_ID_Assignment1.docx, where ABC123 is the course code and Assignment1 is the assignment name.
+I also have a file called rubric_template.docx that should be copied and renamed for each student as ABC123_ID_Rubric.docx.
+Both the renamed essay and rubric should be placed into a folder named ID_CourseName, where CourseName is the name of the course.
+
+<strong>Limitations:</strong>
+The solution must work without requiring additional tools or services.
+
+<strong>Format:</strong>
+Return a PowerShell script for Windows OR a Bash script for macOS.</code></pre>
+  </div>
+
+  <h3>⚠️ What Could Go Wrong?</h3>
+  <div class="table-copy-container">
+    <button class="table-copy-button" onclick="copyTableData(this)" aria-label="Copy troubleshooting table to clipboard">Copy Table</button>
+    <div class="scrollable-table" role="region" aria-label="Troubleshooting table for batch renaming workflow" tabindex="0">
+      <table role="table" aria-label="Common issues and solutions for batch renaming workflow">
+        <thead>
+          <tr role="row">
+            <th>Issue</th>
+            <th>What It Means</th>
+            <th>How to Fix It</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>❌ Script doesn't run</td>
+            <td>Wrong file path or permissions</td>
+            <td>Check folder name and use chmod +x on Mac</td>
+          </tr>
+          <tr>
+            <td>❌ Files not renamed</td>
+            <td>Filename format doesn't match</td>
+            <td>Ensure all files follow Surname_ID_Essay.docx</td>
+          </tr>
+          <tr>
+            <td>❌ Rubric template missing</td>
+            <td>Script can't copy it</td>
+            <td>Place rubric_template.docx in the same folder</td>
+          </tr>
+          <tr>
+            <td>❌ Script overwrites files</td>
+            <td>If run twice</td>
+            <td>Add logic to skip existing files or rename with timestamp</td>
+          </tr>
+          <tr>
+            <td>❌ Mac users can't run PowerShell</td>
+            <td>PowerShell is Windows-only</td>
+            <td>Use the Bash version provided</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <h3>🧪 Hallucination Safeguards</h3>
+  <p>While hallucination is less likely in file renaming workflows, you can still ask Copilot to:</p>
+
+  <p>✅ <strong>Validate filename patterns:</strong><br>
+  "Check if each filename matches the expected format before renaming."</p>
+
+  <p>✅ <strong>Flag unknown formats:</strong><br>
+  "Add a column to the log for 'Filename Valid?' and mark Yes/No."</p>
+
+  <h3>🚀 Next Steps: Advanced Options</h3>
+
+  <h4>🔹 Excel Integration</h4>
+  <p>Use Excel to:</p>
+  <ul>
+    <li>Track renamed files</li>
+    <li>Match student IDs to names</li>
+    <li>Generate folder names dynamically</li>
+  </ul>
+
+  <h4>🔹 Power Automate Integration</h4>
+  <ul>
+    <li>Automatically trigger renaming when files are uploaded to SharePoint or OneDrive.</li>
+    <li>Auto-email confirmation to staff once renaming is complete.</li>
+    <li>Log renamed files into a central Excel tracker.</li>
+  </ul>
+
+  <h4>🔹 Build a Submission Dashboard</h4>
+  <p>Use Excel + Power BI to visualise:</p>
+  <ul>
+    <li>Submission status</li>
+    <li>Missing files</li>
+    <li>Folder organisation completeness</li>
+  </ul>
+
+  <hr>
+  
+  <!-- Enhanced Footer with Legal Information -->
+  <footer style="background: #f8f9fa; border: 2px solid #011451; border-radius: 8px; padding: 20px; margin-top: 30px;">
+    <div style="text-align: center; margin-bottom: 15px;">
+      <img src="https://sfdora.org/wp-content/uploads/2024/03/UoG_keyline.png" alt="University of Glasgow Logo" style="height: 40px; margin-bottom: 10px;" />
+    </div>
+    
+    <div style="border-bottom: 1px solid #dee2e6; padding-bottom: 15px; margin-bottom: 15px;">
+      <h4 style="color: #011451; margin: 0 0 8px 0; text-align: center;">Copyright & Legal Notice</h4>
+      <p style="margin: 5px 0; text-align: center; font-weight: bold;">© 2025 University of Glasgow. All Rights Reserved.</p>
+      <p style="margin: 5px 0; text-align: center; font-size: 14px;"><strong>Author:</strong> Dr Alisha Aman | <strong>Version:</strong> 1.8 | <strong>Date:</strong> August 3, 2025</p>
+    </div>
+    
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin-bottom: 15px; font-size: 13px;">
+      <div>
+        <h5 style="color: #011451; margin: 0 0 8px 0;">Usage Rights</h5>
+        <ul style="margin: 0; padding-left: 15px; line-height: 1.4;">
+          <li>Educational use within University of Glasgow only</li>
+          <li>No reproduction without written permission</li>
+          <li>Attribution required for any permitted use</li>
+          <li>Commercial use strictly prohibited</li>
+        </ul>
+      </div>
+      
+      <div>
+        <h5 style="color: #011451; margin: 0 0 8px 0;">Legal Protection</h5>
+        <ul style="margin: 0; padding-left: 15px; line-height: 1.4;">
+          <li>Protected by UK copyright law</li>
+          <li>International treaty protection</li>
+          <li>Version control documentation available</li>
+          <li>Timestamped development history</li>
+        </ul>
+      </div>
+      
+      <div>
+        <h5 style="color: #011451; margin: 0 0 8px 0;">Academic Integrity</h5>
+        <ul style="margin: 0; padding-left: 15px; line-height: 1.4;">
+          <li>Cannot be submitted as original work</li>
+          <li>Plagiarism violations will be reported</li>
+          <li>Originality verified through Git history</li>
+          <li>Institutional IP protection applies</li>
+        </ul>
+      </div>
+    </div>
+    
+    <div style="background: #fff3cd; border: 1px solid #ffc107; padding: 10px; border-radius: 4px; margin-bottom: 15px; text-align: center; font-size: 12px;">
+      <strong>⚠️ Warning:</strong> Unauthorised copying, distribution, or claiming authorship of this material constitutes copyright infringement and may result in legal action.
+    </div>
+    
+    <div style="text-align: center; font-size: 11px; color: #6c757d; border-top: 1px solid #dee2e6; padding-top: 10px;">
+      <p style="margin: 0;">For permissions or licensing inquiries, contact: <a href="mailto:copyright@glasgow.ac.uk" style="color: #011451;">copyright@glasgow.ac.uk</a></p>
+      <p style="margin: 5px 0 0 0;">University of Glasgow, Glasgow G12 8QQ, Scotland, UK | <a href="https://www.gla.ac.uk" style="color: #011451;">www.gla.ac.uk</a></p>
+    </div>
+  </footer>
+</section>
+            </div>
+        </main>
+        
+
+    </div>
+    <script>
+        // Navigation scroll
+        function scrollToSection(id) {
+            var el = document.getElementById(id);
+            if (el) {
+                // Account for fixed header height
+                var headerOffset = 60; // Adjust for top navigation height
+                var elementPosition = el.offsetTop;
+                var offsetPosition = elementPosition - headerOffset;
+                
+                window.scrollTo({
+                    top: offsetPosition,
+                    behavior: 'smooth'
+                });
+            }
+        }
+
+        // Tab switching function
+        function showTab(tabName) {
+            // Hide all tab contents
+            var tabContents = document.querySelectorAll('.tab-content');
+            tabContents.forEach(function(content) {
+                content.classList.remove('active');
+            });
+            
+            // Remove active class from all nav tabs
+            var navTabs = document.querySelectorAll('.nav-tab');
+            navTabs.forEach(function(tab) {
+                tab.classList.remove('active');
+            });
+            
+            // Show the selected tab content
+            var selectedTab = document.getElementById(tabName + '-tab');
+            if (selectedTab) {
+                selectedTab.classList.add('active');
+            }
+            
+            // Add active class to the clicked nav tab
+            if (event && event.target) {
+                event.target.classList.add('active');
+            } else {
+                // Find the correct tab button when called programmatically
+                var tabButtons = document.querySelectorAll('.nav-tab');
+                tabButtons.forEach(function(button) {
+                    if ((tabName === 'guide' && button.textContent.includes('Guide')) ||
+                        (tabName === 'workflow1' && button.textContent.includes('Reference')) ||
+                        (tabName === 'workflow2' && button.textContent.includes('Calendar')) ||
+                        (tabName === 'workflow3' && button.textContent.includes('Batch'))) {
+                        button.classList.add('active');
+                    }
+                });
+            }
+            
+            // Update TOC for current tab
+            updateTOCForCurrentTab();
+            
+            // Scroll to top of content
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        }
+
+        // Copy code function
+        function copyCode(button) {
+            var codeContainer = button.parentElement;
+            var preElement = codeContainer.querySelector('pre');
+            var codeElement = preElement.querySelector('code');
+            var textToCopy = codeElement ? codeElement.textContent : preElement.textContent;
+            
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(textToCopy).then(function() {
+                    showCopyFeedback(button, '✓ Copied!');
+                }).catch(function() {
+                    fallbackCopyCode(textToCopy, button);
+                });
+            } else {
+                fallbackCopyCode(textToCopy, button);
+            }
+        }
+
+        // Copy table data as HTML for direct pasting into Word/Outlook
+        function copyTableData(button) {
+            var container = button.parentElement;
+            var table = container.querySelector('table');
+            
+            // If not found in immediate parent, try to find table in .scrollable-table sibling
+            if (!table && container.classList.contains('table-copy-container')) {
+                var scrollableTable = container.querySelector('.scrollable-table');
+                if (scrollableTable) {
+                    table = scrollableTable.querySelector('table');
+                }
+            }
+            
+            // If still not found, try the old code-container method for backward compatibility
+            if (!table) {
+                var codeContainer = container.querySelector('.code-container') || container;
+                table = codeContainer.querySelector('table');
+            }
+            
+            if (!table) return;
+            
+            // Create a clean table HTML for copying
+            var tableHTML = '<table border="1" style="border-collapse: collapse; font-family: Arial, sans-serif; font-size: 12px;">';
+            var rows = table.querySelectorAll('tr');
+            
+            rows.forEach(function(row, index) {
+                tableHTML += '<tr>';
+                var cells = row.querySelectorAll('th, td');
+                
+                cells.forEach(function(cell) {
+                    var cellText = cell.textContent.trim();
+                    // Handle line breaks in cells by converting to spaces
+                    cellText = cellText.replace(/\s+/g, ' ');
+                    
+                    if (cell.tagName.toLowerCase() === 'th') {
+                        tableHTML += '<th style="background-color: #011451; color: white; padding: 8px; font-weight: bold; text-align: left;">' + cellText + '</th>';
+                    } else {
+                        tableHTML += '<td style="padding: 8px; border: 1px solid #ccc;">' + cellText + '</td>';
+                    }
+                });
+                
+                tableHTML += '</tr>';
+            });
+            
+            tableHTML += '</table>';
+            
+            // Try to copy as HTML using the modern clipboard API
+            if (navigator.clipboard && navigator.clipboard.write) {
+                var blob = new Blob([tableHTML], { type: 'text/html' });
+                var clipboardItem = new ClipboardItem({ 'text/html': blob });
+                
+                navigator.clipboard.write([clipboardItem]).then(function() {
+                    showCopyFeedback(button, '✓ Table Copied!');
+                }).catch(function() {
+                    // Fallback to plain text if HTML copying fails
+                    fallbackCopyTableAsText(table, button);
+                });
+            } else {
+                // Fallback for older browsers
+                fallbackCopyTableAsText(table, button);
+            }
+        }
+
+        // Fallback copy functions
+        function fallbackCopyCode(text, button) {
+            var textArea = document.createElement('textarea');
+            textArea.value = text;
+            document.body.appendChild(textArea);
+            textArea.select();
+            try {
+                var success = document.execCommand('copy');
+                if (success) {
+                    showCopyFeedback(button, '✓ Copied!');
+                } else {
+                    showCopyFeedback(button, '❌ Copy failed');
+                }
+            } catch (err) {
+                showCopyFeedback(button, '❌ Copy failed');
+            }
+            document.body.removeChild(textArea);
+        }
+
+        // Fallback method for copying table data as tab-separated text (for older browsers)
+        function fallbackCopyTableAsText(table, button) {
+            var text = '';
+            var rows = table.querySelectorAll('tr');
+            
+            rows.forEach(function(row, index) {
+                var cells = row.querySelectorAll('th, td');
+                var rowData = [];
+                
+                cells.forEach(function(cell) {
+                    var cellText = cell.textContent.trim();
+                    cellText = cellText.replace(/\s+/g, ' ');
+                    rowData.push(cellText);
+                });
+                
+                text += rowData.join('\t') + '\n';
+            });
+            
+            // Create a temporary text area to copy the text
+            var textArea = document.createElement('textarea');
+            textArea.value = text;
+            document.body.appendChild(textArea);
+            textArea.select();
+            
+            try {
+                var success = document.execCommand('copy');
+                if (success) {
+                    showCopyFeedback(button, '✓ Table Copied!');
+                } else {
+                    showCopyFeedback(button, '❌ Copy failed');
+                }
+            } catch (err) {
+                showCopyFeedback(button, '❌ Copy failed');
+            }
+            
+            document.body.removeChild(textArea);
+        }
+
+        // Copy essay text function
+        function copyEssayText(button) {
+            var textArea = document.getElementById('essay-copy-text');
+            if (textArea) {
+                var textToCopy = textArea.value;
+                
+                if (navigator.clipboard && navigator.clipboard.writeText) {
+                    navigator.clipboard.writeText(textToCopy).then(function() {
+                        showCopyFeedback(button, '✓ Essay Copied!');
+                    }).catch(function() {
+                        fallbackCopyCode(textToCopy, button);
+                    });
+                } else {
+                    fallbackCopyCode(textToCopy, button);
+                }
+            }
+        }
+
+        // Copy textarea content function
+        function copyTextArea(textareaId) {
+            var button = event.target;
+            var textArea = document.getElementById(textareaId);
+            if (textArea) {
+                var textToCopy = textArea.value;
+                
+                if (navigator.clipboard && navigator.clipboard.writeText) {
+                    navigator.clipboard.writeText(textToCopy).then(function() {
+                        showCopyFeedback(button, '✓ Copied!');
+                    }).catch(function() {
+                        fallbackCopyTextArea(textToCopy, button);
+                    });
+                } else {
+                    fallbackCopyTextArea(textToCopy, button);
+                }
+            }
+        }
+
+        function fallbackCopyTextArea(text, button) {
+            var textArea = document.createElement('textarea');
+            textArea.value = text;
+            document.body.appendChild(textArea);
+            textArea.select();
+            try {
+                var success = document.execCommand('copy');
+                if (success) {
+                    showCopyFeedback(button, '✓ Copied!');
+                } else {
+                    showCopyFeedback(button, '❌ Copy failed');
+                }
+            } catch (err) {
+                showCopyFeedback(button, '❌ Copy failed');
+            }
+            document.body.removeChild(textArea);
+        }
+
+        function showCopyFeedback(button, message) {
+            var originalText = button.textContent;
+            button.textContent = message;
+            button.style.background = '#27ae60';
+            setTimeout(function() {
+                button.textContent = originalText;
+                button.style.background = '#011451';
+            }, 2000);
+        }
+
+        // Script tab switching function
+        function showScriptTab(platform) {
+            // Hide all script tab contents
+            var scriptContents = document.querySelectorAll('.script-toggle-content');
+            scriptContents.forEach(function(content) {
+                content.classList.remove('active');
+            });
+            
+            // Remove active class from all script tabs
+            var scriptTabs = document.querySelectorAll('.script-toggle-tab');
+            scriptTabs.forEach(function(tab) {
+                               tab.classList.remove('active');
+            });
+            
+            // Show the selected script content
+            var selectedScript = document.getElementById(platform + '-script');
+            if (selectedScript) {
+                selectedScript.classList.add('active');
+            }
+            
+            // Add active class to the clicked script tab
+            var clickedTab = event.target;
+            clickedTab.classList.add('active');
+        }
+
+        // Instruction tab switching function (for Running the Script section)
+        function showInstructionTab(instructionId) {
+            // Hide all instruction tab contents
+            var instructionContents = document.querySelectorAll('#windows-instructions, #macos-instructions');
+            instructionContents.forEach(function(content) {
+                content.classList.remove('active');
+            });
+            
+            // Remove active class from all instruction tabs
+            var instructionTabs = document.querySelectorAll('.script-toggle-container .script-toggle-tab');
+            instructionTabs.forEach(function(tab) {
+                tab.classList.remove('active');
+            });
+            
+            // Show the selected instruction content
+            var selectedInstruction = document.getElementById(instructionId);
+            if (selectedInstruction) {
+                selectedInstruction.classList.add('active');
+            }
+            
+            // Add active class to the clicked instruction tab
+            var clickedTab = event.target;
+            clickedTab.classList.add('active');
+        }
+        
+        // Initialize tabs on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            // Ensure only the guide tab is visible on load
+            showTab('guide');
+            
+            // Check if user has seen the disclaimer
+            var disclaimerSeen = localStorage.getItem('uog-disclaimer-seen');
+            if (!disclaimerSeen) {
+                // Show detailed disclaimer on first visit
+                document.getElementById('legal-disclaimer').style.display = 'block';
+            } else {
+                // Show compact copyright notice for returning users
+                document.getElementById('copyright-notice').style.display = 'block';
+            }
+        });
+
+        // Copyright protection - Disable common copying methods
+        document.addEventListener('keydown', function(e) {
+            // Disable Ctrl+S (Save As)
+            if (e.ctrlKey && e.key === 's') {
+                e.preventDefault();
+                alert('Saving this document is not permitted. This material is copyrighted by the University of Glasgow.');
+                return false;
+            }
+            
+            // Disable Ctrl+A + Ctrl+C combination for mass copying
+            if (e.ctrlKey && e.key === 'a') {
+                // Allow normal text selection but show warning for large selections
+                setTimeout(function() {
+                    var selection = window.getSelection();
+                    if (selection.toString().length > 1000) {
+                        console.warn('Large text selection detected. This material is protected by copyright.');
+                    }
+                }, 100);
+            }
+        });
+
+        // Add watermark function for printing
+        window.addEventListener('beforeprint', function() {
+            var watermark = document.createElement('div');
+            watermark.id = 'print-watermark';
+            watermark.innerHTML = '© 2025 University of Glasgow - Dr Alisha Aman - All Rights Reserved';
+            watermark.style.cssText = 'position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(-45deg); font-size: 48px; color: rgba(0,56,101,0.1); z-index: 9999; pointer-events: none; font-weight: bold;';
+            document.body.appendChild(watermark);
+        });
+
+        window.addEventListener('afterprint', function() {
+            var watermark = document.getElementById('print-watermark');
+            if (watermark) {
+                watermark.remove();
+            }
+        });
+
+        // Table of Contents functionality
+        function toggleTOC() {
+            var sidebar = document.getElementById('toc-sidebar');
+            var toggle = document.querySelector('.toc-toggle');
+            var main = document.querySelector('.main-content');
+            
+            if (sidebar.classList.contains('open')) {
+                sidebar.classList.remove('open');
+                toggle.classList.remove('open');
+                main.classList.remove('toc-open');
+            } else {
+                sidebar.classList.add('open');
+                toggle.classList.add('open');
+                main.classList.add('toc-open');
+                updateTOCForCurrentTab();
+            }
+        }
+
+        // Function to show tab and navigate to section
+        function showTabAndNavigate(tabName, sectionId) {
+            // First show the tab
+            showTab(tabName);
+            
+            // Small delay to ensure tab content is visible
+            setTimeout(function() {
+                scrollToSection(sectionId);
+                updateActiveLink(sectionId);
+            }, 100);
+            
+            // Close TOC on mobile
+            if (window.innerWidth <= 768) {
+                toggleTOC();
+            }
+        }
+
+        // Update TOC visibility based on current tab
+        function updateTOCForCurrentTab() {
+            var activeTab = document.querySelector('.nav-tab.active');
+            if (!activeTab) return;
+            
+            var tabName = '';
+            if (activeTab.textContent.includes('Guide')) tabName = 'guide';
+            else if (activeTab.textContent.includes('Reference')) tabName = 'workflow1';
+            else if (activeTab.textContent.includes('Calendar')) tabName = 'workflow2';
+            else if (activeTab.textContent.includes('Batch')) tabName = 'workflow3';
+            
+            // Hide all TOC sections
+            document.querySelectorAll('.toc-tab-section').forEach(function(section) {
+                section.style.display = 'none';
+            });
+            
+            // Show current tab's TOC
+            var currentTOC = document.getElementById('toc-' + tabName);
+            if (currentTOC) {
+                currentTOC.style.display = 'block';
+            }
+        }
+
+        // Update active link in TOC
+        function updateActiveLink(sectionId) {
+            document.querySelectorAll('.toc-link').forEach(function(link) {
+                link.classList.remove('active');
+            });
+            
+            var activeLink = document.querySelector('.toc-link[href="#' + sectionId + '"]');
+            if (activeLink) {
+                activeLink.classList.add('active');
+            }
+        }
+
+        // Scroll spy to highlight current section in TOC
+        function updateTOCOnScroll() {
+            var sections = document.querySelectorAll('[id]');
+            var scrollPosition = window.scrollY + 100; // Offset for fixed header
+            
+            var currentSection = '';
+            sections.forEach(function(section) {
+                if (section.offsetTop <= scrollPosition) {
+                    currentSection = section.id;
+                }
+            });
+            
+            if (currentSection) {
+                updateActiveLink(currentSection);
+            }
+        }
+
+        // Throttle function for scroll performance
+        function throttle(func, limit) {
+            let inThrottle;
+            return function() {
+                const args = arguments;
+                const context = this;
+                if (!inThrottle) {
+                    func.apply(context, args);
+                    inThrottle = true;
+                    setTimeout(() => inThrottle = false, limit);
+                }
+            }
+        }
+
+        // Create throttled scroll handler for TOC highlighting only
+        const throttledScrollHandler = throttle(function() {
+            updateTOCOnScroll();
+        }, 100);
+
+        // Add scroll listener for TOC highlighting
+        window.addEventListener('scroll', throttledScrollHandler);
+
+        // Initialize TOC on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            updateTOCForCurrentTab();
+        });
+
+        // Handle keyboard navigation for TOC
+        document.addEventListener('keydown', function(e) {
+            if (e.ctrlKey && e.key === 't') {
+                e.preventDefault();
+                toggleTOC();
+            }
+        });
+    </script>
+</body>
+</html>
+
