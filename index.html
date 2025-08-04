@@ -1461,7 +1461,8 @@ Context: Post-graduate audience; APA 7th; 2,500-word chapter supplied below
 Format: Bullet list ≤100 words with 5 key citations</code></pre>
 </p>
             </blockquote>
-            <p><strong>This prompt is specific, clear, and actionable.</strong> It tells the AI your role, what you want to do (the task), the context you're working in, and how you want the output formatted.</p>
+            <p><strong>This prompt is specific, clear, and actionable.</strong> It tells the AI your role, what you want to do (the task), the context you're working in, and how you want the output formatted.<br>
+            NOTE: Remember to account for hallucinations and ensure the AI's responses are grounded in the provided context - add columns like "Is this a hallucination" or "Does this exist in PUBMED" etc to ensure the results are correct</p>
 
             <p id="prompt-practice"><strong>Practice:</strong> Write your own prompt using the same structure to complete the reference evaluation task.
                  You want your output to look something like this:</p>
@@ -1939,7 +1940,7 @@ END:VCALENDAR
             <h3 id="copilot-prompt">Excel Copilot Prompt</h3>
 
             <h4>Prompt Structure</h4>
-            <p>To create an effective prompt for Excel Copilot, we can try the P-T-C-F structure. Below, try crafting the prompt to generate an .ics file from the provided table:</p>
+            <p>To create an effective prompt for Excel Copilot, we can try the P-T-C-F structure. Below, try crafting the prompt to generate an .ics file from the provided table. Copy and save the table to Excel first and then upload it to Copilot with your prompt</p>
 
             <div class="code-container" role="region" aria-label="Prompt improvement text area">
                 <button class="copy-button" onclick="copyTextArea('prompt-improve-workflow2')" aria-label="Copy text area content to clipboard">Copy</button>
@@ -2519,7 +2520,7 @@ Format: Return only plain-text .ics content, ready to be saved and imported into
                 <div class="code-container" role="region" aria-label="Example prompt code block">
                     <button class="copy-button" onclick="copyCode(this)" aria-label="Copy example prompt to clipboard">Copy</button>
                     <pre><code><strong>Context:</strong><br>
-I have a folder of student essays named in the format Surname_ID_Essay.docx.<br>
+I have a folder of student essays named in the format Surname_ID_Essay.docx in the folder <strong><span style="background-color: #10b981"> ADD PATH TO FOLDER HERE for example: C:\Users\alish\Downloads\Rename_Files</strong></code></span><br>
 I need to rename each file to ABC123_ID_Assignment1.docx, where ABC123 is the course code and Assignment1 is the assignment name.<br>
 I also have a file called rubric_template.docx that should be copied and renamed for each student as ABC123_ID_Rubric.docx.<br>
 Both the renamed essay and rubric should be placed into a folder named ID_CourseName, where CourseName is the name of the course.
