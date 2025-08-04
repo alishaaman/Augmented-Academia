@@ -180,6 +180,40 @@
             font-size: 0.9em;
         }
         
+        .feedback-button {
+            background: #fbc02d;
+            color: #011451;
+            border: 2px solid #011451;
+            padding: 6px 12px;
+            border-radius: 8px;
+            font-size: 0.75em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+            z-index: 1001;
+        }
+        .feedback-button:hover {
+            background: #011451;
+            color: #fbc02d;
+            transform: translateY(-1px);
+            box-shadow: 0 3px 8px rgba(0,0,0,0.2);
+        }
+        .feedback-button::before {
+            content: "💬";
+            font-size: 1em;
+        }
+        
+        .top-nav-right {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
         /* Skip navigation link for screen readers */
         .skip-nav {
             position: absolute;
@@ -519,6 +553,10 @@
                 font-size: 0.65em;
                 padding: 2px 6px;
             }
+            .feedback-button {
+                font-size: 0.7em;
+                padding: 4px 8px;
+            }
         }
         @media (max-width: 900px) {
             .top-nav {
@@ -539,9 +577,17 @@
             .top-nav-header h2 {
                 font-size: 1.6em;
             }
-            .accessibility-badge {
+            .top-nav-right {
                 order: 3;
                 flex-shrink: 0;
+                gap: 8px;
+            }
+            .accessibility-badge {
+                flex-shrink: 0;
+            }
+            .feedback-button {
+                font-size: 0.65em;
+                padding: 3px 6px;
             }
             .main-content {
                 margin-top: 75px;
@@ -565,10 +611,15 @@
             }
             .top-nav-right {
                 flex: 0 0 auto;
+                gap: 6px;
             }
             .accessibility-badge {
                 padding: 2px 4px;
                 font-size: 0.6em;
+            }
+            .feedback-button {
+                font-size: 0.6em;
+                padding: 2px 4px;
             }
             .nav-tabs-horizontal {
                 justify-content: center;
@@ -1012,8 +1063,11 @@
                     <button class="nav-tab" onclick="showTab('workflow3')" aria-label="Navigate to Workflow 3 - Batch Renaming">Batch Renaming</button>
                 </div>
             </div>
-            <div class="accessibility-badge" title="This workbook includes comprehensive ARIA labels for screen readers and assistive technologies">
-                ARIA Accessible
+            <div class="top-nav-right">
+                <a href="https://forms.office.com/e/VLjD0cqTnK" class="feedback-button" target="_blank" aria-label="Provide feedback on this workbook">Feedback</a>
+                <div class="accessibility-badge" title="This workbook includes comprehensive ARIA labels for screen readers and assistive technologies">
+                    ARIA Accessible
+                </div>
             </div>
         </nav>
         
@@ -1225,24 +1279,24 @@
 <!-- ================================ -->
 
   <!-- Enhanced Footer with Legal Information -->
-  <footer style="background: #f8f9fa; border: 2px solid #011451; border-radius: 8px; padding: 20px; margin-top: 30px;">
-    <div style="text-align: center; margin-bottom: 15px;">
-      <img src="https://sfdora.org/wp-content/uploads/2024/03/UoG_keyline.png" alt="University of Glasgow Logo" style="height: 40px; margin-bottom: 10px;" />
+  <footer style="background: #f8f9fa; border: 2px solid #011451; border-radius: 8px; padding: 12px; margin-top: 20px;">
+    <div style="text-align: center; margin-bottom: 8px;">
+      <img src="https://sfdora.org/wp-content/uploads/2024/03/UoG_keyline.png" alt="University of Glasgow Logo" style="height: 30px; margin-bottom: 6px;" />
     </div>
     
-    <div style="border-bottom: 1px solid #dee2e6; padding-bottom: 15px; margin-bottom: 15px;">
-      <h4 style="color: #011451; margin: 0 0 8px 0; text-align: center;">Copyright & Legal Notice</h4>
-      <p style="margin: 5px 0; text-align: center; font-weight: bold;">© 2025 University of Glasgow. All Rights Reserved.</p>
-      <p style="margin: 5px 0; text-align: center; font-size: 14px;"><strong>Author:</strong> Dr Alisha Aman | <strong>Version:</strong> 1.8 | <strong>Date:</strong> August 3, 2025</p>
+    <div style="border-bottom: 1px solid #dee2e6; padding-bottom: 8px; margin-bottom: 8px;">
+      <h4 style="color: #011451; margin: 0 0 4px 0; text-align: center; font-size: 0.9em;">Copyright & Legal Notice</h4>
+      <p style="margin: 3px 0; text-align: center; font-weight: bold; font-size: 0.85em;">© 2025 University of Glasgow. All Rights Reserved.</p>
+      <p style="margin: 3px 0; text-align: center; font-size: 0.75em;"><strong>Author:</strong> Dr Alisha Aman | <strong>Version:</strong> 1.8 | <strong>Date:</strong> August 3, 2025</p>
     </div>
     
-    <div style="background: #fff3cd; border: 1px solid #ffc107; padding: 10px; border-radius: 4px; margin-bottom: 15px; text-align: center; font-size: 12px;">
+    <div style="background: #fff3cd; border: 1px solid #ffc107; padding: 6px; border-radius: 4px; margin-bottom: 8px; text-align: center; font-size: 0.7em;">
       <strong>⚠️ Warning:</strong> Unauthorised copying, distribution, or claiming authorship of this material constitutes copyright infringement and may result in legal action.
     </div>
     
-    <div style="text-align: center; font-size: 11px; color: #6c757d; border-top: 1px solid #dee2e6; padding-top: 10px;">
+    <div style="text-align: center; font-size: 0.65em; color: #6c757d; border-top: 1px solid #dee2e6; padding-top: 6px;">
       <p style="margin: 0;">For permissions or licensing inquiries, contact: <a href="mailto:copyright@glasgow.ac.uk" style="color: #011451;">alisha.aman@glasgow.ac.uk</a></p>
-      <p style="margin: 5px 0 0 0;">University of Glasgow, Glasgow G12 8QQ, Scotland, UK | <a href="https://www.gla.ac.uk" style="color: #011451;">www.gla.ac.uk</a></p>
+      <p style="margin: 3px 0 0 0;">University of Glasgow, Glasgow G12 8QQ, Scotland, UK | <a href="https://www.gla.ac.uk" style="color: #011451;">www.gla.ac.uk</a></p>
     </div>
   </footer>
             </div>
@@ -1629,24 +1683,24 @@ Format: Excel-compatible table</code></pre>
             </ul>
 
   <!-- Enhanced Footer with Legal Information -->
-  <footer style="background: #f8f9fa; border: 2px solid #011451; border-radius: 8px; padding: 20px; margin-top: 30px;">
-    <div style="text-align: center; margin-bottom: 15px;">
-      <img src="https://sfdora.org/wp-content/uploads/2024/03/UoG_keyline.png" alt="University of Glasgow Logo" style="height: 40px; margin-bottom: 10px;" />
+  <footer style="background: #f8f9fa; border: 2px solid #011451; border-radius: 8px; padding: 12px; margin-top: 20px;">
+    <div style="text-align: center; margin-bottom: 8px;">
+      <img src="https://sfdora.org/wp-content/uploads/2024/03/UoG_keyline.png" alt="University of Glasgow Logo" style="height: 30px; margin-bottom: 6px;" />
     </div>
     
-    <div style="border-bottom: 1px solid #dee2e6; padding-bottom: 15px; margin-bottom: 15px;">
-      <h4 style="color: #011451; margin: 0 0 8px 0; text-align: center;">Copyright & Legal Notice</h4>
-      <p style="margin: 5px 0; text-align: center; font-weight: bold;">© 2025 University of Glasgow. All Rights Reserved.</p>
-      <p style="margin: 5px 0; text-align: center; font-size: 14px;"><strong>Author:</strong> Dr Alisha Aman | <strong>Version:</strong> 1.8 | <strong>Date:</strong> August 3, 2025</p>
+    <div style="border-bottom: 1px solid #dee2e6; padding-bottom: 8px; margin-bottom: 8px;">
+      <h4 style="color: #011451; margin: 0 0 4px 0; text-align: center; font-size: 0.9em;">Copyright & Legal Notice</h4>
+      <p style="margin: 3px 0; text-align: center; font-weight: bold; font-size: 0.85em;">© 2025 University of Glasgow. All Rights Reserved.</p>
+      <p style="margin: 3px 0; text-align: center; font-size: 0.75em;"><strong>Author:</strong> Dr Alisha Aman | <strong>Version:</strong> 1.8 | <strong>Date:</strong> August 3, 2025</p>
     </div>
     
-    <div style="background: #fff3cd; border: 1px solid #ffc107; padding: 10px; border-radius: 4px; margin-bottom: 15px; text-align: center; font-size: 12px;">
+    <div style="background: #fff3cd; border: 1px solid #ffc107; padding: 6px; border-radius: 4px; margin-bottom: 8px; text-align: center; font-size: 0.7em;">
       <strong>⚠️ Warning:</strong> Unauthorised copying, distribution, or claiming authorship of this material constitutes copyright infringement and may result in legal action.
     </div>
     
-    <div style="text-align: center; font-size: 11px; color: #6c757d; border-top: 1px solid #dee2e6; padding-top: 10px;">
+    <div style="text-align: center; font-size: 0.65em; color: #6c757d; border-top: 1px solid #dee2e6; padding-top: 6px;">
       <p style="margin: 0;">For permissions or licensing inquiries, contact: <a href="mailto:copyright@glasgow.ac.uk" style="color: #011451;">alisha.aman@glasgow.ac.uk</a></p>
-      <p style="margin: 5px 0 0 0;">University of Glasgow, Glasgow G12 8QQ, Scotland, UK | <a href="https://www.gla.ac.uk" style="color: #011451;">www.gla.ac.uk</a></p>
+      <p style="margin: 3px 0 0 0;">University of Glasgow, Glasgow G12 8QQ, Scotland, UK | <a href="https://www.gla.ac.uk" style="color: #011451;">www.gla.ac.uk</a></p>
     </div>
   </footer>
             </section>
@@ -2319,24 +2373,24 @@ Format: Return only plain-text .ics content, ready to be saved and imported into
             </ul>
 
   <!-- Enhanced Footer with Legal Information -->
-  <footer style="background: #f8f9fa; border: 2px solid #011451; border-radius: 8px; padding: 20px; margin-top: 30px;">
-    <div style="text-align: center; margin-bottom: 15px;">
-      <img src="https://sfdora.org/wp-content/uploads/2024/03/UoG_keyline.png" alt="University of Glasgow Logo" style="height: 40px; margin-bottom: 10px;" />
+  <footer style="background: #f8f9fa; border: 2px solid #011451; border-radius: 8px; padding: 12px; margin-top: 20px;">
+    <div style="text-align: center; margin-bottom: 8px;">
+      <img src="https://sfdora.org/wp-content/uploads/2024/03/UoG_keyline.png" alt="University of Glasgow Logo" style="height: 30px; margin-bottom: 6px;" />
     </div>
     
-    <div style="border-bottom: 1px solid #dee2e6; padding-bottom: 15px; margin-bottom: 15px;">
-      <h4 style="color: #011451; margin: 0 0 8px 0; text-align: center;">Copyright & Legal Notice</h4>
-      <p style="margin: 5px 0; text-align: center; font-weight: bold;">© 2025 University of Glasgow. All Rights Reserved.</p>
-      <p style="margin: 5px 0; text-align: center; font-size: 14px;"><strong>Author:</strong> Dr Alisha Aman | <strong>Version:</strong> 1.8 | <strong>Date:</strong> August 3, 2025</p>
+    <div style="border-bottom: 1px solid #dee2e6; padding-bottom: 8px; margin-bottom: 8px;">
+      <h4 style="color: #011451; margin: 0 0 4px 0; text-align: center; font-size: 0.9em;">Copyright & Legal Notice</h4>
+      <p style="margin: 3px 0; text-align: center; font-weight: bold; font-size: 0.85em;">© 2025 University of Glasgow. All Rights Reserved.</p>
+      <p style="margin: 3px 0; text-align: center; font-size: 0.75em;"><strong>Author:</strong> Dr Alisha Aman | <strong>Version:</strong> 1.8 | <strong>Date:</strong> August 3, 2025</p>
     </div>
     
-    <div style="background: #fff3cd; border: 1px solid #ffc107; padding: 10px; border-radius: 4px; margin-bottom: 15px; text-align: center; font-size: 12px;">
+    <div style="background: #fff3cd; border: 1px solid #ffc107; padding: 6px; border-radius: 4px; margin-bottom: 8px; text-align: center; font-size: 0.7em;">
       <strong>⚠️ Warning:</strong> Unauthorised copying, distribution, or claiming authorship of this material constitutes copyright infringement and may result in legal action.
     </div>
     
-    <div style="text-align: center; font-size: 11px; color: #6c757d; border-top: 1px solid #dee2e6; padding-top: 10px;">
+    <div style="text-align: center; font-size: 0.65em; color: #6c757d; border-top: 1px solid #dee2e6; padding-top: 6px;">
       <p style="margin: 0;">For permissions or licensing inquiries, contact: <a href="mailto:copyright@glasgow.ac.uk" style="color: #011451;">alisha.aman@glasgow.ac.uk</a></p>
-      <p style="margin: 5px 0 0 0;">University of Glasgow, Glasgow G12 8QQ, Scotland, UK | <a href="https://www.gla.ac.uk" style="color: #011451;">www.gla.ac.uk</a></p>
+      <p style="margin: 3px 0 0 0;">University of Glasgow, Glasgow G12 8QQ, Scotland, UK | <a href="https://www.gla.ac.uk" style="color: #011451;">www.gla.ac.uk</a></p>
     </div>
   </footer>
             </section>
@@ -2716,24 +2770,24 @@ Return a PowerShell script for Windows OR a Bash script for macOS.</code></pre>
   <hr>
   
   <!-- Enhanced Footer with Legal Information -->
-  <footer style="background: #f8f9fa; border: 2px solid #011451; border-radius: 8px; padding: 20px; margin-top: 30px;">
-    <div style="text-align: center; margin-bottom: 15px;">
-      <img src="https://sfdora.org/wp-content/uploads/2024/03/UoG_keyline.png" alt="University of Glasgow Logo" style="height: 40px; margin-bottom: 10px;" />
+  <footer style="background: #f8f9fa; border: 2px solid #011451; border-radius: 8px; padding: 12px; margin-top: 20px;">
+    <div style="text-align: center; margin-bottom: 8px;">
+      <img src="https://sfdora.org/wp-content/uploads/2024/03/UoG_keyline.png" alt="University of Glasgow Logo" style="height: 30px; margin-bottom: 6px;" />
     </div>
     
-    <div style="border-bottom: 1px solid #dee2e6; padding-bottom: 15px; margin-bottom: 15px;">
-      <h4 style="color: #011451; margin: 0 0 8px 0; text-align: center;">Copyright & Legal Notice</h4>
-      <p style="margin: 5px 0; text-align: center; font-weight: bold;">© 2025 University of Glasgow. All Rights Reserved.</p>
-      <p style="margin: 5px 0; text-align: center; font-size: 14px;"><strong>Author:</strong> Dr Alisha Aman | <strong>Version:</strong> 1.8 | <strong>Date:</strong> August 3, 2025</p>
+    <div style="border-bottom: 1px solid #dee2e6; padding-bottom: 8px; margin-bottom: 8px;">
+      <h4 style="color: #011451; margin: 0 0 4px 0; text-align: center; font-size: 0.9em;">Copyright & Legal Notice</h4>
+      <p style="margin: 3px 0; text-align: center; font-weight: bold; font-size: 0.85em;">© 2025 University of Glasgow. All Rights Reserved.</p>
+      <p style="margin: 3px 0; text-align: center; font-size: 0.75em;"><strong>Author:</strong> Dr Alisha Aman | <strong>Version:</strong> 1.8 | <strong>Date:</strong> August 3, 2025</p>
     </div>
     
-    <div style="background: #fff3cd; border: 1px solid #ffc107; padding: 10px; border-radius: 4px; margin-bottom: 15px; text-align: center; font-size: 12px;">
+    <div style="background: #fff3cd; border: 1px solid #ffc107; padding: 6px; border-radius: 4px; margin-bottom: 8px; text-align: center; font-size: 0.7em;">
       <strong>⚠️ Warning:</strong> Unauthorised copying, distribution, or claiming authorship of this material constitutes copyright infringement and may result in legal action.
     </div>
     
-    <div style="text-align: center; font-size: 11px; color: #6c757d; border-top: 1px solid #dee2e6; padding-top: 10px;">
+    <div style="text-align: center; font-size: 0.65em; color: #6c757d; border-top: 1px solid #dee2e6; padding-top: 6px;">
       <p style="margin: 0;">For permissions or licensing inquiries, contact: <a href="mailto:copyright@glasgow.ac.uk" style="color: #011451;">alisha.aman@glasgow.ac.uk</a></p>
-      <p style="margin: 5px 0 0 0;">University of Glasgow, Glasgow G12 8QQ, Scotland, UK | <a href="https://www.gla.ac.uk" style="color: #011451;">www.gla.ac.uk</a></p>
+      <p style="margin: 3px 0 0 0;">University of Glasgow, Glasgow G12 8QQ, Scotland, UK | <a href="https://www.gla.ac.uk" style="color: #011451;">www.gla.ac.uk</a></p>
     </div>
   </footer>
 </section>
