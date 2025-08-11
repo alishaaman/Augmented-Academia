@@ -1,0 +1,1928 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Augmented Academia Workbook 2 - University of Glasgow GenAI Training</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Interactive workshop companion for University of Glasgow GenAI training. Learn advanced AI prompting, lecture creation, and interactive content for biology education.">
+    <meta name="author" content="Dr Alisha Aman, University of Glasgow">
+    <meta name="copyright" content="© 2025 University of Glasgow. All rights reserved.">
+    <meta name="license" content="All Rights Reserved - University of Glasgow Proprietary Material">
+    <meta name="creation-date" content="2025-08-07">
+    <meta name="version" content="2.0">
+    <meta name="institutional-affiliation" content="University of Glasgow">
+    <meta name="robots" content="index, follow">
+    <!-- 
+    COPYRIGHT NOTICE:
+    This work is protected by copyright and is the exclusive property of the University of Glasgow.
+    Author: Dr Alisha Aman
+    Created: August 2025
+    All rights reserved. No part of this publication may be reproduced, distributed, or transmitted 
+    in any form or by any means without the prior written permission of the University of Glasgow.
+    -->
+    <style>
+        :root {
+            --primary: #21808d;
+            --accent: #fbc02d;
+            --bg: #f5f7fa;
+            --header: #2c3e50;
+            --gray: #7f8c8d;
+            --error: #e74c3c;
+            --success: #27ae60;
+            --font-main: 'Segoe UI', Arial, sans-serif;
+            --sidebar-bg: #f8f9fa;
+            --sidebar-width: 260px;
+            --sidebar-right-width: 320px;
+            --main-bg: #fff;
+            --border-radius: 8px;
+            --shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+        html {
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            margin: 0;
+            font-family: var(--font-main);
+            background: var(--bg);
+            color: var(--header);
+            overflow-x: auto;
+            padding: 0 0 2em 0;
+            min-width: 320px;
+        }
+        .app-container {
+            width: 100%;
+            min-height: 100vh;
+        }
+        .top-nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: #011451;
+            color: white;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            padding: 9px 30px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            z-index: 1000;
+            height: 57px;
+            min-height: 57px;
+        }
+        .top-nav-left {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+        .top-nav-center {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            flex: 1;
+            margin: 0 20px;
+        }
+        .top-nav-header {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+        .top-nav-header h1 {
+            margin: 0;
+            color: white;
+            font-size: 1.8em;
+        }
+        .top-nav-header .subtitle {
+            font-size: 0.8em;
+            color: rgba(255,255,255,0.85);
+            margin-top: 2px;
+        }
+        .nav-tabs-horizontal {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+        .nav-tab {
+            background: white;
+            border: 1px solid #ddd;
+            color: #011451;
+            border-radius: 4px;
+            padding: 3px 10px;
+            font-size: 0.8em;
+            cursor: pointer;
+            transition: background 0.2s, color 0.2s;
+            white-space: nowrap;
+        }
+        .nav-tab:hover {
+            background: #011451;
+            color: white;
+        }
+        .nav-tab:focus {
+            outline: 3px solid #fbc02d;
+            outline-offset: 2px;
+            background: #011451;
+            color: white;
+        }
+        .nav-tab.active {
+            background: #011451;
+            color: white;
+            font-weight: bold;
+        }
+
+        .tab-content {
+            display: none !important;
+        }
+        .tab-content.active {
+            display: block !important;
+        }
+        
+        
+        .main-content {
+            margin-top: 75px;
+            margin-left: var(--sidebar-width);
+            padding: 20px 40px 20px 40px;
+            max-width: calc(100% - var(--sidebar-width));
+            min-height: calc(100vh - 75px);
+            position: relative;
+            width: calc(100% - var(--sidebar-width));
+            box-sizing: border-box;
+        }
+        
+        .sidebar {
+            position: fixed;
+            top: 75px;
+            left: 0;
+            width: var(--sidebar-width);
+            height: calc(100vh - 75px);
+            background: var(--sidebar-bg);
+            border-right: 1px solid #e9ecef;
+            overflow-y: auto;
+            z-index: 900;
+            padding: 20px 15px;
+            box-sizing: border-box;
+        }
+        
+        .sidebar h2 {
+            color: var(--header);
+            font-size: 1.1em;
+            margin: 0 0 15px 0;
+            padding-bottom: 8px;
+            border-bottom: 2px solid var(--primary);
+        }
+        
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border: 0;
+        }
+        
+        .sidebar ul {
+            list-style: none;
+            padding: 0;
+            margin: 0 0 25px 0;
+        }
+        
+        .sidebar li {
+            margin: 0;
+        }
+        
+        .sidebar a {
+            display: block;
+            padding: 8px 12px;
+            color: var(--header);
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+            transition: background 0.2s, color 0.2s;
+        }
+        
+        .sidebar a:hover {
+            background: var(--primary);
+            color: white;
+        }
+        
+        .sidebar a:focus {
+            outline: 2px solid var(--accent);
+            outline-offset: 2px;
+        }
+        .uog-logo {
+            height: 51px;
+            width: auto;
+            z-index: 1002;
+        }
+        .accessibility-badge {
+            background: rgba(255, 255, 255, 0.95);
+            color: #011451;
+            padding: 3px 8px;
+            border-radius: 8px;
+            font-size: 0.7em;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 3px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+            z-index: 1001;
+        }
+        .accessibility-badge::before {
+            content: '♿';
+            font-size: 0.9em;
+        }
+        
+        .feedback-button {
+            background: #fbc02d;
+            color: #011451;
+            border: 2px solid #011451;
+            padding: 6px 12px;
+            border-radius: 8px;
+            font-size: 0.75em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+            z-index: 1001;
+        }
+        .feedback-button:hover {
+            background: #011451;
+            color: #fbc02d;
+            transform: translateY(-1px);
+            box-shadow: 0 3px 8px rgba(0,0,0,0.2);
+        }
+        .feedback-button::before {
+            content: "💬";
+            font-size: 1em;
+        }
+        
+        .top-nav-right {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        h1, h2, h3, h4, h5, h6 {
+            color: #011451;
+        }
+        .workflow-header {
+            color: white;
+            background: #011451;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 30px 0 20px 0;
+            font-size: 1.6em;
+        }
+        
+        blockquote {
+            background: #e8f4fd;
+            border-left: 4px solid #011451;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
+            font-style: italic;
+        }
+        
+        .center {
+            text-align: center;
+            font-size: 1.1em;
+            font-weight: bold;
+            color: #011451;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        th {
+            background: #011451;
+            color: white;
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+        }
+        
+        td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #e9ecef;
+        }
+        
+        tr:nth-child(even) {
+            background: #f8f9fa;
+        }
+        
+        tr:hover {
+            background: #e8f4fd;
+        }
+        
+        h3 {
+            color: #2c5530;
+            font-size: 1.4em;
+            margin-top: 30px;
+            margin-bottom: 15px;
+        }
+        
+        h4 {
+            color: #4a5568;
+            font-size: 1.2em;
+            margin-top: 25px;
+            margin-bottom: 10px;
+        }
+        
+        ul, ol {
+            margin: 15px 0;
+            padding-left: 25px;
+        }
+        
+        li {
+            margin: 8px 0;
+        }
+        
+        .code-container {
+            position: relative;
+            background: white;
+            border: 2px solid #011451;
+            border-radius: 8px;
+            margin: 20px 0;
+            overflow: hidden;
+            max-height: 500px;
+            overflow-y: auto;
+            box-shadow: 0 2px 8px rgba(1, 20, 81, 0.1);
+        }
+        
+        .copy-button {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: #011451;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+            z-index: 10;
+            font-family: var(--font-main);
+        }
+        
+        .copy-button:hover, .copy-button:focus {
+            background: #2c5530;
+            outline: 2px solid #fbc02d;
+            outline-offset: 2px;
+        }
+        
+        pre {
+            margin: 0;
+            padding: 20px 50px 20px 20px;
+            background: white;
+            overflow-x: auto;
+            overflow-y: auto;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            font-family: var(--font-main);
+            font-size: 14px;
+            line-height: 1.5;
+            max-height: 450px;
+            border: none;
+        }
+        
+        code {
+            background: white;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: var(--font-main);
+            font-size: 14px;
+            line-height: 1.5;
+            border: 1px solid #e9ecef;
+        }
+        
+        textarea {
+            width: 100%;
+            min-height: 120px;
+            padding: 15px;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            font-family: inherit;
+            font-size: 14px;
+            resize: vertical;
+            box-sizing: border-box;
+        }
+        
+        textarea:focus {
+            outline: none;
+            border-color: #011451;
+            box-shadow: 0 0 0 3px rgba(1, 20, 81, 0.1);
+        }
+        
+        .exercise-box {
+            background: #fff3cd;
+            border: 2px solid #fbc02d;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 25px 0;
+        }
+        
+        .exercise-box h4 {
+            color: #856404;
+            margin-top: 0;
+        }
+        
+        .success-criteria {
+            background: #d4edda;
+            border: 1px solid #c3e6cb;
+            border-radius: 6px;
+            padding: 15px;
+            margin: 15px 0;
+        }
+        
+        details {
+            background: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 20px 0;
+        }
+        
+        summary {
+            cursor: pointer;
+            font-weight: bold;
+            color: #011451;
+            padding: 10px;
+            margin: -15px -15px 15px -15px;
+            background: #e9ecef;
+            border-radius: 8px 8px 0 0;
+        }
+        
+        summary:hover {
+            background: #dee2e6;
+        }
+        
+        footer {
+            background: #f8f9fa;
+            border: 2px solid #011451;
+            border-radius: 8px;
+            padding: 20px;
+            margin-top: 40px;
+            text-align: center;
+            color: #6c757d;
+        }
+        
+        .notes-status {
+            font-size: 0.9em;
+            color: #666;
+            margin-top: 10px;
+        }
+        
+        /* Desktop sidebar toggle */
+        .sidebar {
+            transform: translateX(0);
+            transition: transform 0.3s ease;
+            z-index: 1100;
+        }
+        
+        .sidebar.hidden {
+            transform: translateX(-100%);
+        }
+        
+        .main-content {
+            margin-left: var(--sidebar-width);
+            transition: margin-left 0.3s ease, width 0.3s ease;
+        }
+        
+        .main-content.expanded {
+            margin-left: 0;
+            width: 100%;
+            max-width: 100%;
+        }
+        
+        .menu-toggle {
+            display: block;
+            background: var(--accent);
+            color: var(--header);
+            border: none;
+            padding: 8px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.8em;
+            font-weight: 600;
+            z-index: 1200;
+        }
+        
+        .menu-toggle:hover {
+            background: #e6a800;
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+            
+            .sidebar.show {
+                transform: translateX(0);
+            }
+            
+            .main-content {
+                margin-left: 0;
+                margin-top: 75px;
+                width: 100%;
+                max-width: 100%;
+                padding: 20px;
+            }
+            
+            .main-content.expanded {
+                margin-left: 0;
+                width: 100%;
+            }
+            
+            .top-nav {
+                padding: 9px 15px;
+            }
+            
+            .top-nav-center {
+                margin: 0 10px;
+            }
+            
+            .top-nav-header h1 {
+                font-size: 1.4em;
+            }
+            
+            .nav-tabs-horizontal {
+                gap: 4px;
+            }
+            
+            .nav-tab {
+                padding: 2px 6px;
+                font-size: 0.7em;
+            }
+            
+            h1 {
+                font-size: 1.8em;
+            }
+            
+            h2 {
+                font-size: 1.5em;
+            }
+        }
+        
+        .sidebar-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1050;
+        }
+        
+        @media (max-width: 768px) {
+            .sidebar-overlay.show {
+                display: block;
+            }
+        }
+
+        /* Ensure consistent text formatting */
+        p {
+            line-height: 1.6;
+            margin: 15px 0;
+        }
+        
+        /* Fix text center class that was missing */
+        .text-center {
+            text-align: center;
+        }
+        
+        /* Ensure consistent table formatting */
+        .table-copy-container {
+            position: relative;
+        }
+    </style>
+
+    <script>
+        function copyCode(button) {
+            const codeBlock = button.nextElementSibling;
+            const text = codeBlock.textContent;
+            
+            // Announce to screen readers
+            button.setAttribute('aria-label', 'Copying code to clipboard');
+            
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(text).then(() => {
+                    const originalText = button.textContent;
+                    button.textContent = 'Copied!';
+                    button.style.background = '#28a745';
+                    button.setAttribute('aria-label', 'Code copied to clipboard successfully');
+                    
+                    setTimeout(() => {
+                        button.textContent = originalText;
+                        button.style.background = '#011451';
+                        button.setAttribute('aria-label', 'Copy code to clipboard');
+                    }, 2000);
+                }).catch(err => {
+                    console.error('Failed to copy text: ', err);
+                    fallbackCopyTextToClipboard(text, button);
+                });
+            } else {
+                fallbackCopyTextToClipboard(text, button);
+            }
+        }
+        
+        function fallbackCopyTextToClipboard(text, button) {
+            const textArea = document.createElement("textarea");
+            textArea.value = text;
+            textArea.style.position = "fixed";
+            textArea.style.left = "-999999px";
+            textArea.style.top = "-999999px";
+            document.body.appendChild(textArea);
+            textArea.focus();
+            textArea.select();
+            
+            try {
+                const successful = document.execCommand('copy');
+                if (successful) {
+                    const originalText = button.textContent;
+                    button.textContent = 'Copied!';
+                    button.style.background = '#28a745';
+                    button.setAttribute('aria-label', 'Code copied to clipboard successfully');
+                    
+                    setTimeout(() => {
+                        button.textContent = originalText;
+                        button.style.background = '#011451';
+                        button.setAttribute('aria-label', 'Copy code to clipboard');
+                    }, 2000);
+                } else {
+                    throw new Error('Fallback copy failed');
+                }
+            } catch (err) {
+                console.error('Fallback copy failed: ', err);
+                button.textContent = 'Copy failed';
+                button.setAttribute('aria-label', 'Failed to copy code to clipboard');
+                setTimeout(() => {
+                    button.textContent = 'Copy';
+                    button.setAttribute('aria-label', 'Copy code to clipboard');
+                }, 2000);
+            }
+            
+            document.body.removeChild(textArea);
+        }
+        
+        function showTab(tabName) {
+            // Hide all tab contents and update ARIA attributes
+            const tabs = document.querySelectorAll('.tab-content');
+            tabs.forEach(tab => {
+                tab.classList.remove('active');
+                tab.setAttribute('aria-hidden', 'true');
+            });
+            
+            // Remove active class from all nav tabs and update ARIA attributes
+            const navTabs = document.querySelectorAll('.nav-tab');
+            navTabs.forEach(tab => {
+                tab.classList.remove('active');
+                tab.setAttribute('aria-selected', 'false');
+            });
+            
+            // Show the selected tab content and update ARIA attributes
+            const selectedTab = document.getElementById(tabName + '-tab');
+            if (selectedTab) {
+                selectedTab.classList.add('active');
+                selectedTab.setAttribute('aria-hidden', 'false');
+            }
+            
+            // Add active class to the clicked nav tab and update ARIA attributes
+            const clickedNavTab = document.querySelector(`[onclick="showTab('${tabName}')"]`);
+            if (clickedNavTab) {
+                clickedNavTab.classList.add('active');
+                clickedNavTab.setAttribute('aria-selected', 'true');
+            }
+            
+            // Close sidebar on mobile after selection
+            if (window.innerWidth <= 768) {
+                const sidebar = document.getElementById('sidebar');
+                if (sidebar) {
+                    sidebar.classList.remove('show');
+                }
+            }
+        }
+        
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const mainContent = document.querySelector('.main-content');
+            const overlay = document.getElementById('sidebar-overlay');
+            const menuButton = document.querySelector('.menu-toggle');
+            
+            if (window.innerWidth <= 768) {
+                // Mobile behavior
+                if (sidebar && overlay) {
+                    const isOpen = sidebar.classList.contains('show');
+                    sidebar.classList.toggle('show');
+                    overlay.classList.toggle('show');
+                    
+                    // Update ARIA attributes
+                    sidebar.setAttribute('aria-hidden', isOpen ? 'true' : 'false');
+                    overlay.setAttribute('aria-hidden', isOpen ? 'true' : 'false');
+                    menuButton.setAttribute('aria-expanded', isOpen ? 'false' : 'true');
+                }
+            } else {
+                // Desktop behavior
+                if (sidebar && mainContent) {
+                    const isHidden = sidebar.classList.contains('hidden');
+                    sidebar.classList.toggle('hidden');
+                    mainContent.classList.toggle('expanded');
+                    
+                    // Update ARIA attributes
+                    sidebar.setAttribute('aria-hidden', isHidden ? 'false' : 'true');
+                    menuButton.setAttribute('aria-expanded', isHidden ? 'true' : 'false');
+                }
+            }
+        }
+        
+        function scrollToSection(sectionId) {
+            if (sectionId) {
+                setTimeout(() => {
+                    const element = document.getElementById(sectionId);
+                    if (element) {
+                        element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                        // Announce to screen readers
+                        element.setAttribute('aria-live', 'polite');
+                        element.setAttribute('aria-atomic', 'true');
+                    }
+                }, 100);
+            }
+            
+            // Close sidebar on mobile after selection only
+            if (window.innerWidth <= 768) {
+                const sidebar = document.getElementById('sidebar');
+                const overlay = document.getElementById('sidebar-overlay');
+                if (sidebar && overlay) {
+                    sidebar.classList.remove('show');
+                    overlay.classList.remove('show');
+                    sidebar.setAttribute('aria-hidden', 'true');
+                    overlay.setAttribute('aria-hidden', 'true');
+                }
+            }
+        }
+        
+        // Close sidebar when clicking on overlay
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize copy button accessibility
+            const copyButtons = document.querySelectorAll('.copy-button');
+            copyButtons.forEach(button => {
+                button.setAttribute('aria-label', 'Copy code to clipboard');
+            });
+            
+            loadNotes();
+            // Show guide tab by default
+            showTab('guide');
+            
+            // Initialize focus management for accessibility
+            const overlay = document.getElementById('sidebar-overlay');
+            if (overlay) {
+                overlay.addEventListener('click', function() {
+                    const sidebar = document.getElementById('sidebar');
+                    if (sidebar) {
+                        sidebar.classList.remove('show');
+                        overlay.classList.remove('show');
+                        
+                        // Return focus to menu toggle button
+                        const menuToggle = document.querySelector('.menu-toggle');
+                        if (menuToggle) {
+                            menuToggle.focus();
+                        }
+                    }
+                });
+            }
+        });
+        
+        function saveNotes(textareaId, statusId) {
+            const textarea = document.getElementById(textareaId);
+            const status = document.getElementById(statusId);
+            
+            if (textarea && status) {
+                localStorage.setItem(textareaId, textarea.value);
+                status.textContent = 'Notes saved automatically';
+                status.style.color = '#28a745';
+                
+                // Announce to screen readers
+                status.setAttribute('aria-live', 'polite');
+                
+                setTimeout(() => {
+                    status.textContent = '';
+                }, 3000);
+            }
+        }
+        
+        function loadNotes() {
+            const textareas = document.querySelectorAll('textarea[id]');
+            textareas.forEach(textarea => {
+                const saved = localStorage.getItem(textarea.id);
+                if (saved) {
+                    textarea.value = saved;
+                }
+                
+                textarea.addEventListener('input', () => {
+                    const statusId = 'status-' + textarea.id.replace('textarea-', '');
+                    saveNotes(textarea.id, statusId);
+                });
+            });
+        }
+    </script>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Top Navigation -->
+        <nav class="top-nav" role="banner" aria-label="Main navigation">
+            <div class="top-nav-left">
+                <button class="menu-toggle" onclick="toggleSidebar()" aria-label="Toggle sidebar navigation" aria-expanded="true" aria-controls="sidebar">☰ Menu</button>
+                <img src="https://sfdora.org/wp-content/uploads/2024/03/UoG_keyline.png" alt="University of Glasgow Logo" class="uog-logo" />
+            </div>
+            
+            <div class="top-nav-center">
+                <div class="top-nav-header">
+                    <h1>Augmented Academia</h1>
+                </div>
+                <div class="nav-tabs-horizontal" role="tablist" aria-label="Workshop sections">
+                    <button class="nav-tab" onclick="showTab('guide')" role="tab" aria-controls="guide-tab" aria-selected="true" id="guide-tab-button">📚 GenAI Foundations</button>
+                    <button class="nav-tab" onclick="showTab('accessibility')" role="tab" aria-controls="accessibility-tab" aria-selected="false" id="accessibility-tab-button">♿ Inclusive Learning</button>
+                    <button class="nav-tab" onclick="showTab('workflow1')" role="tab" aria-controls="workflow1-tab" aria-selected="false" id="workflow1-tab-button">🧠 Advanced Prompting</button>
+                    <button class="nav-tab" onclick="showTab('workflow2')" role="tab" aria-controls="workflow2-tab" aria-selected="false" id="workflow2-tab-button">🎨 Content Creation</button>
+                </div>
+            </div>
+            
+            <div class="top-nav-right">
+                <div class="accessibility-badge" role="img" aria-label="Accessibility compliant">Accessible</div>
+                <a href="https://forms.office.com/e/VLjD0cqTnK" class="feedback-button" target="_blank" aria-label="Provide feedback on this workbook">Feedback</a>
+            </div>
+        </nav>
+
+        <!-- Sidebar Overlay for mobile -->
+        <div class="sidebar-overlay" id="sidebar-overlay" aria-hidden="true"></div>
+
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar" id="sidebar" role="navigation" aria-label="Workshop Navigation" aria-hidden="false">
+            <h2>📚 GenAI Foundations</h2>
+            <ul role="list">
+                <li><a href="#" onclick="showTab('guide'); scrollToSection('')" aria-describedby="guide-desc">What is GenAI?</a></li>
+                <li><a href="#" onclick="showTab('guide'); scrollToSection('uog-policy')" aria-describedby="guide-desc">University Policy</a></li>
+                <li><a href="#" onclick="showTab('guide'); scrollToSection('prompt-writing')" aria-describedby="guide-desc">Prompt Writing Basics</a></li>
+                <li><a href="#" onclick="showTab('guide'); scrollToSection('frameworks')" aria-describedby="guide-desc">Prompt Frameworks</a></li>
+            </ul>
+            <div id="guide-desc" class="sr-only">GenAI foundations and prompt writing basics</div>
+
+            <h2>♿ Inclusive Learning</h2>
+            <ul role="list">
+                <li><a href="#" onclick="showTab('accessibility'); scrollToSection('accessibility-overview')" aria-describedby="accessibility-desc">Legal Requirements</a></li>
+                <li><a href="#" onclick="showTab('accessibility'); scrollToSection('wcag-integration')" aria-describedby="accessibility-desc">WCAG & AI Tools</a></li>
+                <li><a href="#" onclick="showTab('accessibility'); scrollToSection('content-audit')" aria-describedby="accessibility-desc">Content Auditing</a></li>
+                <li><a href="#" onclick="showTab('accessibility'); scrollToSection('technology-tools')" aria-describedby="accessibility-desc">Assistive Technology</a></li>
+                <li><a href="#" onclick="showTab('accessibility'); scrollToSection('practical-exercises')" aria-describedby="accessibility-desc">Practice Exercises</a></li>
+            </ul>
+            <div id="accessibility-desc" class="sr-only">Accessibility and inclusive design for biology education</div>
+
+            <h2>🧠 Advanced Prompting</h2>
+            <ul role="list">
+                <li><a href="#" onclick="showTab('workflow1'); scrollToSection('three-frameworks')" aria-describedby="workflow1-desc">Core Frameworks</a></li>
+                <li><a href="#" onclick="showTab('workflow1'); scrollToSection('hands-on-scenario')" aria-describedby="workflow1-desc">Protein Synthesis Case</a></li>
+                <li><a href="#" onclick="showTab('workflow1'); scrollToSection('exercise1')" aria-describedby="workflow1-desc">Chain-of-Thought Exercise</a></li>
+                <li><a href="#" onclick="showTab('workflow1'); scrollToSection('lab-prompting')" aria-describedby="workflow1-desc">Lab Preparation (PCR)</a></li>
+                <li><a href="#" onclick="showTab('workflow1'); scrollToSection('quality-control')" aria-describedby="workflow1-desc">Quality Control</a></li>
+                <li><a href="#" onclick="showTab('workflow1'); scrollToSection('common-pitfalls')" aria-describedby="workflow1-desc">Common Pitfalls</a></li>
+            </ul>
+            <div id="workflow1-desc" class="sr-only">Advanced prompting techniques for biology content creation</div>
+
+            <h2>🎨 Content Creation</h2>
+            <ul role="list">
+                <li><a href="#" onclick="showTab('workflow2'); scrollToSection('scenario-mitosis')" aria-describedby="workflow2-desc">Slide Transformation</a></li>
+                <li><a href="#" onclick="showTab('workflow2'); scrollToSection('lab-presentation')" aria-describedby="workflow2-desc">Lab Presentations</a></li>
+                <li><a href="#" onclick="showTab('workflow2'); scrollToSection('quality-control-checklist')" aria-describedby="workflow2-desc">Quality Checklist</a></li>
+            </ul>
+            <div id="workflow2-desc" class="sr-only">PowerPoint transformation and interactive content creation</div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content" role="main">
+            <!-- Screen reader instructions -->
+            <div class="sr-only" aria-live="polite">
+                <p>This interactive workbook contains multiple workflow tabs. Use the tab navigation above to switch between sections, or use the sidebar navigation to jump to specific content.</p>
+            </div>
+            
+            <div class="text-center">
+                <p><strong>Augmented Academia Workbook 2</strong></p>
+                <p>This workbook is your practical companion during the workshop and a handy reference for later use. 
+                You can work directly in Copilot or other AI tools while following along.</p>
+                <p><em><strong>This workbook includes accessibility features and ARIA labels for an inclusive learning experience.</strong></em></p>
+            </div>
+            <hr>
+
+            <!-- GUIDE TAB -->
+            <div id="guide-tab" class="tab-content active" role="tabpanel" aria-labelledby="guide-tab-button" aria-hidden="false">
+                <h2 class="workflow-header">🧠 What is GenAI?</h2>
+                <p>Generative Artificial Intelligence (GenAI) is the technology behind tools like ChatGPT, Claude, and Gemini. These tools can create new content based on your instructions.</p>
+                
+                <blockquote>
+                    <p class="center">To put it simply, GenAI is <strong>🧠✨ Your Intelligent Partner in Progress</strong></p>
+
+                    <p>GenAI is not just a tool, it's a creative co-author, a strategic collaborator, and a thinking partner that enhances your professional capabilities.
+                    Like a productivity assistant, it handles routine tasks, drafts content, and sparks new ideas, freeing you to focus on insight and impact. 
+                    It serves as an idea navigator, helping you explore unfamiliar territory, uncover patterns, and generate fresh perspectives. 
+                    And as a cognitive toolkit, it equips you with flexible, adaptive capabilities, from writing and analysis to design and coding, tailored to your goals.</p>
+
+                    <p><strong>Rather than replacing expertise, GenAI amplifies it, offering a dynamic partnership that evolves with your needs and empowers your work.</strong></p>
+                </blockquote>
+<h3 id="uog-policy">University of Glasgow GenAI Policy – Quick Guide</h3>
+<p>The University of Glasgow supports responsible and transparent use of Generative AI in teaching, learning, and research. Below is a summary of the key points from the institutional policy:</p>
+
+<ul>
+    <li>✅ <strong>Be Transparent:</strong> Always state when you have used GenAI in creating teaching materials or research outputs.</li>
+    <li>✅ <strong>Check Accuracy:</strong> Review AI outputs for correctness and alignment with current academic standards.</li>
+    <li>✅ <strong>Protect Privacy:</strong> Do not enter identifiable student or staff data into public AI tools.</li>
+    <li>✅ <strong>Keep Control:</strong> Use AI to support – not replace – your academic judgment.</li>
+    <li>✅ <strong>Use Approved Tools:</strong> Prefer University-provided or contracted AI tools to ensure security.</li>
+    <li>❌ <strong>No Plagiarism:</strong> Do not use AI to copy from sources without proper citation.</li>
+</ul>
+
+<p><a href="https://www.gla.ac.uk/myglasgow/learningandteaching/af-aiguidance/" target="_blank" rel="noopener">Read the full University of Glasgow GenAI policy</a></p>
+
+<div class="success-criteria">
+    <h4>Policy Compliance Quick Check</h4>
+    <ul>
+        <li> Have I disclosed AI use in my work?</li>
+        <li> Have I checked accuracy against trusted sources?</li>
+        <li> Have I removed all personal or sensitive data?</li>
+        <li> Am I using a secure or University-approved tool?</li>
+    </ul>
+</div>
+
+                <h2 class="workflow-header" id="prompt-writing">Prompt writing</h2>
+
+                <h3>What are prompts and why do they matter?</h3>
+                
+                <p>A <strong>prompt</strong> is the instructions, questions, or requests you give to an AI system.</p>
+
+                <blockquote>
+                    <p>Understanding how to write prompts is essential for getting reliable, relevant, and efficient results from any GenAI tool.</p>
+                </blockquote>
+
+                <h4>The prompt-output relationship</h4>
+                
+                <p>Like in everyday situations, AI responds best when you:</p>
+                <ul>
+                    <li>Are specific about what you want</li>
+                    <li>Provide context and background</li>
+                    <li>Explain your role and the audience</li>
+                    <li>Specify the format you need</li>
+                </ul>
+
+                <h4>Key differences between vague and clear prompts</h4>
+
+                <table role="table" aria-label="Comparison of vague and clear prompts">
+                    <caption class="sr-only">This table compares vague prompts with clear prompts and explains why clear prompts work better</caption>
+                    <thead>
+                        <tr>
+                            <th>Vague Prompt</th>
+                            <th>Clear Prompt</th>
+                            <th>Why Clear Works Better</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>"Explain photosynthesis"</td>
+                            <td>"Explain photosynthesis for second-year biology students, focusing on the light reactions, using analogies and including a simple diagram description"</td>
+                            <td>Specifies audience, focus, teaching method, and format</td>
+                        </tr>
+                        <tr>
+                            <td>"Make this better"</td>
+                            <td>"Improve this slide by reducing text by 70%, adding visual elements for enzyme kinetics, and including an interactive poll question"</td>
+                            <td>Defines specific improvements and measurable outcomes</td>
+                        </tr>
+                        <tr>
+                            <td>"Help with my lecture"</td>
+                            <td>"Create a 45-minute lecture outline on DNA replication for first-year students, including learning objectives, activities, and assessment questions"</td>
+                            <td>Clear scope, audience, time frame, and deliverables</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h3 id="frameworks">Prompt frameworks</h3>
+                <p>Frameworks are structured ways to write prompts that help you get the best results.</p>
+                <p>Here are the 5 effective frameworks:</p>
+
+                <table role="table" aria-label="Five effective prompt frameworks for biology educators">
+                    <caption class="sr-only">This table describes five prompt frameworks including their structure, biology examples, and best use cases</caption>
+                    <thead>
+                        <tr>
+                            <th>Framework</th>
+                            <th>Structure</th>
+                            <th>Biology Example</th>
+                            <th>Best For</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>P-T-C-F</strong><br>(Persona-Task-Context-Format)</td>
+                            <td>
+                                <strong>Persona:</strong> Your role<br>
+                                <strong>Task:</strong> What to do<br>
+                                <strong>Context:</strong> Background info<br>
+                                <strong>Format:</strong> Output style
+                            </td>
+                            <td>
+                                <strong>Persona:</strong> Cell biology expert<br>
+                                <strong>Task:</strong> Explain mitosis<br>
+                                <strong>Context:</strong> 2nd year students, 50 minute lecture<br>
+                                <strong>Format:</strong> Outline with activities
+                            </td>
+                            <td>Content creation, lesson planning</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Chain-of-Thought</strong></td>
+                            <td>Ask AI to think step-by-step through complex processes</td>
+                            <td>"Explain photosynthesis step-by-step: 1) Light capture, 2) Water splitting, 3) ATP/NADPH formation, 4) Carbon fixation, showing how each connects"</td>
+                            <td>Complex biological processes, problem-solving</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Few-Shot Learning</strong></td>
+                            <td>Provide 2 to 3 examples of your style, then ask for new content</td>
+                            <td>"Here's how I explain enzymes and here's how I explain metabolism. Now explain DNA replication in the same style"</td>
+                            <td>Maintaining consistency across content</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Role-Based</strong></td>
+                            <td>AI adopts specific expert persona with defined background</td>
+                            <td>"Act as a molecular biologist with 15 years research experience who teaches undergraduates"</td>
+                            <td>Authoritative content, research connections</td>
+                        </tr>
+                        <tr>
+                            <td><strong>CLEAR</strong><br>(Context-Length-Examples-Audience-Role)</td>
+                            <td>
+                                <strong>C:</strong> Background context<br>
+                                <strong>L:</strong> Desired length<br>
+                                <strong>E:</strong> Examples included<br>
+                                <strong>A:</strong> Target audience<br>
+                                <strong>R:</strong> Your role
+                            </td>
+                            <td>
+                                <strong>Context:</strong> Teaching genetics<br>
+                                <strong>Length:</strong> 30 minute segment<br>
+                                <strong>Examples:</strong> Include Mendel's peas<br>
+                                <strong>Audience:</strong> First year students<br>
+                                <strong>Role:</strong> Biology lecturer
+                            </td>
+                            <td>Comprehensive lesson planning</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- ACCESSIBILITY TAB -->
+            <div id="accessibility-tab" class="tab-content" role="tabpanel" aria-labelledby="accessibility-tab-button" aria-hidden="true">
+                <h2 class="workflow-header">♿ Accessibility & Inclusive Design in Biology Education</h2>
+
+                <h3 id="accessibility-overview">Overview & University Policies</h3>
+                <p>Creating accessible educational content ensures all students can engage with biology learning materials effectively. The University of Glasgow is committed to inclusive education that meets diverse learning needs.</p>
+
+                <blockquote>
+                    <p><strong>Legal Requirement:</strong> Under the Equality Act 2010, educational institutions must make reasonable adjustments to ensure students with disabilities can access learning materials and participate fully in education.</p>
+                </blockquote>
+
+                <div class="success-criteria">
+                    <h4>University of Glasgow Accessibility Standards</h4>
+                    <ul>
+                        <li>✅ All digital content must meet WCAG 2.1 AA standards</li>
+                        <li>✅ Alternative formats available within 5 working days of request</li>
+                        <li>✅ Captions required for all video content</li>
+                        <li>✅ Text alternatives for all images and graphics</li>
+                        <li>✅ Keyboard navigation support for interactive elements</li>
+                    </ul>
+                </div>
+
+                <h3 id="wcag-integration">WCAG Guidelines Integration with AI Tools</h3>
+                <p>When using AI to create educational content, ensure outputs meet Web Content Accessibility Guidelines (WCAG) standards.</p>
+
+                <h4>AI Prompting for Accessible Content Creation</h4>
+                <div class="code-container">
+                    <button class="copy-button" onclick="copyCode(this)">Copy</button>
+                    <pre><code><strong>Accessibility-First Content Prompt:</strong>
+
+Create [biology content] that meets WCAG 2.1 AA accessibility standards:
+
+VISUAL ACCESSIBILITY:
+- Use high contrast colors (minimum 4.5:1 ratio for normal text)
+- Provide descriptive alt text for all images and diagrams
+- Use clear, readable fonts (minimum 12pt, sans-serif recommended)
+- Ensure content is readable when magnified to 200%
+
+COGNITIVE ACCESSIBILITY:
+- Use clear, simple language appropriate for [student level]
+- Break complex information into digestible chunks
+- Provide definitions for technical terms
+- Include summary sections and clear headings
+
+MOTOR ACCESSIBILITY:
+- Ensure all interactive elements are keyboard accessible
+- Provide adequate click/touch targets (minimum 44px)
+- Include focus indicators for navigation
+- Avoid content that requires precise timing or coordination
+
+SENSORY ACCESSIBILITY:
+- Provide text alternatives for audio content
+- Include captions for video materials
+- Don't rely solely on color to convey information
+- Offer multiple ways to access the same information
+
+Include specific suggestions for accommodating students with:
+- Visual impairments (screen readers, magnification)
+- Hearing impairments (captions, transcripts)
+- Cognitive differences (clear structure, simple language)
+- Motor impairments (keyboard navigation, alternative inputs)</code></pre>
+                </div>
+
+                <h3 id="content-audit">Content Auditing with AI</h3>
+                <p>Use AI to systematically review existing content for accessibility barriers.</p>
+
+                <div class="code-container">
+                    <button class="copy-button" onclick="copyCode(this)">Copy</button>
+                    <pre><code><strong>Accessibility Audit Prompt:</strong>
+
+Review this biology education content for accessibility barriers:
+
+[Insert your content here]
+
+Analyze for:
+
+VISUAL BARRIERS:
+- Images without alt text or with insufficient descriptions
+- Poor color contrast combinations
+- Text embedded in images that screen readers cannot access
+- Overly complex visual layouts
+
+COGNITIVE BARRIERS:
+- Dense paragraphs without clear structure
+- Technical language without definitions
+- Missing headings or poor heading hierarchy
+- Information overload without clear priorities
+
+NAVIGATION BARRIERS:
+- Links without descriptive text ("click here" vs "download photosynthesis diagram")
+- Missing skip navigation options
+- Unclear page structure
+- Non-intuitive information flow
+
+INTERACTION BARRIERS:
+- Elements that require mouse-only interaction
+- Time-limited activities without extensions
+- Complex drag-and-drop without alternatives
+- Missing feedback for user actions
+
+Provide specific recommendations for improvement with examples of better alternatives.</code></pre>
+                </div>
+
+                <h3 id="technology-tools">Assistive Technology Integration</h3>
+                <p>Ensure your AI-generated content works seamlessly with assistive technologies.</p>
+
+                <h4>Screen Reader Compatibility</h4>
+                <table role="table" aria-label="Screen reader compatibility guidelines">
+                    <thead>
+                        <tr>
+                            <th>Content Type</th>
+                            <th>Accessibility Requirement</th>
+                            <th>AI Prompt Addition</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Images/Diagrams</td>
+                            <td>Descriptive alt text</td>
+                            <td>"Include detailed alt text describing both content and function"</td>
+                        </tr>
+                        <tr>
+                            <td>Tables</td>
+                            <td>Clear headers and structure</td>
+                            <td>"Create tables with proper headers and caption descriptions"</td>
+                        </tr>
+                        <tr>
+                            <td>Interactive Elements</td>
+                            <td>Keyboard navigation</td>
+                            <td>"Ensure all interactions work with keyboard-only navigation"</td>
+                        </tr>
+                        <tr>
+                            <td>Documents</td>
+                            <td>Proper heading structure</td>
+                            <td>"Use hierarchical headings (H1, H2, H3) for clear document structure"</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h3 id="practical-exercises">Practice Exercises</h3>
+
+                <div class="exercise-box">
+                    <h4>Exercise: Accessible content creation</h4>
+                    <p><strong>Challenge:</strong> Create an accessible version of your old lab protocol or lecture notes.</p>
+
+                    <p><strong>Your task:</strong> Write a prompt to make your protocol accessible.</p>
+                    <label for="textarea-accessible-protocol" class="sr-only">Write your accessible protocol prompt</label>
+                    <textarea id="textarea-accessible-protocol" placeholder="Write your accessibility-focused prompt here..." aria-describedby="status-accessible-protocol"></textarea>
+                    <div class="notes-status" id="status-accessible-protocol" role="status" aria-live="polite"></div>
+                </div>
+
+                <details>
+                    <summary>Accessibility Resources</summary>
+                    <ul>
+                        <li><a href="https://www.gla.ac.uk/myglasgow/disability/" target="_blank">University of Glasgow Disability Service</a></li>
+                        <li><a href="https://www.w3.org/WAI/WCAG21/quickref/" target="_blank">WCAG 2.1 Quick Reference</a></li>
+                        <li><a href="https://webaim.org/resources/contrastchecker/" target="_blank">WebAIM Color Contrast Checker</a></li>
+                        <li><a href="https://www.nvaccess.org/download/" target="_blank">NVDA Screen Reader (Free)</a></li>
+                    </ul>
+                </details>
+            </div>
+
+            <!-- WORKFLOW 1 TAB -->
+            <div id="workflow1-tab" class="tab-content" role="tabpanel" aria-labelledby="workflow1-tab-button" aria-hidden="true">
+                <h2 class="workflow-header">🧠  Advanced Prompt Engineering </h2>
+
+                <h3>Workflow overview</h3>
+                
+                <p><strong>Key outcome:</strong> Learn complex AI prompting techniques to create comprehensive, accurate, and engaging biology educational content that meets pedagogical standards and learning objectives.</p>
+
+        <h3 id="three-frameworks">Understanding the three core advanced prompting frameworks</h3>
+
+        <h4>Framework 1: Chain-of-Thought (CoT) prompting</h4>
+        
+        <p><strong>What it is:</strong> A technique where you ask AI to show its reasoning process step-by-step, leading to more accurate and comprehensive responses.</p>
+        
+        <p><strong>Why it works in life sciences:</strong> Complex biological processes involve multiple interconnected steps that students often struggle to connect coherently. CoT mirrors how expert biology teachers explain concepts by building understanding progressively.</p>
+
+        <div class="code-container">
+            <button class="copy-button" onclick="copyCode(this)">Copy</button>
+            <pre><code><strong>Basic Structure:</strong>
+Explain [biological concept] using step-by-step logical reasoning:
+1. Start with [foundational principle]
+2. Connect to [intermediate concept] 
+3. Build to [complex application]
+4. Conclude with [real-world relevance]
+
+For each step, explain WHY this process evolved this way and HOW it connects to the next step.</code></pre>
+        </div>
+
+
+        <h3 id="hands-on-scenario">Hands-on practice scenario: Cell biology lecture creation</h3>
+        
+        <div class="exercise-box">
+            <h4>Your challenge: Create comprehensive content for a 90 minute lecture on "Protein Synthesis: From Gene to Function" for second year biology undergraduates.</h4>
+            
+            <p><strong>Learning objectives:</strong></p>
+            <ul>
+                <li>Explain the molecular mechanisms of transcription and translation</li>
+                <li>Analyse the relationship between protein structure and function</li>
+                <li>Evaluate the impact of mutations on protein synthesis</li>
+                <li>Connect protein synthesis to current biotechnology applications</li>
+            </ul>
+        </div>
+
+        <h4 id="exercise1">Exercise: Chain-of-Thought for protein synthesis </h4>
+        
+        <p><strong>Standard prompt (ineffective):</strong></p>
+        <div class="code-container">
+            <button class="copy-button" onclick="copyCode(this)">Copy</button>
+            <pre><code>Explain protein synthesis for undergraduate biology students.</code></pre>
+        </div>
+
+        <p><strong>Your task:</strong> Rewrite this using Chain-of-Thought prompting</p>
+
+        <div class="code-container">
+            <button class="copy-button" onclick="copyCode(this)">Copy</button>
+            <pre><code><strong>Template to complete:</strong>
+Explain protein synthesis using step-by-step logical reasoning for second year biology undergraduates:
+
+1. <strong>Foundation:</strong> [What should students understand first?]
+2. <strong>Transcription mechanics:</strong> [How does the process begin?]
+3. <strong>RNA processing:</strong> [What happens next and why?]
+4. <strong>Translation setup:</strong> [How do the components come together?]
+5. <strong>Translation process:</strong> [What are the key steps?]
+6. <strong>Post-translation:</strong> [How does the process conclude?]
+7. <strong>Regulation:</strong> [How is this controlled?]
+8. <strong>Real-world applications:</strong> [Why does this matter today?]
+
+For each step, explain WHY this process evolved this way and HOW it connects to the next step. Include common student misconceptions and address them directly.</code></pre>
+        </div>
+
+        <p><strong>Practice space:</strong></p>
+        <label for="textarea-exercise1" class="sr-only">Write your Chain-of-Thought prompt for protein synthesis (or any other topic)</label>
+        <textarea id="textarea-exercise1" placeholder="Write your Chain-of-Thought prompt here..." aria-describedby="status-exercise1"></textarea>
+        <div class="notes-status" id="status-exercise1" role="status" aria-live="polite"></div>
+
+        <details>
+            <summary>View solution example</summary>
+            <div class="code-container">
+                <button class="copy-button" onclick="copyCode(this)">Copy</button>
+                <pre><code>Explain protein synthesis using step-by-step logical reasoning for second year biology undergraduates:
+
+1. <strong>Foundation:</strong> Start with the central dogma and why cells need to make proteins - cells must convert genetic information into functional molecules to survive and respond to environment
+2. <strong>Transcription mechanics:</strong> Detail how RNA polymerase reads DNA template to create mRNA - this separation allows regulation and protects DNA
+3. <strong>RNA processing:</strong> Connect how mRNA is modified (5' cap, 3' poly-A tail, splicing) and why this matters for stability and nuclear export
+4. <strong>Translation setup:</strong> Show how ribosomes, tRNAs, and mRNA come together - this complexity allows for regulation and accuracy
+5. <strong>Translation process:</strong> Walk through initiation, elongation, and termination - each step has quality control mechanisms
+6. <strong>Post-translation:</strong> Explain protein folding, modifications, and targeting - this determines final protein function
+7. <strong>Regulation:</strong> Connect how cells control protein synthesis at multiple levels - this allows cellular responses to changing conditions
+8. <strong>Real-world applications:</strong> Link to genetic engineering, gene therapy, and drug development - show how understanding leads to medical breakthroughs
+
+For each step, explain WHY this process evolved this way and HOW it connects to the next step. Address common misconceptions like 'DNA directly makes proteins' or 'all genes are always active'.</code></pre>
+            </div>
+        </details>
+        <h3>Framework 2: Few-Shot Learning</h3>
+
+        <p><strong>What it is:</strong> Providing 2 to 3 examples of your desired explanation style before asking for new content.</p>
+        
+        <p><strong>Why it works:</strong> Shows AI the specific depth, analogies, and connections you want for your student population and teaching context.</p>
+
+        <div class="code-container">
+            <button class="copy-button" onclick="copyCode(this)">Copy</button>
+            <pre><code><strong>Basic Structure:</strong>
+Here are examples of how I explain concepts to [student level]:
+
+Example 1: [Your explanation style for concept A]
+Example 2: [Your explanation style for concept B]
+
+Now explain [new concept] using the same approach, ensuring [specific requirements]...</code></pre>
+        </div>
+
+       
+        <p> Create examples of your teaching style, then use them to generate new content:</p>
+
+        <div class="code-container">
+            <button class="copy-button" onclick="copyCode(this)">Copy</button>
+            <pre><code><strong>Template:</strong>
+Here are three examples of how I explain complex biology concepts to second year undergraduates:
+
+<strong>Example 1:</strong> [Choose your own topic such as Membrane Transport]
+[Write your explanation style - should include analogy, mechanism, current research connection]
+
+<strong>Example 2:</strong> [Choose your own topic such as DNA Replication]  
+[Write your explanation style - consistent with Example 1]
+
+<strong>Example 3:</strong> [Choose your own topic such as Photosynthesis]
+[Write your explanation style - consistent with previous examples]
+
+Now create a similar explanation for [topic].</code></pre>
+        </div>
+
+        <div class="code-container">
+            <button class="copy-button" onclick="copyCode(this)">Copy</button>
+            <pre><code><strong>Detailed Few-Shot Example:</strong>
+Here are three examples of how I explain genetics to my MSc students:
+
+Example 1: DNA Methylation and Epigenetic Inheritance
+'Think of DNA methylation like library book annotations - the original text (DNA sequence) remains unchanged, but the notes in the margins (methyl groups) completely change how you interpret the content. When cytosine residues get methylated at CpG sites, they act like "Do Not Read" sticky notes placed on gene promoters, silencing transcription through chromatin condensation and blocking transcription factor binding. What's fascinating is that these annotations can be inherited - just like a annotated textbook passed down through generations of students. The DNMT1 enzyme acts like a meticulous librarian, ensuring daughter cells receive the same annotations during DNA replication. This connects directly to David Sinclair's recent work on aging, where he's shown that epigenetic "noise" - the accumulation of incorrect methylation patterns - may be a primary driver of cellular aging. His lab demonstrated that resetting these patterns in mice can actually reverse aging phenotypes, suggesting our epigenetic annotations aren't permanent instructions but rather reversible modifications we can potentially control.'
+
+Example 2: CRISPR-Cas9 Gene Editing
+'CRISPR-Cas9 works like a molecular GPS navigation system combined with precision surgery. The guide RNA acts as your GPS coordinates, scanning the entire genome until it finds the exact matching sequence - like typing a specific address into Google Maps. Once the Cas9 protein arrives at the target location, it functions like molecular scissors, creating a precise double-strand break. The beauty lies in the cell's natural repair mechanisms - just as your phone automatically reroutes when you take a wrong turn, the cell's homology-directed repair (HDR) system automatically fixes the break, but we can hijack this process by providing a "suggested route" - a donor template with our desired sequence. The recent breakthrough by David Liu's lab with prime editing has revolutionized this field - they've created a molecular word processor that can insert, delete, or replace DNA letters without requiring double-strand breaks, achieving up to 50% editing efficiency in human cells. This precision is already being tested in clinical trials for sickle cell disease, where patients' own bone marrow cells are edited ex vivo and then reinfused.'
+
+Example 3: Polymerase Chain Reaction (PCR)
+'PCR is like having a molecular photocopier that can selectively copy just one page from a library containing millions of books. You start with your template DNA (the library), add specific primers that act like bookmarks identifying exactly which "page" you want to copy, and then use DNA polymerase as your photocopier. The genius lies in the temperature cycling - at 95°C, the double-stranded DNA separates like opening a book, at 55°C the primers find and bind to their complementary sequences like placing bookmarks, and at 72°C the polymerase extends from the primers, creating perfect copies. After each cycle, you've doubled the number of copies, so 30 cycles gives you over a billion copies of your target sequence. This exponential amplification transformed modern biology and became the foundation for COVID-19 testing worldwide. Kary Mullis won the Nobel Prize for this technique, but what's remarkable is how it's evolved - new variants like qPCR allow real-time monitoring of amplification, digital PCR provides absolute quantification without standard curves, and LAMP (Loop-mediated isothermal amplification) enables field diagnostics without sophisticated thermocyclers, making genetic testing accessible in resource-limited settings.'
+
+Now create a similar explanation for Mendelian Randomization that follows this same pattern: accessible analogy + molecular mechanism + current research connection.</code></pre>
+        </div>
+
+        <h3>Framework 3: Role-Based Expert Prompting</h3>
+
+        <p><strong>What it is:</strong> Asking AI to adopt the persona of a specific type of biology expert with defined experience and perspective.</p>
+        
+        <p><strong>Why it works:</strong> Creates more focused, authoritative content with appropriate depth and real-world connections.</p>
+
+        <div class="code-container">
+            <button class="copy-button" onclick="copyCode(this)">Copy</button>
+            <pre><code><strong>Basic Structure:</strong>
+Act as a [specific biology expert] with [credentials/experience] who teaches [student population].
+
+Your expertise includes: [specific research areas]
+Your teaching approach emphasizes: [pedagogical focus]
+
+[Your specific content request]...</code></pre>
+        </div>
+
+        <p> Example: </p>
+
+        <div class="code-container">
+            <button class="copy-button" onclick="copyCode(this)">Copy</button>
+            <pre><code><strong>Template:</strong>
+Act as a [choose your expert type] with [define specific credentials] who teaches [your context].
+
+Your expertise includes:
+- [Specific research area 1]
+- [Specific research area 2]
+- [Industry/clinical experience]
+- [Teaching specialization]
+
+Your teaching approach emphasizes:
+- [Pedagogical focus 1]
+- [Student engagement strategy]
+- [Assessment philosophy]
+
+Create a 45-minute lecture segment on [your chosen topic] that includes:
+- Personal research examples and case studies
+- Common misconceptions you've observed
+- Current applications and future directions
+- Hands-on activities for student engagement
+- Assessment questions that test deep understanding
+
+Address the learning objective: [write specific learning objective]
+
+Write in your voice as an expert who balances scientific excitement with realistic limitations.</code></pre>
+        </div>
+
+        <div class="code-container">
+            <button class="copy-button" onclick="copyCode(this)">Copy</button>
+            <pre><code><strong>Detailed Example:</strong>
+Act as a molecular geneticist and cancer researcher with a PhD in Human Genetics from University of Glasgow and 12 years of postdoctoral experience studying tumor suppressor genes who teaches MSc Genetic Counselling students.
+
+Your expertise includes:
+- p53 pathway regulation and its role in DNA damage response
+- BRCA1/BRCA2 gene mutations and hereditary breast cancer syndromes
+- Clinical genetics laboratory experience with next-generation sequencing
+- Genetic counseling for cancer predisposition syndromes
+
+Your teaching approach emphasizes:
+- Connecting molecular mechanisms to real patient outcomes and family histories
+- Using case-based learning with actual (anonymized) patient scenarios from your clinical work
+- Encouraging critical evaluation of genetic testing limitations and ethical implications
+- Assessment through problem-solving rather than memorization
+
+Create a 45-minute lecture segment on 'Interpreting Variants of Uncertain Significance (VUS) in Cancer Predisposition Genes' that includes:
+- Personal research examples from your work on p53 functional assays
+- Common misconceptions you've observed about VUS reporting and patient counseling
+- Current developments in variant classification using ClinVar and ACMG guidelines
+- Hands-on activity analyzing real VUS cases using classification software
+- Assessment questions that test ability to explain VUS to patients and families
+
+Address the learning objective: 'Students will critically evaluate the clinical significance of genetic variants and develop strategies for communicating uncertainty to patients while maintaining appropriate clinical management recommendations.'
+
+Write in your voice as an expert who balances scientific excitement about genomic discoveries with realistic understanding of current clinical limitations and the psychological impact of genetic uncertainty on patients and families.</code></pre>
+        </div>
+
+        <h3 id="lab-prompting">🧪 Laboratory-Specific Prompting Techniques</h3>
+
+        <h4>Framework: Laboratory Safety & Procedure Integration</h4>
+        <p><strong>Why labs need special prompting:</strong> Laboratory content requires precise safety protocols, step-by-step procedures, troubleshooting guidance, and risk assessment integration.</p>
+
+        <div class="code-container">
+            <button class="copy-button" onclick="copyCode(this)">Copy</button>
+            <pre><code><strong>Laboratory Content Template:</strong>
+Act as a biology laboratory coordinator with 10+ years experience teaching undergraduate practical sessions.
+
+Create comprehensive laboratory guidance for [specific experiment] that includes:
+
+SAFETY FIRST:
+- Identify all hazards and risk assessment requirements
+- List required PPE and safety protocols
+- Include emergency procedures specific to this experiment
+
+PROCEDURE DESIGN:
+- Break complex procedures into 5-10 minute segments
+- Include visual checkpoints for student self-assessment
+- Provide troubleshooting guidance for common issues
+- Add quality control measures
+
+LEARNING INTEGRATION:
+- Connect practical steps to theoretical concepts
+- Include pre-lab preparation questions
+- Design post-lab analysis activities
+- Create assessment rubrics for practical skills
+
+ACCESSIBILITY:
+- Accommodate different learning styles and physical abilities
+- Provide alternative methods where possible
+- Include clear timing and pacing guidance
+
+Target: [Year level] students in [duration] laboratory session
+Learning objective: [Specific practical skill or concept]</code></pre>
+        </div>
+
+        <h4>Example: Lab Preparation for PCR Amplification (50 Students)</h4>
+
+        <div class="code-container">
+            <button class="copy-button" onclick="copyCode(this)">Copy</button>
+            <pre><code>Act as an experienced molecular biology laboratory manager preparing for a manual PCR (Polymerase Chain Reaction) practical session with 50 second-year students working in pairs (25 groups).
+
+Create comprehensive preparation guidance for amplifying a 500bp gene fragment including:
+
+REAGENT CALCULATIONS:
+Calculate total quantities needed with 25% excess for manual PCR setup (25μl reaction volume per group):
+
+CORE PCR COMPONENTS:
+- Template DNA (genomic DNA at 10ng/μl): 1μl per reaction
+- Forward primer (10μM stock): 1μl per reaction  
+- Reverse primer (10μM stock): 1μl per reaction
+- Taq DNA polymerase (5 units/μl): 0.2μl per reaction
+- dNTP mix (10mM each dATP, dTTP, dGTP, dCTP): 0.5μl per reaction
+- PCR buffer (10X with MgCl2): 2.5μl per reaction
+- Sterile distilled water: to final volume 25μl
+
+ADDITIONAL REAGENTS:
+- MgCl2 solution (25mM) for optimization: 50μl per group
+- Positive control DNA template: 10 reactions worth
+- Negative control (sterile water): 10 reactions worth
+- DNA loading dye (6X): 5μl per group
+- Agarose powder for gel electrophoresis: 2g total
+- TAE buffer (50X stock): 200ml for dilution
+- Ethidium bromide or safer DNA stain: appropriate volume
+- DNA molecular weight marker: 10 lanes worth
+
+EQUIPMENT PREPARATION:
+- PCR tubes (0.2ml thin-walled): 3 per group + extras
+- Micropipettes: P10, P20, P200, P1000 (check calibration)
+- Sterile pipette tips: yellow, blue, clear (1000 each type)
+- Ice buckets and crushed ice: 6 stations
+- Vortex mixers: 1 per 10 groups
+- Microcentrifuge: 1 per 15 groups
+- Thermal cycler programming and capacity check
+
+PRE-LAB SETUP CHECKLIST:
+REAGENT PREPARATION (Day before):
+- Prepare fresh 10X PCR buffer if needed
+- Check primer stocks and dilute to working concentration
+- Aliquot template DNA to prevent freeze-thaw cycles
+- Prepare fresh dNTP working solutions
+- Set up gel electrophoresis apparatus and test
+
+DAY OF LAB:
+- Pre-chill ice buckets 30 minutes before class
+- Layout reagents in logical order at each station
+- Program thermal cyclers with correct protocol:
+  * Initial denaturation: 94°C for 5 minutes
+  * 30 cycles of: 94°C/30sec, 55°C/30sec, 72°C/45sec
+  * Final extension: 72°C for 10 minutes
+  * Hold at 4°C
+
+SAFETY PREPARATION:
+- Risk assessment for ethidium bromide handling (or safer alternatives)
+- UV safety protocols for gel visualization
+- Proper disposal containers for contaminated tips and tubes
+- Emergency spill kit for chemical accidents
+- Safety data sheets available for all reagents
+
+QUALITY CONTROL MEASURES:
+- Test PCR protocol with known template 24 hours prior
+- Prepare master mix calculations worksheet for students
+- Set up positive and negative controls for each thermal cycler
+- Backup reagents stored at -20°C
+- Troubleshooting guide for common PCR failures
+
+ASSESSMENT PREPARATION:
+- PCR setup technique observation checklist
+- Gel electrophoresis results interpretation rubric
+- Pre-lab quiz on PCR theory and primer design
+- Post-lab analysis: band size calculation and yield estimation
+- Lab report template connecting results to PCR principles
+
+TIMING AND LOGISTICS:
+TOTAL SESSION: 3 hours
+- Introduction and safety briefing: 15 minutes
+- PCR setup demonstration: 20 minutes
+- Student PCR setup: 45 minutes
+- PCR cycling time: 90 minutes (prepare gels during this time)
+- Gel electrophoresis and results analysis: 30 minutes
+- Cleanup and data recording: 20 minutes
+
+COST OPTIMIZATION:
+- Calculate cost per student for budget planning
+- Identify reusable vs. consumable items
+- Suggest supplier contacts for bulk reagent purchasing
+- Include shelf life information for inventory management
+
+Include specific concentrations, storage temperatures, and supplier catalog numbers where relevant.</code></pre>
+        </div>
+
+        <div class="exercise-box">
+            <h4>Practice Exercise: Advanced Lab Prep Calculation</h4>
+            <p><strong>Your Task:</strong> Use GenAI to calculate comprehensive reagent quantities and protocols for your specific molecular biology lab scenario.</p>
+            
+            <label for="textarea-lab-prep" class="sr-only">Write your lab preparation prompt</label>
+            <textarea id="textarea-lab-prep" placeholder="Write a prompt to calculate reagents and prepare for your specific molecular biology lab scenario (e.g., gel electrophoresis, enzyme digestion, cloning)..." aria-describedby="status-lab-prep"></textarea>
+            <div class="notes-status" id="status-lab-prep" role="status" aria-live="polite"></div>
+        </div>
+
+        <h3 id="quality-control">🔍 Quality Control and Verification Techniques</h3>
+
+        <h4>Scientific Accuracy Check Prompt</h4>
+        <div class="code-container">
+            <button class="copy-button" onclick="copyCode(this)">Copy</button>
+            <pre><code>Review the biology content you just generated for scientific accuracy:
+- Are all facts current according to recent peer-reviewed literature?
+- Are any concepts oversimplified to the point of inaccuracy?
+- Does the content reflect current scientific understanding vs. outdated models?
+- Are there important exceptions or nuances missing?
+- Would a biology professor find any errors or misleading statements?
+
+Provide specific corrections with explanations.</code></pre>
+        </div>
+
+        <h4>Student Misconception Integration</h4>
+        <div class="code-container">
+            <button class="copy-button" onclick="copyCode(this)">Copy</button>
+            <pre><code>Identify common student misconceptions related to this biology content and suggest how to address them:
+- What do students typically misunderstand about this topic?
+- How can the explanation be modified to prevent these misconceptions?
+- What analogies might be misleading and should be avoided?
+- How can we explicitly contrast correct vs. incorrect thinking?</code></pre>
+        </div>
+
+        <h3 id="common-pitfalls">⚠️ Common Pitfalls and Quick Fixes</h3>
+
+        <table role="table" aria-label="Common AI prompting problems and solutions">
+            <caption class="sr-only">This table shows common problems when using AI for biology content creation and provides quick fixes</caption>
+            <thead>
+                <tr>
+                    <th scope="col">Problem</th>
+                    <th scope="col">Why It Happens</th>
+                    <th scope="col">Quick Fix</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Oversimplified explanations</strong></td>
+                    <td>AI tries to make everything "simple"</td>
+                    <td>Specify exact student level and prerequisite knowledge</td>
+                </tr>
+                <tr>
+                    <td><strong>Outdated information</strong></td>
+                    <td>AI trained on older literature</td>
+                    <td>Always request verification against recent (2020+) research</td>
+                </tr>
+                <tr>
+                    <td><strong>Missing nuances</strong></td>
+                    <td>AI focuses on general principles</td>
+                    <td>Ask explicitly for exceptions, limitations, and edge cases</td>
+                </tr>
+                <tr>
+                    <td><strong>Generic analogies</strong></td>
+                    <td>AI uses common but misleading comparisons</td>
+                    <td>Provide examples of analogies that work in your context</td>
+                </tr>
+                <tr>
+                    <td><strong>No practical applications</strong></td>
+                    <td>AI sticks to theoretical content</td>
+                    <td>Require connections to current research, medicine, or biotech</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+            <!-- WORKFLOW 2 TAB -->
+            <div id="workflow2-tab" class="tab-content" role="tabpanel" aria-labelledby="workflow2-tab-button" aria-hidden="true">
+                <h2 class="workflow-header">🗂️ PowerPoint Transformation & Interactive Content Creation </h2>
+
+                <h3>📋 Workflow Overview</h3>
+                
+                <p><strong>Key outcome:</strong> Transform dense, text-heavy content into engaging, visual, and interactive learning experiences.</p>
+<blockquote>
+            <p><strong>It may not always work:</strong></p>
+            <p>GenAI tools are still evolving - so having Copilot create presentations may be challenging based on what license your University has. There are other GenAI tools that can generate very comprehensive slides, images, videos and even apps for your lectures - but please check University regulations before using them. <br>
+            The examples provided in this workflow, hence, may not yield the expected results and should be adapted to fit your specific context and available tools.</p>
+        </blockquote>
+
+                <h3 id="scenario-mitosis">🔬Scenario: Cell Division Presentation</h3>
+        
+        <div class="exercise-box">
+            <h4><strong>Your Challenge:</strong> Transform a traditional lecture on "Mitosis and Cell Cycle Regulation" (or any slide of your choice) from a text-heavy presentation into an engaging, interactive experience.</h4>
+
+            <p><strong>Target Audience:</strong> Second-year biology students<br>
+            <strong>Duration:</strong> 50 minutes</p>
+            
+            <p><strong>Learning Objectives:</strong></p>
+            <ul>
+                <li>Describe the stages of mitosis and their key events</li>
+                <li>Explain how the cell cycle is regulated</li>
+                <li>Analyze what happens when regulation fails (cancer)</li>
+                <li>Apply knowledge to evaluate cancer treatments</li>
+            </ul>
+        </div>
+
+      
+        <p><strong>Text-Heavy Content</strong></p>
+        <div class="code-container">
+            <button class="copy-button" onclick="copyCode(this)">Copy</button>
+            <pre><code>MITOSIS AND THE CELL CYCLE
+• G1 Phase: Cell growth and normal metabolic activities, preparation for DNA synthesis
+• S Phase: DNA synthesis occurs, each chromosome is duplicated to form sister chromatids
+• G2 Phase: Cell continues to grow and produces proteins necessary for chromosome condensation
+• M Phase: Mitosis occurs, including prophase, metaphase, anaphase, and telophase
+• Cytokinesis: Division of the cytoplasm to form two daughter cells
+• Checkpoints: G1/S checkpoint checks for DNA damage, G2/M checkpoint ensures DNA replication is complete, spindle checkpoint ensures all chromosomes are attached to spindle fibers
+• Regulation: Cyclins and cyclin-dependent kinases (CDKs) control progression through phases
+• Cancer: Results from mutations in genes controlling cell cycle, leading to uncontrolled division</code></pre>
+        </div>
+
+
+        <p><strong>Transformation Prompt:</strong></p>
+
+        <div class="code-container">
+            <button class="copy-button" onclick="copyCode(this)">Copy</button>
+            <pre><code>Redesign this cell biology slide about mitosis and cell cycle for second-year undergraduates to be more visual and engaging.
+
+Requirements:
+- Reduce text by 80% to essential concepts only
+- Suggest specific visual elements: cell cycle diagrams, checkpoint illustrations, before/after comparisons
+- Create visual hierarchy emphasizing key regulatory points
+- Add interactive Mentimeter polling question: 'Which cell cycle checkpoint do you think is most important for preventing cancer?' with options A) G1/S checkpoint B) G2/M checkpoint C) Spindle checkpoint D) All equally important
+- Include progressive disclosure - reveal information in logical sequence
+
+Learning objective: Students must describe mitosis stages and explain cell cycle regulation
+
+Design for maximum clarity while maintaining scientific accuracy. Include speaker notes with:
+* Key analogies (e.g., cell cycle as factory production line)
+* Common student misconceptions about cancer and cell division
+* Connection to current cancer research and treatments
+* Discussion prompts for active learning
+
+Format: Detailed slide redesign suggestions with timing and interaction points</code></pre>
+        </div>
+        </details>   
+
+        <h4>Interactive elements:</h4>
+        <div class="code-container">
+            <button class="copy-button" onclick="copyCode(this)">Copy</button>
+            <pre><code><strong>Template for Interactive Case Study Generation:</strong>
+
+Create an interactive case study for teaching cell cycle regulation and cancer:
+
+CASE CONTEXT:
+-  45-year-old patient with newly diagnosed breast cancer
+- Tumor cells show mutations in p53 (G1/S checkpoint) and RB (retinoblastoma protein)
+- Treatment options include chemotherapy targeting different cell cycle phases
+
+INTERACTIVE ELEMENTS:
+Generate 5 progressive questions for student analysis:
+
+1. **Initial Assessment:** Multiple choice poll - 'Based on these mutations, what would you expect in the tumor cells?'
+   Options: A) Faster cell division B) DNA damage accumulation C) Resistance to growth signals D) All of the above
+
+2. **Mechanism Analysis:** Discussion prompt - 'In small groups, explain how p53 mutations lead to cancer. You have 3 minutes.'
+
+3. **Treatment Strategy:** Ranking exercise - 'Rank these chemotherapy approaches by likely effectiveness for this patient:'
+   - Taxanes (block mitosis by stabilizing microtubules)
+   - Antimetabolites (interfere with DNA synthesis in S phase)
+   - Topoisomerase inhibitors (cause DNA breaks, trigger checkpoints)
+
+4. **Critical Thinking:** Open response - 'Why might normal cells be less affected by these treatments than cancer cells?'
+
+5. **Application:** Word cloud - 'Name one way this case connects to what you learned about normal cell cycle control'
+
+MENTIMETER INTEGRATION:
+- Include QR codes for easy student access
+- Provide real-time result visualization
+- Generate discussion points based on response patterns
+
+ASSESSMENT ALIGNMENT:
+Connect each question to course learning objectives and provide model answers with explanations of common student misconceptions.
+
+Make it scientifically accurate while engaging students in active problem-solving.</code></pre>
+        </div>
+
+
+<h3 id="lab-presentation">🔬 Laboratory Presentation Enhancement</h3>
+
+<h4>Transforming Lab Instructions into Engaging Presentations</h4>
+
+<p><strong>Challenge:</strong> Traditional lab manuals are text-heavy and don't engage students or help them visualize techniques.</p>
+
+<div class="code-container">
+    <button class="copy-button" onclick="copyCode(this)">Copy</button>
+    <pre><code><strong>Laboratory Presentation Transformation Prompt:</strong>
+
+Transform this laboratory procedure into an engaging pre-lab presentation for [student level]:
+
+CONTENT ANALYSIS:
+- Identify the 3-5 most critical technique points students struggle with
+- Highlight safety issues that need visual emphasis
+- Find opportunities for interactive knowledge checks
+
+VISUAL ENHANCEMENT:
+- Replace text instructions with step-by-step photo sequences
+- Create before/after comparison slides for key steps
+- Design visual troubleshooting guides ("If this happens, then...")
+- Generate equipment identification quizzes with images
+
+INTERACTIVE INTEGRATION:
+- Add Mentimeter polls: "What do you predict will happen when we add..."
+- Create "Pause and Predict" moments throughout procedures
+- Design safety knowledge checks with immediate feedback
+- Include virtual lab tour with clickable hotspots
+
+PRACTICAL FOCUS:
+- Show common mistakes with visual examples
+- Include timing guides for each procedure step
+- Create assessment checkpoints aligned with learning objectives
+- Add post-lab reflection questions that connect to theory
+
+Format: Detailed slide-by-slide breakdown with timing, interaction points, and assessment opportunities.</code></pre>
+</div>
+
+<h4>Example: Microscopy Skills Presentation</h4>
+
+
+<h4>Laboratory Safety Presentation Templates</h4>
+
+<div class="code-container">
+    <button class="copy-button" onclick="copyCode(this)">Copy</button>
+    <pre><code><strong>Safety-First Lab Presentation Prompt:</strong>
+
+Create an engaging laboratory safety presentation for [specific experiment] that:
+
+VISUAL SAFETY EMPHASIS:
+- Show proper vs. improper PPE use with clear photo comparisons
+- Create "Spot the Hazard" interactive slides for risk identification
+- Design emergency procedure flowcharts with clear visual steps
+- Include equipment-specific safety demonstrations
+
+INTERACTIVE SAFETY CHECKS:
+- Mentimeter poll: "Which PPE is required for this procedure?" with visual options
+- Safety scenario discussions: "What would you do if..." case studies
+- Equipment identification quiz with safety implications
+- Risk assessment activities students complete in real-time
+
+PROCEDURE INTEGRATION:
+- Connect each safety requirement to specific procedure steps
+- Show consequences of safety violations (appropriate, educational examples)
+- Include laboratory-specific emergency contact information
+- Create safety checklists students can use during actual lab work
+
+ASSESSMENT ALIGNMENT:
+- Design safety knowledge checks that must be passed before lab access
+- Include peer safety observation activities
+- Create post-incident learning scenarios for continuous improvement
+
+Make it serious but engaging - safety is critical but shouldn't be boring!</code></pre>
+</div>
+
+<h4>Equipment and Technique Visualization</h4>
+
+<div class="code-container">
+    <button class="copy-button" onclick="copyCode(this)">Copy</button>
+    <pre><code><strong>Equipment Presentation Prompt:</strong>
+
+Transform equipment instruction for [specific laboratory instrument] into visual learning experience:
+
+TECHNIQUE BREAKDOWN:
+- Create slow-motion conceptual animations for complex procedures
+- Show common technique errors with side-by-side comparisons
+- Design progressive skill-building activities from basic to advanced
+- Include "Expert Tips" callouts from experienced researchers
+
+INTERACTIVE LEARNING:
+- Equipment component identification with drag-and-drop activities
+- "Predict the Result" polls before demonstrating techniques
+- Troubleshooting scenarios with branching decision trees
+- Peer teaching opportunities where students explain techniques
+
+REAL-WORLD CONNECTIONS:
+- Show how laboratory techniques connect to research applications
+- Include career spotlights featuring equipment expertise
+- Connect basic techniques to advanced research methods
+- Highlight quality control and reproducibility standards
+
+ASSESSMENT INTEGRATION:
+- Practical skills checklists with clear criteria
+- Video analysis activities where students identify technique quality
+- Self-assessment tools for technique improvement
+- Peer evaluation opportunities with structured feedback
+
+</code></pre>
+</div>
+
+
+        <h3 id="quality-control-checklist">🎯 Quality Control Checklist</h3>
+        
+        <p><strong>Before Using AI-Transformed Content:</strong></p>
+        <ul role="list" aria-label="Quality control checklist for AI-generated content">
+            <li><span aria-hidden="true"></span> Scientific accuracy verified against reliable sources</li>
+            <li><span aria-hidden="true"></span> Appropriate complexity level for target students</li>
+            <li><span aria-hidden="true"></span> Interactive elements tested and functional</li>
+            <li><span aria-hidden="true"></span> Visual elements enhance rather than distract from content</li>
+            <li><span aria-hidden="true"></span> Learning objectives clearly addressed</li>
+            <li><span aria-hidden="true"></span> Assessment opportunities aligned with goals</li>
+            <li><span aria-hidden="true"></span> Accessibility features included (alt text, readable fonts)</li>
+            <li><span aria-hidden="true"></span> Technology requirements clearly communicated to students</li>
+        </ul>
+            </div>
+        </main>
+
+        <!-- Enhanced Footer with Legal Information -->
+        <footer role="contentinfo">
+            <p><strong>© 2025 University of Glasgow - Workshop 2: Advanced AI Prompting & Lecture Creation for Biology Education</strong></p>
+            <p>Created by Dr Alisha Aman | All Rights Reserved | Proprietary Educational Material</p>
+        </footer>
+    </div>
+</body>
+</html>
