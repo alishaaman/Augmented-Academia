@@ -1,0 +1,88 @@
+<h3 id="mizou-genetics">Genetics Example</h3>
+<p>This example shows how to set up a genetics-focused QuizBot for a molecular biology course:</p>
+
+<div class="code-container">
+    <button class="copy-button" onclick="copyCode(this)" aria-label="Copy genetics example">Copy</button>
+    <pre><code>----- AI INSTRUCTIONS FIELD -----
+Create a revision quiz for third-year undergraduate students for the course Molecular Genetics and Gene Expression. Generate conceptual multiple-choice questions that require application of knowledge rather than simple recall. Focus on gene expression mechanisms, regulation, and experimental techniques. Use the following learning outcomes and terminology:
+
+Learning Outcomes:
+- Describe and explain eukaryotic transcription mechanisms and regulation
+- Compare and contrast prokaryotic and eukaryotic gene expression
+- Analyze experimental approaches for studying transcription factors
+- Evaluate the role of chromatin structure in gene expression
+- Apply knowledge of molecular techniques to experimental design scenarios
+
+Key Terminology: RNA polymerase, chromatin remodeling, histone modifications, promoter elements, enhancers, silencers, transcription factors, ChIP-seq, CRISPR-Cas9, reporter genes, DNA footprinting, gel shift assay, DNase hypersensitivity, polymerase chain reaction, next-generation sequencing
+
+----- WELCOME MESSAGE FIELD -----
+Welcome to the Molecular Genetics Revision QuizBot! I'll generate questions to help you test your understanding of gene expression mechanisms and experimental techniques. 
+
+Type 'start' to begin with multiple-choice questions.
+Type 'short answers' if you prefer short-answer format.
+You can focus on specific areas with commands like 'Ask about transcription factors' or 'Focus on experimental techniques.'
+
+Ready to test your knowledge?
+
+----- RULES FIELD -----
+[Use the standard rules template from above]</code></pre>
+</div>
+
+<h3 id="mizou-anatomy">Anatomy Example</h3>
+<p>This example demonstrates a QuizBot configuration for a human anatomy course:</p>
+
+<div class="code-container">
+    <button class="copy-button" onclick="copyCode(this)" aria-label="Copy anatomy example">Copy</button>
+    <pre><code>----- AI INSTRUCTIONS FIELD -----
+Create a revision quiz for second-year medical students for the course Human Anatomy: Musculoskeletal System. Generate challenging multiple-choice questions that require integration of anatomical knowledge with clinical applications. Use the following learning outcomes and terminology:
+
+Learning Outcomes:
+- Identify and describe the major bones, joints, muscles and neurovascular structures of the upper and lower limbs
+- Explain the functional relationships between musculoskeletal components
+- Apply anatomical knowledge to common clinical scenarios and pathologies
+- Interpret medical imaging (X-rays, MRIs, CT scans) of musculoskeletal structures
+- Analyze the biomechanical principles governing human movement
+
+Key Terminology: origin, insertion, innervation, blood supply, brachial plexus, rotator cuff, carpal tunnel, femoral triangle, anatomical snuffbox, compartment syndrome, joint capsule, ligaments, bursae, tendon sheaths, fascia, osteology, myology, arthrology, gait analysis, surface anatomy, anatomical variation
+
+----- WELCOME MESSAGE FIELD -----
+Welcome to the Human Anatomy Revision QuizBot! I'll generate questions to test your knowledge of musculoskeletal anatomy and clinical applications.
+
+Type 'start' to begin with multiple-choice questions.
+Type 'short answers' for short-answer format.
+You can focus on specific regions (e.g., 'Ask about the upper limb') or applications (e.g., 'Clinical scenarios').
+
+Ready to begin your anatomy review?
+
+----- RULES FIELD -----
+[Use the standard rules template from above]</code></pre>
+</div>
+
+<div class="exercise-box">
+    <h4>Exercise: Create Your Own QuizBot Configuration</h4>
+    <p>Develop a QuizBot configuration for your own course by modifying the template. Focus on the learning outcomes and key terminology that would be most valuable for your students to practice.</p>
+    <label for="textarea-quizbot" class="sr-only">Create your QuizBot configuration</label>
+    <textarea id="textarea-quizbot" placeholder="Paste your modified QuizBot configuration here..." aria-describedby="status-quizbot"></textarea>
+    <div class="notes-status" id="status-quizbot" role="status" aria-live="polite"></div>
+</div>
+
+<h3>Implementation Tips</h3>
+<ul>
+    <li><strong>Pilot with small groups:</strong> Test your QuizBot with a few students before wide release</li>
+    <li><strong>Create multiple specialized bots:</strong> Consider creating separate bots for different topic areas</li>
+    <li><strong>Update regularly:</strong> Refine your AI instructions based on student feedback</li>
+    <li><strong>Integrate with formative assessment:</strong> Use QuizBot interactions as preparation for formal assessments</li>
+    <li><strong>Monitor usage patterns:</strong> Check which topics students are struggling with most</li>
+</ul>
+
+<details>
+    <summary>Advanced QuizBot Features</summary>
+    <p>For more sophisticated QuizBots, consider these advanced configuration options:</p>
+    <ul>
+        <li><strong>Progressive difficulty:</strong> Structure questions to increase in difficulty based on performance</li>
+        <li><strong>Case-based scenarios:</strong> Include clinical or real-world scenarios that require application</li>
+        <li><strong>Visual integration:</strong> Reference diagrams or images (e.g., "Refer to Figure 3.2 in your textbook")</li>
+        <li><strong>Spaced repetition:</strong> Configure the bot to revisit previously missed questions</li>
+        <li><strong>Peer discussion prompts:</strong> Generate questions that students can discuss in small groups</li>
+    </ul>
+</details>
