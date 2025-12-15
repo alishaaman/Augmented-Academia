@@ -36,7 +36,7 @@
             --main-bg: #fff;
             --border-radius: 8px;
             --shadow: 0 2px 8px rgba(0,0,0,0.08);
-            --nav-height: 96px;
+            --nav-height: 110px;
             --brand-title-size: 1.8em;
             --brand-logo-height: 51px;
             --hubs-logo-height: 76px;
@@ -92,7 +92,7 @@
             align-items: center;
             gap: 16px;
         }
-        .top-nav-header h1 {
+        .top-nav-header h2 {
             margin: 0;
             color: white;
             font-size: var(--brand-title-size);
@@ -299,8 +299,22 @@
         
         .top-nav-right {
             display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 6px;
+        }
+
+        .logo-row {
+            display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 10px;
+        }
+
+        .cta-stack {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 4px;
         }
         
         h1, h2, h3, h4, h5, h6 {
@@ -898,16 +912,11 @@
         <nav class="top-nav" role="banner" aria-label="Main navigation">
             <div class="top-nav-left">
                 <button class="menu-toggle" onclick="toggleSidebar()" aria-label="Toggle sidebar navigation" aria-expanded="true" aria-controls="sidebar">☰ Menu</button>
-                <a href="../../index.html" style="color: white; text-decoration: none; font-size: 0.8em; margin-right: 10px;">← Workshop Hub</a>
-                <img src="https://sfdora.org/wp-content/uploads/2024/03/UoG_keyline.png" alt="University of Glasgow Logo" class="uog-logo" />
+                <img src="../assets/hubs-logo.png" alt="HUBS Early Career Lecturers in Biosciences" class="brand-logo hubs" loading="lazy">
             </div>
-            
             <div class="top-nav-center">
-                <div class="brand-strip" aria-label="Partner logos">
-                    <img src="../assets/hubs-logo.png" alt="HUBS Early Career Lecturers in Biosciences" class="brand-logo hubs" loading="lazy">
-                </div>
                 <div class="top-nav-header">
-                    <h1>Augmented Academia</h1>
+                    <h2>Augmented Academia</h2>
                 </div>
                 <div class="nav-tabs-horizontal" role="tablist" aria-label="Workshop content sections">
                     <button class="nav-tab" onclick="showTab('assessments')" role="tab" aria-controls="assessments-tab" aria-selected="true" id="assessments-tab-button" aria-label="Assessment Transformation tab">📝 Assessment Transformation</button>
@@ -915,11 +924,17 @@
                     <button class="nav-tab" onclick="showTab('mizou')" role="tab" aria-controls="mizou-tab" aria-selected="false" id="mizou-tab-button" aria-label="QuizBot & MCQ Generation tab">🤖 QuizBot & MCQ Generation</button>
                 </div>
             </div>
-            
             <div class="top-nav-right">
-                <img src="https://srf-reproduction.org/wp-content/uploads/2023/04/RSB-logo-clear.png" alt="Royal Society of Biology" class="brand-logo rsb" loading="lazy">
-                <div class="accessibility-badge" role="img" aria-label="Accessibility compliant">Accessible</div>
-                <a href="https://forms.office.com/e/VLjD0cqTnK" class="feedback-button" target="_blank" aria-label="Provide feedback on this workbook">Feedback</a>
+                <div class="logo-row" aria-label="Right logos">
+                    <img src="https://srf-reproduction.org/wp-content/uploads/2023/04/RSB-logo-clear.png" alt="Royal Society of Biology" class="brand-logo rsb" loading="lazy">
+                    <img src="https://sfdora.org/wp-content/uploads/2024/03/UoG_keyline.png" alt="University of Glasgow Logo" class="uog-logo" />
+                </div>
+                <div class="cta-stack">
+                    <a href="https://forms.office.com/e/VLjD0cqTnK" class="feedback-button" target="_blank" aria-label="Provide feedback on this workbook">Feedback</a>
+                    <div class="accessibility-badge" title="This workbook includes comprehensive ARIA labels for screen readers and assistive technologies">
+                        ARIA Accessible
+                    </div>
+                </div>
             </div>
         </nav>
 
