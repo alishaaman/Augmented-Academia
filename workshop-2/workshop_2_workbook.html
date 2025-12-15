@@ -36,6 +36,10 @@
             --main-bg: #fff;
             --border-radius: 8px;
             --shadow: 0 2px 8px rgba(0,0,0,0.08);
+            --nav-height: 96px;
+            --brand-title-size: 1.8em;
+            --brand-logo-height: 51px;
+            --hubs-logo-height: 76px;
         }
         html {
             margin: 0;
@@ -67,8 +71,8 @@
             align-items: center;
             justify-content: space-between;
             z-index: 1000;
-            height: 57px;
-            min-height: 57px;
+            height: auto;
+            min-height: var(--nav-height);
         }
         .top-nav-left {
             display: flex;
@@ -91,7 +95,7 @@
         .top-nav-header h1 {
             margin: 0;
             color: white;
-            font-size: 1.8em;
+            font-size: var(--brand-title-size);
         }
         .top-nav-header .subtitle {
             font-size: 0.8em;
@@ -139,7 +143,7 @@
         
         
         .main-content {
-            margin-top: 75px;
+            margin-top: var(--nav-height);
             margin-left: var(--sidebar-width);
             padding: 20px 40px 20px 40px;
             max-width: calc(100% - var(--sidebar-width));
@@ -151,10 +155,10 @@
         
         .sidebar {
             position: fixed;
-            top: 75px;
+            top: var(--nav-height);
             left: 0;
             width: var(--sidebar-width);
-            height: calc(100vh - 75px);
+            height: calc(100vh - var(--nav-height));
             background: var(--sidebar-bg);
             border-right: 1px solid #e9ecef;
             overflow-y: auto;
@@ -213,7 +217,7 @@
             outline-offset: 2px;
         }
         .uog-logo {
-            height: 51px;
+            height: var(--brand-logo-height);
             width: auto;
             z-index: 1002;
         }
@@ -233,6 +237,36 @@
         .accessibility-badge::before {
             content: '♿';
             font-size: 0.9em;
+        }
+
+        .brand-logo {
+            height: 44px;
+            width: auto;
+            flex-shrink: 0;
+            object-fit: contain;
+        }
+
+        .brand-logo.hubs {
+            height: var(--hubs-logo-height);
+        }
+        .brand-logo.rsb  { background: #fff; padding: 4px; border-radius: 8px; }
+
+        .top-nav-center .brand-strip {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 4px;
+            justify-content: center;
+        }
+
+        /* HUBS desktop override */
+
+        @media (max-width: 820px) {
+            .top-nav-center .brand-strip {
+                gap: 8px;
+            }
+            .brand-logo { height: 36px; }
+            :root { --brand-logo-height: 36px; --hubs-logo-height: 48px; }
         }
         
         .feedback-button {
@@ -609,6 +643,19 @@
         .table-copy-container {
             position: relative;
         }
+        
+        /* editable code focus styles */
+        .code-container code[contenteditable="true"] {
+            outline: 1px dashed #011451;
+            caret-color: #011451;
+        }
+        .code-container code[contenteditable="true"]:focus {
+            outline: 2px solid var(--accent);
+            background: #fffef4;
+        }
+
+        /* ADD: nested indent for generated TOC items */
+        .sidebar ul ul { margin-left: 14px; padding-left: 10px; border-left: 2px solid #e9ecef; }
     </style>
 
     <script>
@@ -715,6 +762,10 @@
                     sidebar.classList.remove('show');
                 }
             }
+            // ADD: Rebuild sidebar TOC after switching tabs to ensure links are populated
+            if (typeof buildSidebarTOC === 'function') {
+                setTimeout(buildSidebarTOC, 0);
+            }
         }
         
         function toggleSidebar() {
@@ -786,7 +837,13 @@
             loadNotes();
             // Show guide tab by default
             showTab('guide');
-            
+
+            // ADD: build dynamic sidebar TOC from headings
+            buildSidebarTOC();
+
+            // enable editable code after DOM is ready
+            makeCodeBlocksEditable();
+
             // Initialize focus management for accessibility
             const overlay = document.getElementById('sidebar-overlay');
             if (overlay) {
@@ -838,7 +895,132 @@
                 });
             });
         }
+
+        // helper to make code blocks editable
+        function makeCodeBlocksEditable() {
+            document.querySelectorAll('.code-container pre code').forEach(code => {
+                code.setAttribute('contenteditable', 'true');
+                code.setAttribute('spellcheck', 'false');
+                code.setAttribute('role', 'textbox');
+                code.setAttribute('aria-multiline', 'true');
+                code.setAttribute('tabindex', '0');
+            });
+        }
+
+        // ADD: utilities to slugify and assign unique IDs within a container
+        function slugifyText(text) {
+          return text.trim().toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
+        }
+        function ensureHeadingIds(container) {
+          const counts = new Map();
+          const hs = container.querySelectorAll('h2, h3, h4');
+          hs.forEach(h => {
+            const base = slugifyText(h.textContent);
+            const n = counts.get(base) || 0;
+            counts.set(base, n + 1);
+            const id = n === 0 ? base : `${base}-${n+1}`;
+            h.id = h.id || id; // don't override existing ids
+          });
+        }
+
+        // ADD: build sidebar lists per tab from headings (H3 + H4 nested)
+        function buildSidebarTOC() {
+          const sections = [
+            { tab: 'guide',     containerId: 'guide-tab',     listId: 'toc-guide' },
+            { tab: 'accessibility', containerId: 'accessibility-tab', listId: 'toc-accessibility' },
+            { tab: 'workflow1', containerId: 'workflow1-tab', listId: 'toc-workflow1' },
+            { tab: 'workflow2', containerId: 'workflow2-tab', listId: 'toc-workflow2' }
+          ];
+          sections.forEach(s => {
+            const container = document.getElementById(s.containerId);
+            const list = document.getElementById(s.listId);
+            if (!container || !list) return;
+
+            // Ensure IDs for headings
+            ensureHeadingIds(container);
+
+            // Collect headings in flow
+            const h3s = Array.from(container.querySelectorAll('h3'));
+            const h4sByH3 = new Map();
+            // map h4 under the nearest preceding h3
+            let currentH3 = null;
+            Array.from(container.querySelectorAll('h3, h4')).forEach(h => {
+              if (h.tagName === 'H3') {
+                currentH3 = h;
+                if (!h4sByH3.has(h)) h4sByH3.set(h, []);
+              } else if (h.tagName === 'H4' && currentH3) {
+                h4sByH3.get(currentH3).push(h);
+              }
+            });
+
+            // Build list
+            list.innerHTML = '';
+            h3s.forEach(h3 => {
+              const li = document.createElement('li');
+              const a = document.createElement('a');
+              a.href = `#${h3.id}`;
+              a.textContent = h3.textContent;
+              a.addEventListener('click', (e) => {
+                e.preventDefault();
+                showTab(s.tab);
+                setTimeout(() => scrollToSection(h3.id), 60);
+              });
+              li.appendChild(a);
+
+              const children = h4sByH3.get(h3) || [];
+              if (children.length) {
+                const ul = document.createElement('ul');
+                children.forEach(h4 => {
+                  const li2 = document.createElement('li');
+                  const a2 = document.createElement('a');
+                  a2.href = `#${h4.id}`;
+                  a2.textContent = h4.textContent;
+                  a2.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    showTab(s.tab);
+                    setTimeout(() => scrollToSection(h4.id), 60);
+                  });
+                  li2.appendChild(a2);
+                  ul.appendChild(li2);
+                });
+                li.appendChild(ul);
+              }
+              list.appendChild(li);
+            });
+          });
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+          // ...existing code...
+          loadNotes();
+          showTab('guide');
+
+          // ADD: build dynamic sidebar TOC from headings
+          buildSidebarTOC();
+
+          // ...existing code...
+        });
+        window.addEventListener('load', function() {
+          if (typeof buildSidebarTOC === 'function') buildSidebarTOC();
+        });
     </script>
+    <style>
+  /* Remove dotted/yellow lines around editable code blocks */
+  .code-container code[contenteditable="true"],
+  .code-container code[contenteditable="true"]:focus {
+    outline: none !important;
+    background: #fff !important;
+    box-shadow: none !important;
+  }
+</style>
+        <!-- Google tag (gtag.js) -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-PN5VH96Y0Y"></script>
+        <script>
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-PN5VH96Y0Y');
+        </script>
 </head>
 <body>
     <div class="app-container">
@@ -850,6 +1032,9 @@
             </div>
             
             <div class="top-nav-center">
+                <div class="brand-strip" aria-label="Partner logos">
+                    <img src="../assets/hubs-logo.png" alt="HUBS Early Career Lecturers in Biosciences" class="brand-logo hubs" loading="lazy">
+                </div>
                 <div class="top-nav-header">
                     <h1>Augmented Academia</h1>
                 </div>
@@ -862,6 +1047,7 @@
             </div>
             
             <div class="top-nav-right">
+                <img src="https://srf-reproduction.org/wp-content/uploads/2023/04/RSB-logo-clear.png" alt="Royal Society of Biology" class="brand-logo rsb" loading="lazy">
                 <div class="accessibility-badge" role="img" aria-label="Accessibility compliant">Accessible</div>
                 <a href="https://forms.office.com/e/VLjD0cqTnK" class="feedback-button" target="_blank" aria-label="Provide feedback on this workbook">Feedback</a>
             </div>
@@ -873,41 +1059,20 @@
         <!-- Sidebar Navigation -->
         <aside class="sidebar" id="sidebar" role="navigation" aria-label="Workshop Navigation" aria-hidden="false">
             <h2>📚 GenAI Foundations</h2>
-            <ul role="list">
-                <li><a href="#" onclick="showTab('guide'); scrollToSection('')" aria-describedby="guide-desc">What is GenAI?</a></li>
-                <li><a href="#" onclick="showTab('guide'); scrollToSection('uog-policy')" aria-describedby="guide-desc">University Policy</a></li>
-                <li><a href="#" onclick="showTab('guide'); scrollToSection('prompt-writing')" aria-describedby="guide-desc">Prompt Writing Basics</a></li>
-                <li><a href="#" onclick="showTab('guide'); scrollToSection('frameworks')" aria-describedby="guide-desc">Prompt Frameworks</a></li>
-            </ul>
+            <!-- CHANGED: give UL an id for auto-TOC -->
+            <ul role="list" id="toc-guide"></ul>
             <div id="guide-desc" class="sr-only">GenAI foundations and prompt writing basics</div>
 
             <h2>♿ Inclusive Learning</h2>
-            <ul role="list">
-                <li><a href="#" onclick="showTab('accessibility'); scrollToSection('accessibility-overview')" aria-describedby="accessibility-desc">Legal Requirements</a></li>
-                <li><a href="#" onclick="showTab('accessibility'); scrollToSection('wcag-integration')" aria-describedby="accessibility-desc">WCAG & AI Tools</a></li>
-                <li><a href="#" onclick="showTab('accessibility'); scrollToSection('content-audit')" aria-describedby="accessibility-desc">Content Auditing</a></li>
-                <li><a href="#" onclick="showTab('accessibility'); scrollToSection('technology-tools')" aria-describedby="accessibility-desc">Assistive Technology</a></li>
-                <li><a href="#" onclick="showTab('accessibility'); scrollToSection('practical-exercises')" aria-describedby="accessibility-desc">Practice Exercises</a></li>
-            </ul>
+            <ul role="list" id="toc-accessibility"></ul>
             <div id="accessibility-desc" class="sr-only">Accessibility and inclusive design for biology education</div>
 
             <h2>🧠 Advanced Prompting</h2>
-            <ul role="list">
-                <li><a href="#" onclick="showTab('workflow1'); scrollToSection('three-frameworks')" aria-describedby="workflow1-desc">Core Frameworks</a></li>
-                <li><a href="#" onclick="showTab('workflow1'); scrollToSection('hands-on-scenario')" aria-describedby="workflow1-desc">Protein Synthesis Case</a></li>
-                <li><a href="#" onclick="showTab('workflow1'); scrollToSection('exercise1')" aria-describedby="workflow1-desc">Chain-of-Thought Exercise</a></li>
-                <li><a href="#" onclick="showTab('workflow1'); scrollToSection('lab-prompting')" aria-describedby="workflow1-desc">Lab Preparation (PCR)</a></li>
-                <li><a href="#" onclick="showTab('workflow1'); scrollToSection('quality-control')" aria-describedby="workflow1-desc">Quality Control</a></li>
-                <li><a href="#" onclick="showTab('workflow1'); scrollToSection('common-pitfalls')" aria-describedby="workflow1-desc">Common Pitfalls</a></li>
-            </ul>
+            <ul role="list" id="toc-workflow1"></ul>
             <div id="workflow1-desc" class="sr-only">Advanced prompting techniques for biology content creation</div>
 
             <h2>🎨 Content Creation</h2>
-            <ul role="list">
-                <li><a href="#" onclick="showTab('workflow2'); scrollToSection('scenario-mitosis')" aria-describedby="workflow2-desc">Slide Transformation</a></li>
-                <li><a href="#" onclick="showTab('workflow2'); scrollToSection('lab-presentation')" aria-describedby="workflow2-desc">Lab Presentations</a></li>
-                <li><a href="#" onclick="showTab('workflow2'); scrollToSection('quality-control-checklist')" aria-describedby="workflow2-desc">Quality Checklist</a></li>
-            </ul>
+            <ul role="list" id="toc-workflow2"></ul>
             <div id="workflow2-desc" class="sr-only">PowerPoint transformation and interactive content creation</div>
         </aside>
 
@@ -1341,587 +1506,139 @@ For each step, explain WHY this process evolved this way and HOW it connects to 
 For each step, explain WHY this process evolved this way and HOW it connects to the next step. Address common misconceptions like 'DNA directly makes proteins' or 'all genes are always active'.</code></pre>
             </div>
         </details>
-        <h3>Framework 2: Few-Shot Learning</h3>
 
-        <p><strong>What it is:</strong> Providing 2 to 3 examples of your desired explanation style before asking for new content.</p>
-        
-        <p><strong>Why it works:</strong> Shows AI the specific depth, analogies, and connections you want for your student population and teaching context.</p>
-
-        <div class="code-container">
-            <button class="copy-button" onclick="copyCode(this)">Copy</button>
-            <pre><code><strong>Basic Structure:</strong>
-Here are examples of how I explain concepts to [student level]:
-
-Example 1: [Your explanation style for concept A]
-Example 2: [Your explanation style for concept B]
-
-Now explain [new concept] using the same approach, ensuring [specific requirements]...</code></pre>
-        </div>
-
-       
-        <p> Create examples of your teaching style, then use them to generate new content:</p>
-
-        <div class="code-container">
-            <button class="copy-button" onclick="copyCode(this)">Copy</button>
-            <pre><code><strong>Template:</strong>
-Here are three examples of how I explain complex biology concepts to second year undergraduates:
-
-<strong>Example 1:</strong> [Choose your own topic such as Membrane Transport]
-[Write your explanation style - should include analogy, mechanism, current research connection]
-
-<strong>Example 2:</strong> [Choose your own topic such as DNA Replication]  
-[Write your explanation style - consistent with Example 1]
-
-<strong>Example 3:</strong> [Choose your own topic such as Photosynthesis]
-[Write your explanation style - consistent with previous examples]
-
-Now create a similar explanation for [topic].</code></pre>
-        </div>
-
-        <div class="code-container">
-            <button class="copy-button" onclick="copyCode(this)">Copy</button>
-            <pre><code><strong>Detailed Few-Shot Example:</strong>
-Here are three examples of how I explain genetics to my MSc students:
-
-Example 1: DNA Methylation and Epigenetic Inheritance
-'Think of DNA methylation like library book annotations - the original text (DNA sequence) remains unchanged, but the notes in the margins (methyl groups) completely change how you interpret the content. When cytosine residues get methylated at CpG sites, they act like "Do Not Read" sticky notes placed on gene promoters, silencing transcription through chromatin condensation and blocking transcription factor binding. What's fascinating is that these annotations can be inherited - just like a annotated textbook passed down through generations of students. The DNMT1 enzyme acts like a meticulous librarian, ensuring daughter cells receive the same annotations during DNA replication. This connects directly to David Sinclair's recent work on aging, where he's shown that epigenetic "noise" - the accumulation of incorrect methylation patterns - may be a primary driver of cellular aging. His lab demonstrated that resetting these patterns in mice can actually reverse aging phenotypes, suggesting our epigenetic annotations aren't permanent instructions but rather reversible modifications we can potentially control.'
-
-Example 2: CRISPR-Cas9 Gene Editing
-'CRISPR-Cas9 works like a molecular GPS navigation system combined with precision surgery. The guide RNA acts as your GPS coordinates, scanning the entire genome until it finds the exact matching sequence - like typing a specific address into Google Maps. Once the Cas9 protein arrives at the target location, it functions like molecular scissors, creating a precise double-strand break. The beauty lies in the cell's natural repair mechanisms - just as your phone automatically reroutes when you take a wrong turn, the cell's homology-directed repair (HDR) system automatically fixes the break, but we can hijack this process by providing a "suggested route" - a donor template with our desired sequence. The recent breakthrough by David Liu's lab with prime editing has revolutionized this field - they've created a molecular word processor that can insert, delete, or replace DNA letters without requiring double-strand breaks, achieving up to 50% editing efficiency in human cells. This precision is already being tested in clinical trials for sickle cell disease, where patients' own bone marrow cells are edited ex vivo and then reinfused.'
-
-Example 3: Polymerase Chain Reaction (PCR)
-'PCR is like having a molecular photocopier that can selectively copy just one page from a library containing millions of books. You start with your template DNA (the library), add specific primers that act like bookmarks identifying exactly which "page" you want to copy, and then use DNA polymerase as your photocopier. The genius lies in the temperature cycling - at 95°C, the double-stranded DNA separates like opening a book, at 55°C the primers find and bind to their complementary sequences like placing bookmarks, and at 72°C the polymerase extends from the primers, creating perfect copies. After each cycle, you've doubled the number of copies, so 30 cycles gives you over a billion copies of your target sequence. This exponential amplification transformed modern biology and became the foundation for COVID-19 testing worldwide. Kary Mullis won the Nobel Prize for this technique, but what's remarkable is how it's evolved - new variants like qPCR allow real-time monitoring of amplification, digital PCR provides absolute quantification without standard curves, and LAMP (Loop-mediated isothermal amplification) enables field diagnostics without sophisticated thermocyclers, making genetic testing accessible in resource-limited settings.'
-
-Now create a similar explanation for Mendelian Randomization that follows this same pattern: accessible analogy + molecular mechanism + current research connection.</code></pre>
-        </div>
-
-        <h3>Framework 3: Role-Based Expert Prompting</h3>
-
-        <p><strong>What it is:</strong> Asking AI to adopt the persona of a specific type of biology expert with defined experience and perspective.</p>
-        
-        <p><strong>Why it works:</strong> Creates more focused, authoritative content with appropriate depth and real-world connections.</p>
-
-        <div class="code-container">
-            <button class="copy-button" onclick="copyCode(this)">Copy</button>
-            <pre><code><strong>Basic Structure:</strong>
-Act as a [specific biology expert] with [credentials/experience] who teaches [student population].
-
-Your expertise includes: [specific research areas]
-Your teaching approach emphasizes: [pedagogical focus]
-
-[Your specific content request]...</code></pre>
-        </div>
-
-        <p> Example: </p>
-
-        <div class="code-container">
-            <button class="copy-button" onclick="copyCode(this)">Copy</button>
-            <pre><code><strong>Template:</strong>
-Act as a [choose your expert type] with [define specific credentials] who teaches [your context].
-
-Your expertise includes:
-- [Specific research area 1]
-- [Specific research area 2]
-- [Industry/clinical experience]
-- [Teaching specialization]
-
-Your teaching approach emphasizes:
-- [Pedagogical focus 1]
-- [Student engagement strategy]
-- [Assessment philosophy]
-
-Create a 45-minute lecture segment on [your chosen topic] that includes:
-- Personal research examples and case studies
-- Common misconceptions you've observed
-- Current applications and future directions
-- Hands-on activities for student engagement
-- Assessment questions that test deep understanding
-
-Address the learning objective: [write specific learning objective]
-
-Write in your voice as an expert who balances scientific excitement with realistic limitations.</code></pre>
-        </div>
-
-        <div class="code-container">
-            <button class="copy-button" onclick="copyCode(this)">Copy</button>
-            <pre><code><strong>Detailed Example:</strong>
-Act as a molecular geneticist and cancer researcher with a PhD in Human Genetics from University of Glasgow and 12 years of postdoctoral experience studying tumor suppressor genes who teaches MSc Genetic Counselling students.
-
-Your expertise includes:
-- p53 pathway regulation and its role in DNA damage response
-- BRCA1/BRCA2 gene mutations and hereditary breast cancer syndromes
-- Clinical genetics laboratory experience with next-generation sequencing
-- Genetic counseling for cancer predisposition syndromes
-
-Your teaching approach emphasizes:
-- Connecting molecular mechanisms to real patient outcomes and family histories
-- Using case-based learning with actual (anonymized) patient scenarios from your clinical work
-- Encouraging critical evaluation of genetic testing limitations and ethical implications
-- Assessment through problem-solving rather than memorization
-
-Create a 45-minute lecture segment on 'Interpreting Variants of Uncertain Significance (VUS) in Cancer Predisposition Genes' that includes:
-- Personal research examples from your work on p53 functional assays
-- Common misconceptions you've observed about VUS reporting and patient counseling
-- Current developments in variant classification using ClinVar and ACMG guidelines
-- Hands-on activity analyzing real VUS cases using classification software
-- Assessment questions that test ability to explain VUS to patients and families
-
-Address the learning objective: 'Students will critically evaluate the clinical significance of genetic variants and develop strategies for communicating uncertainty to patients while maintaining appropriate clinical management recommendations.'
-
-Write in your voice as an expert who balances scientific excitement about genomic discoveries with realistic understanding of current clinical limitations and the psychological impact of genetic uncertainty on patients and families.</code></pre>
-        </div>
-
-        <h3 id="lab-prompting">🧪 Laboratory-Specific Prompting Techniques</h3>
-
-        <h4>Framework: Laboratory Safety & Procedure Integration</h4>
-        <p><strong>Why labs need special prompting:</strong> Laboratory content requires precise safety protocols, step-by-step procedures, troubleshooting guidance, and risk assessment integration.</p>
-
-        <div class="code-container">
-            <button class="copy-button" onclick="copyCode(this)">Copy</button>
-            <pre><code><strong>Laboratory Content Template:</strong>
-Act as a biology laboratory coordinator with 10+ years experience teaching undergraduate practical sessions.
-
-Create comprehensive laboratory guidance for [specific experiment] that includes:
-
-SAFETY FIRST:
-- Identify all hazards and risk assessment requirements
-- List required PPE and safety protocols
-- Include emergency procedures specific to this experiment
-
-PROCEDURE DESIGN:
-- Break complex procedures into 5-10 minute segments
-- Include visual checkpoints for student self-assessment
-- Provide troubleshooting guidance for common issues
-- Add quality control measures
-
-LEARNING INTEGRATION:
-- Connect practical steps to theoretical concepts
-- Include pre-lab preparation questions
-- Design post-lab analysis activities
-- Create assessment rubrics for practical skills
-
-ACCESSIBILITY:
-- Accommodate different learning styles and physical abilities
-- Provide alternative methods where possible
-- Include clear timing and pacing guidance
-
-Target: [Year level] students in [duration] laboratory session
-Learning objective: [Specific practical skill or concept]</code></pre>
-        </div>
-
-        <h4>Example: Lab Preparation for PCR Amplification (50 Students)</h4>
-
-        <div class="code-container">
-            <button class="copy-button" onclick="copyCode(this)">Copy</button>
-            <pre><code>Act as an experienced molecular biology laboratory manager preparing for a manual PCR (Polymerase Chain Reaction) practical session with 50 second-year students working in pairs (25 groups).
-
-Create comprehensive preparation guidance for amplifying a 500bp gene fragment including:
-
-REAGENT CALCULATIONS:
-Calculate total quantities needed with 25% excess for manual PCR setup (25μl reaction volume per group):
-
-CORE PCR COMPONENTS:
-- Template DNA (genomic DNA at 10ng/μl): 1μl per reaction
-- Forward primer (10μM stock): 1μl per reaction  
-- Reverse primer (10μM stock): 1μl per reaction
-- Taq DNA polymerase (5 units/μl): 0.2μl per reaction
-- dNTP mix (10mM each dATP, dTTP, dGTP, dCTP): 0.5μl per reaction
-- PCR buffer (10X with MgCl2): 2.5μl per reaction
-- Sterile distilled water: to final volume 25μl
-
-ADDITIONAL REAGENTS:
-- MgCl2 solution (25mM) for optimization: 50μl per group
-- Positive control DNA template: 10 reactions worth
-- Negative control (sterile water): 10 reactions worth
-- DNA loading dye (6X): 5μl per group
-- Agarose powder for gel electrophoresis: 2g total
-- TAE buffer (50X stock): 200ml for dilution
-- Ethidium bromide or safer DNA stain: appropriate volume
-- DNA molecular weight marker: 10 lanes worth
-
-EQUIPMENT PREPARATION:
-- PCR tubes (0.2ml thin-walled): 3 per group + extras
-- Micropipettes: P10, P20, P200, P1000 (check calibration)
-- Sterile pipette tips: yellow, blue, clear (1000 each type)
-- Ice buckets and crushed ice: 6 stations
-- Vortex mixers: 1 per 10 groups
-- Microcentrifuge: 1 per 15 groups
-- Thermal cycler programming and capacity check
-
-PRE-LAB SETUP CHECKLIST:
-REAGENT PREPARATION (Day before):
-- Prepare fresh 10X PCR buffer if needed
-- Check primer stocks and dilute to working concentration
-- Aliquot template DNA to prevent freeze-thaw cycles
-- Prepare fresh dNTP working solutions
-- Set up gel electrophoresis apparatus and test
-
-DAY OF LAB:
-- Pre-chill ice buckets 30 minutes before class
-- Layout reagents in logical order at each station
-- Program thermal cyclers with correct protocol:
-  * Initial denaturation: 94°C for 5 minutes
-  * 30 cycles of: 94°C/30sec, 55°C/30sec, 72°C/45sec
-  * Final extension: 72°C for 10 minutes
-  * Hold at 4°C
-
-SAFETY PREPARATION:
-- Risk assessment for ethidium bromide handling (or safer alternatives)
-- UV safety protocols for gel visualization
-- Proper disposal containers for contaminated tips and tubes
-- Emergency spill kit for chemical accidents
-- Safety data sheets available for all reagents
-
-QUALITY CONTROL MEASURES:
-- Test PCR protocol with known template 24 hours prior
-- Prepare master mix calculations worksheet for students
-- Set up positive and negative controls for each thermal cycler
-- Backup reagents stored at -20°C
-- Troubleshooting guide for common PCR failures
-
-ASSESSMENT PREPARATION:
-- PCR setup technique observation checklist
-- Gel electrophoresis results interpretation rubric
-- Pre-lab quiz on PCR theory and primer design
-- Post-lab analysis: band size calculation and yield estimation
-- Lab report template connecting results to PCR principles
-
-TIMING AND LOGISTICS:
-TOTAL SESSION: 3 hours
-- Introduction and safety briefing: 15 minutes
-- PCR setup demonstration: 20 minutes
-- Student PCR setup: 45 minutes
-- PCR cycling time: 90 minutes (prepare gels during this time)
-- Gel electrophoresis and results analysis: 30 minutes
-- Cleanup and data recording: 20 minutes
-
-COST OPTIMIZATION:
-- Calculate cost per student for budget planning
-- Identify reusable vs. consumable items
-- Suggest supplier contacts for bulk reagent purchasing
-- Include shelf life information for inventory management
-
-Include specific concentrations, storage temperatures, and supplier catalog numbers where relevant.</code></pre>
-        </div>
-
-        <div class="exercise-box">
-            <h4>Practice Exercise: Advanced Lab Prep Calculation</h4>
-            <p><strong>Your Task:</strong> Use GenAI to calculate comprehensive reagent quantities and protocols for your specific molecular biology lab scenario.</p>
-            
-            <label for="textarea-lab-prep" class="sr-only">Write your lab preparation prompt</label>
-            <textarea id="textarea-lab-prep" placeholder="Write a prompt to calculate reagents and prepare for your specific molecular biology lab scenario (e.g., gel electrophoresis, enzyme digestion, cloning)..." aria-describedby="status-lab-prep"></textarea>
-            <div class="notes-status" id="status-lab-prep" role="status" aria-live="polite"></div>
-        </div>
-
-        <h3 id="quality-control">🔍 Quality Control and Verification Techniques</h3>
-
-        <h4>Scientific Accuracy Check Prompt</h4>
-        <div class="code-container">
-            <button class="copy-button" onclick="copyCode(this)">Copy</button>
-            <pre><code>Review the biology content you just generated for scientific accuracy:
-- Are all facts current according to recent peer-reviewed literature?
-- Are any concepts oversimplified to the point of inaccuracy?
-- Does the content reflect current scientific understanding vs. outdated models?
-- Are there important exceptions or nuances missing?
-- Would a biology professor find any errors or misleading statements?
-
-Provide specific corrections with explanations.</code></pre>
-        </div>
-
-        <h4>Student Misconception Integration</h4>
-        <div class="code-container">
-            <button class="copy-button" onclick="copyCode(this)">Copy</button>
-            <pre><code>Identify common student misconceptions related to this biology content and suggest how to address them:
-- What do students typically misunderstand about this topic?
-- How can the explanation be modified to prevent these misconceptions?
-- What analogies might be misleading and should be avoided?
-- How can we explicitly contrast correct vs. incorrect thinking?</code></pre>
-        </div>
-
-        <h3 id="common-pitfalls">⚠️ Common Pitfalls and Quick Fixes</h3>
-
-        <table role="table" aria-label="Common AI prompting problems and solutions">
-            <caption class="sr-only">This table shows common problems when using AI for biology content creation and provides quick fixes</caption>
-            <thead>
-                <tr>
-                    <th scope="col">Problem</th>
-                    <th scope="col">Why It Happens</th>
-                    <th scope="col">Quick Fix</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td><strong>Oversimplified explanations</strong></td>
-                    <td>AI tries to make everything "simple"</td>
-                    <td>Specify exact student level and prerequisite knowledge</td>
-                </tr>
-                <tr>
-                    <td><strong>Outdated information</strong></td>
-                    <td>AI trained on older literature</td>
-                    <td>Always request verification against recent (2020+) research</td>
-                </tr>
-                <tr>
-                    <td><strong>Missing nuances</strong></td>
-                    <td>AI focuses on general principles</td>
-                    <td>Ask explicitly for exceptions, limitations, and edge cases</td>
-                </tr>
-                <tr>
-                    <td><strong>Generic analogies</strong></td>
-                    <td>AI uses common but misleading comparisons</td>
-                    <td>Provide examples of analogies that work in your context</td>
-                </tr>
-                <tr>
-                    <td><strong>No practical applications</strong></td>
-                    <td>AI sticks to theoretical content</td>
-                    <td>Require connections to current research, medicine, or biotech</td>
-                </tr>
-            </tbody>
-        </table>
+        <!-- ADD: Framework 4 - Inverted‑Pyramid / 5 W’s, after Chain-of-Thought section -->
+        <h4>Framework 4: Inverted‑Pyramid / 5 W’s</h4>
+    <p><strong>What it is:</strong> A news-style structure that puts the most important information first, guided by the 5 W’s (Who, What, When, Where, Why) plus How.</p>
+    <p><strong>Why it works in education:</strong> Helps students produce clear, accurate, and concise summaries of research and lab outputs; ideal for press releases, module announcements, and assessment briefs.</p>
+
+    <div class="code-container">
+        <button class="copy-button" onclick="copyCode(this)">Copy</button>
+        <pre><code><strong>Structure:</strong>
+1) Lead: Who + What + When + Where + Why/How (core finding/significance)
+2) Key Details: methods, scope, one quantitative result
+3) Context: prior work, limitations, uncertainties
+4) Next Steps: implications, future work, calls to action</code></pre>
     </div>
 
-            <!-- WORKFLOW 2 TAB -->
-            <div id="workflow2-tab" class="tab-content" role="tabpanel" aria-labelledby="workflow2-tab-button" aria-hidden="true">
-                <h2 class="workflow-header">🗂️ PowerPoint Transformation & Interactive Content Creation </h2>
+    <div class="code-container">
+        <button class="copy-button" onclick="copyCode(this)">Copy</button>
+        <pre><code><strong>Prompt Template (copy‑ready):</strong>
+Write a 40–60 word inverted‑pyramid lead using the 5 W’s for this study:
+[Paste key facts or abstract]
 
-                <h3>📋 Workflow Overview</h3>
+Constraints:
+- First sentence must contain: Who, What, When, Where, Why/How
+- Second sentence: one quantitative detail and a limitation or uncertainty
+- Use plain language suitable for second year undergraduates</code></pre>
+    </div>
+
+    <div class="code-container">
+        <button class="copy-button" onclick="copyCode(this)">Copy</button>
+        <pre><code><strong>Short Practice:</strong>
+Task A: Convert this abstract to a 2‑sentence lead (≤70 words).
+Task B: Expand to a 150‑word news brief that keeps the original lead intact.
+[Paste abstract]</code></pre>
+    </div>
+
+    <h3>Framework 2: Few-Shot Learning</h3>
+    <p><strong>What it is:</strong> A method where you provide a few examples of the desired output style, and AI learns to replicate that style in new content.</p>
+    
+    <p><strong>Why it works in education:</strong> Ensures consistency and adherence to specific communication standards, especially useful in collaborative teaching environments.</p>
+
+    <div class="code-container">
+    <button class="copy-button" onclick="copyCode(this)">Copy</button>
+    <pre><code><strong>Example (two‑sentence lead):</strong>
+University of Glasgow researchers reported on 26 Oct 2025 at the Wolfson Wohl Cancer Research Centre that a new multi‑omic blood test detects early pancreatic cancer, potentially enabling earlier treatment. In a 1,200‑patient multicentre trial, the assay achieved 92% sensitivity and 88% specificity, but requires external validation before clinical adoption.</code></pre>
+    </div>
+
+    <!-- WORKFLOW 2 TAB -->
+    <div id="workflow2-tab" class="tab-content" role="tabpanel" aria-labelledby="workflow2-tab-button" aria-hidden="true">
+        <h2 class="workflow-header">🎨 Content Creation with GenAI</h2>
+
+        <h3>Workflow overview</h3>
                 
-                <p><strong>Key outcome:</strong> Transform dense, text-heavy content into engaging, visual, and interactive learning experiences.</p>
-<blockquote>
-            <p><strong>It may not always work:</strong></p>
-            <p>GenAI tools are still evolving - so having Copilot create presentations may be challenging based on what license your University has. There are other GenAI tools that can generate very comprehensive slides, images, videos and even apps for your lectures - but please check University regulations before using them. <br>
-            The examples provided in this workflow, hence, may not yield the expected results and should be adapted to fit your specific context and available tools.</p>
-        </blockquote>
+        <p><strong>Key outcome:</strong> Acquire skills to effectively use GenAI for creating engaging and educationally valuable biology content, including presentations, quizzes, and interactive materials.</p>
 
-                <h3 id="scenario-mitosis">🔬Scenario: Cell Division Presentation</h3>
+        <h3 id="scenario-mitosis">Scenario-based learning: Mitosis slide transformation</h3>
         
-        <div class="exercise-box">
-            <h4><strong>Your Challenge:</strong> Transform a traditional lecture on "Mitosis and Cell Cycle Regulation" (or any slide of your choice) from a text-heavy presentation into an engaging, interactive experience.</h4>
-
-            <p><strong>Target Audience:</strong> Second-year biology students<br>
-            <strong>Duration:</strong> 50 minutes</p>
-            
-            <p><strong>Learning Objectives:</strong></p>
-            <ul>
-                <li>Describe the stages of mitosis and their key events</li>
-                <li>Explain how the cell cycle is regulated</li>
-                <li>Analyze what happens when regulation fails (cancer)</li>
-                <li>Apply knowledge to evaluate cancer treatments</li>
-            </ul>
-        </div>
-
-      
-        <p><strong>Text-Heavy Content</strong></p>
-        <div class="code-container">
-            <button class="copy-button" onclick="copyCode(this)">Copy</button>
-            <pre><code>MITOSIS AND THE CELL CYCLE
-• G1 Phase: Cell growth and normal metabolic activities, preparation for DNA synthesis
-• S Phase: DNA synthesis occurs, each chromosome is duplicated to form sister chromatids
-• G2 Phase: Cell continues to grow and produces proteins necessary for chromosome condensation
-• M Phase: Mitosis occurs, including prophase, metaphase, anaphase, and telophase
-• Cytokinesis: Division of the cytoplasm to form two daughter cells
-• Checkpoints: G1/S checkpoint checks for DNA damage, G2/M checkpoint ensures DNA replication is complete, spindle checkpoint ensures all chromosomes are attached to spindle fibers
-• Regulation: Cyclins and cyclin-dependent kinases (CDKs) control progression through phases
-• Cancer: Results from mutations in genes controlling cell cycle, leading to uncontrolled division</code></pre>
-        </div>
-
-
-        <p><strong>Transformation Prompt:</strong></p>
-
-        <div class="code-container">
-            <button class="copy-button" onclick="copyCode(this)">Copy</button>
-            <pre><code>Redesign this cell biology slide about mitosis and cell cycle for second-year undergraduates to be more visual and engaging.
-
-Requirements:
-- Reduce text by 80% to essential concepts only
-- Suggest specific visual elements: cell cycle diagrams, checkpoint illustrations, before/after comparisons
-- Create visual hierarchy emphasizing key regulatory points
-- Add interactive Mentimeter polling question: 'Which cell cycle checkpoint do you think is most important for preventing cancer?' with options A) G1/S checkpoint B) G2/M checkpoint C) Spindle checkpoint D) All equally important
-- Include progressive disclosure - reveal information in logical sequence
-
-Learning objective: Students must describe mitosis stages and explain cell cycle regulation
-
-Design for maximum clarity while maintaining scientific accuracy. Include speaker notes with:
-* Key analogies (e.g., cell cycle as factory production line)
-* Common student misconceptions about cancer and cell division
-* Connection to current cancer research and treatments
-* Discussion prompts for active learning
-
-Format: Detailed slide redesign suggestions with timing and interaction points</code></pre>
-        </div>
-        </details>   
-
-        <h4>Interactive elements:</h4>
-        <div class="code-container">
-            <button class="copy-button" onclick="copyCode(this)">Copy</button>
-            <pre><code><strong>Template for Interactive Case Study Generation:</strong>
-
-Create an interactive case study for teaching cell cycle regulation and cancer:
-
-CASE CONTEXT:
--  45-year-old patient with newly diagnosed breast cancer
-- Tumor cells show mutations in p53 (G1/S checkpoint) and RB (retinoblastoma protein)
-- Treatment options include chemotherapy targeting different cell cycle phases
-
-INTERACTIVE ELEMENTS:
-Generate 5 progressive questions for student analysis:
-
-1. **Initial Assessment:** Multiple choice poll - 'Based on these mutations, what would you expect in the tumor cells?'
-   Options: A) Faster cell division B) DNA damage accumulation C) Resistance to growth signals D) All of the above
-
-2. **Mechanism Analysis:** Discussion prompt - 'In small groups, explain how p53 mutations lead to cancer. You have 3 minutes.'
-
-3. **Treatment Strategy:** Ranking exercise - 'Rank these chemotherapy approaches by likely effectiveness for this patient:'
-   - Taxanes (block mitosis by stabilizing microtubules)
-   - Antimetabolites (interfere with DNA synthesis in S phase)
-   - Topoisomerase inhibitors (cause DNA breaks, trigger checkpoints)
-
-4. **Critical Thinking:** Open response - 'Why might normal cells be less affected by these treatments than cancer cells?'
-
-5. **Application:** Word cloud - 'Name one way this case connects to what you learned about normal cell cycle control'
-
-MENTIMETER INTEGRATION:
-- Include QR codes for easy student access
-- Provide real-time result visualization
-- Generate discussion points based on response patterns
-
-ASSESSMENT ALIGNMENT:
-Connect each question to course learning objectives and provide model answers with explanations of common student misconceptions.
-
-Make it scientifically accurate while engaging students in active problem-solving.</code></pre>
-        </div>
-
-
-<h3 id="lab-presentation">🔬 Laboratory Presentation Enhancement</h3>
-
-<h4>Transforming Lab Instructions into Engaging Presentations</h4>
-
-<p><strong>Challenge:</strong> Traditional lab manuals are text-heavy and don't engage students or help them visualize techniques.</p>
-
-<div class="code-container">
-    <button class="copy-button" onclick="copyCode(this)">Copy</button>
-    <pre><code><strong>Laboratory Presentation Transformation Prompt:</strong>
-
-Transform this laboratory procedure into an engaging pre-lab presentation for [student level]:
-
-CONTENT ANALYSIS:
-- Identify the 3-5 most critical technique points students struggle with
-- Highlight safety issues that need visual emphasis
-- Find opportunities for interactive knowledge checks
-
-VISUAL ENHANCEMENT:
-- Replace text instructions with step-by-step photo sequences
-- Create before/after comparison slides for key steps
-- Design visual troubleshooting guides ("If this happens, then...")
-- Generate equipment identification quizzes with images
-
-INTERACTIVE INTEGRATION:
-- Add Mentimeter polls: "What do you predict will happen when we add..."
-- Create "Pause and Predict" moments throughout procedures
-- Design safety knowledge checks with immediate feedback
-- Include virtual lab tour with clickable hotspots
-
-PRACTICAL FOCUS:
-- Show common mistakes with visual examples
-- Include timing guides for each procedure step
-- Create assessment checkpoints aligned with learning objectives
-- Add post-lab reflection questions that connect to theory
-
-Format: Detailed slide-by-slide breakdown with timing, interaction points, and assessment opportunities.</code></pre>
-</div>
-
-<h4>Example: Microscopy Skills Presentation</h4>
-
-
-<h4>Laboratory Safety Presentation Templates</h4>
-
-<div class="code-container">
-    <button class="copy-button" onclick="copyCode(this)">Copy</button>
-    <pre><code><strong>Safety-First Lab Presentation Prompt:</strong>
-
-Create an engaging laboratory safety presentation for [specific experiment] that:
-
-VISUAL SAFETY EMPHASIS:
-- Show proper vs. improper PPE use with clear photo comparisons
-- Create "Spot the Hazard" interactive slides for risk identification
-- Design emergency procedure flowcharts with clear visual steps
-- Include equipment-specific safety demonstrations
-
-INTERACTIVE SAFETY CHECKS:
-- Mentimeter poll: "Which PPE is required for this procedure?" with visual options
-- Safety scenario discussions: "What would you do if..." case studies
-- Equipment identification quiz with safety implications
-- Risk assessment activities students complete in real-time
-
-PROCEDURE INTEGRATION:
-- Connect each safety requirement to specific procedure steps
-- Show consequences of safety violations (appropriate, educational examples)
-- Include laboratory-specific emergency contact information
-- Create safety checklists students can use during actual lab work
-
-ASSESSMENT ALIGNMENT:
-- Design safety knowledge checks that must be passed before lab access
-- Include peer safety observation activities
-- Create post-incident learning scenarios for continuous improvement
-
-Make it serious but engaging - safety is critical but shouldn't be boring!</code></pre>
-</div>
-
-<h4>Equipment and Technique Visualization</h4>
-
-<div class="code-container">
-    <button class="copy-button" onclick="copyCode(this)">Copy</button>
-    <pre><code><strong>Equipment Presentation Prompt:</strong>
-
-Transform equipment instruction for [specific laboratory instrument] into visual learning experience:
-
-TECHNIQUE BREAKDOWN:
-- Create slow-motion conceptual animations for complex procedures
-- Show common technique errors with side-by-side comparisons
-- Design progressive skill-building activities from basic to advanced
-- Include "Expert Tips" callouts from experienced researchers
-
-INTERACTIVE LEARNING:
-- Equipment component identification with drag-and-drop activities
-- "Predict the Result" polls before demonstrating techniques
-- Troubleshooting scenarios with branching decision trees
-- Peer teaching opportunities where students explain techniques
-
-REAL-WORLD CONNECTIONS:
-- Show how laboratory techniques connect to research applications
-- Include career spotlights featuring equipment expertise
-- Connect basic techniques to advanced research methods
-- Highlight quality control and reproducibility standards
-
-ASSESSMENT INTEGRATION:
-- Practical skills checklists with clear criteria
-- Video analysis activities where students identify technique quality
-- Self-assessment tools for technique improvement
-- Peer evaluation opportunities with structured feedback
-
-</code></pre>
-</div>
-
-
-        <h3 id="quality-control-checklist">🎯 Quality Control Checklist</h3>
+        <p><strong>Task:</strong> Transform an existing slide deck on mitosis into an interactive learning module using GenAI.</p>
         
-        <p><strong>Before Using AI-Transformed Content:</strong></p>
-        <ul role="list" aria-label="Quality control checklist for AI-generated content">
-            <li><span aria-hidden="true"></span> Scientific accuracy verified against reliable sources</li>
-            <li><span aria-hidden="true"></span> Appropriate complexity level for target students</li>
-            <li><span aria-hidden="true"></span> Interactive elements tested and functional</li>
-            <li><span aria-hidden="true"></span> Visual elements enhance rather than distract from content</li>
-            <li><span aria-hidden="true"></span> Learning objectives clearly addressed</li>
-            <li><span aria-hidden="true"></span> Assessment opportunities aligned with goals</li>
-            <li><span aria-hidden="true"></span> Accessibility features included (alt text, readable fonts)</li>
-            <li><span aria-hidden="true"></span> Technology requirements clearly communicated to students</li>
+        <p><strong>Objectives:</strong></p>
+        <ul>
+            <li>Enhance content interactivity and engagement</li>
+            <li>Apply best practices in accessible and inclusive design</li>
+            <li>Utilize AI tools for content adaptation and enhancement</li>
         </ul>
-            </div>
-        </main>
 
-        <!-- Enhanced Footer with Legal Information -->
-        <footer role="contentinfo">
-            <p><strong>© 2025 University of Glasgow - Workshop 2: Advanced AI Prompting & Lecture Creation for Biology Education</strong></p>
-            <p>Created by Dr Alisha Aman | All Rights Reserved | Proprietary Educational Material</p>
+        <h4>Before you begin</h4>
+        <p>Ensure you have the original slide deck on mitosis and access to GenAI tools. Review the University of Glasgow GenAI policy and accessibility standards.</p>
+
+        <h4>Prompting for slide transformation</h4>
+        <div class="code-container">
+            <button class="copy-button" onclick="copyCode(this)">Copy</button>
+            <pre><code><strong>Transformation Prompt:</strong>
+
+Revise the following slide content to create an interactive learning experience:
+
+SLIDE CONTENT:
+[Paste your slide content here]
+
+TRANSFORMATION GUIDELINES:
+- Convert text-heavy slides to concise bullet points
+- Add interactive elements: questions, polls, or discussions
+- Suggest relevant images, diagrams, or videos
+- Ensure accessibility: alt text for images, captions for videos
+- Provide a summary slide with key takeaways
+
+OUTPUT FORMAT:
+- Slide 1: [Revised content]
+- Slide 2: [Interactive element suggestion]
+- Slide 3: [Image/diagram description and alt text]
+- Slide 4: [Video suggestion and captioning guidance]
+- Slide 5: [Summary of key takeaways]</code></pre>
+        </div>
+
+        <h4>Practice scenario: Lab presentation on cellular respiration</h4>
+        
+        <p><strong>Your task:</strong> Create a 10-slide PowerPoint presentation on cellular respiration for a first-year biology class.</p>
+        
+        <p><strong>Use the following resources:</strong></p>
+        <ul>
+            <li>Lecture notes on cellular respiration</li>
+            <li>GenAI tools for slide design and content generation</li>
+            <li>University of Glasgow branding guidelines</li>
+        </ul>
+        
+        <p><strong>Learning objectives:</strong></p>
+        <ul>
+            <li>Understand the key stages of cellular respiration</li>
+            <li>Identify the inputs and outputs of each stage</li>
+            <li>Explain the role of cellular respiration in metabolism</li>
+        </ul>
+        
+        <p><strong>Assessment:</strong> Submit your presentation for feedback on content, design, and accessibility.</p>
+    </div>
+
+    <!-- References — Prompt Frameworks -->
+    <section id="references" aria-labelledby="references-title" style="margin-top:32px;">
+      <h2 class="workflow-header" id="references-title">📚 References — Prompt Frameworks</h2>
+      <ul>
+        <li>Brown, T. B., Mann, B., Ryder, N., et al. (2020). Language Models are Few-Shot Learners. NeurIPS 2020. <a href="https://proceedings.neurips.cc/paper/2020/file/1457c0d6bfcb4967418bfb8ac142f64a-Paper.pdf" target="_blank" rel="noopener">Link</a></li>
+        <li>Wei, J., Xia, C., Kozareva, Z., et al. (2022). Chain-of-Thought Prompting Elicits Reasoning in Large Language Models. NeurIPS 2022. <a href="https://proceedings.neurips.cc/paper_files/paper/2022/hash/5d2692bfd0d0c53d53f6af6cf8ab5554-Abstract-Conference.html" target="_blank" rel="noopener">Link</a></li>
+        <li>Wang, X., Wei, J., Schuurmans, D., et al. (2023). Self-Consistency Improves Chain of Thought Reasoning in Language Models. ICLR 2023. <a href="https://openreview.net/forum?id=1PL1NIMMrw" target="_blank" rel="noopener">Link</a></li>
+        <li>Kojima, T., Gu, S. S., Reid, M., Matsuo, Y., & Iwasawa, Y. (2022). Large Language Models are Zero-Shot Reasoners. NeurIPS 2022. <a href="https://arxiv.org/abs/2205.11916" target="_blank" rel="noopener">Link</a></li>
+        <li>Ouyang, L., Wu, J., Jiang, X., et al. (2022). Training Language Models to Follow Instructions with Human Feedback. NeurIPS 2022. <a href="https://proceedings.neurips.cc/paper_files/paper/2022/hash/b1efde53be364a73914f2f405dfb4f0a-Abstract-Conference.html" target="_blank" rel="noopener">Link</a></li>
+        <li>Sanh, V., Webson, A., Raffel, C., et al. (2022). Multitask Prompted Training Enables Zero-Shot Generalization. ICLR 2022. <a href="https://openreview.net/forum?id=9Vrb9D0WI4" target="_blank" rel="noopener">Link</a></li>
+        <li>Liu, P., Yuan, W., Fu, J., et al. (2023). Pre-train, Prompt, and Predict: A Systematic Survey of Prompting Methods in NLP. ACM Computing Surveys, 55(9), 1–35. <a href="https://doi.org/10.1145/3560815" target="_blank" rel="noopener">DOI</a></li>
+        <li>Pöttker, H. (2003). News and Its Communicative Quality: The Inverted Pyramid—When and Why Did It Appear? Journalism Studies, 4(4), 501–511. <a href="https://doi.org/10.1080/1461670032000136596" target="_blank" rel="noopener">DOI</a></li>
+      </ul>
+    </section>
+
+    <!-- Enhanced Footer with Legal Information -->
+    <footer>
+            <p>© 2025 University of Glasgow. All rights reserved.</p>
+            <p><a href="https://www.gla.ac.uk/myglasgow/learningandteaching/af-aiguidance/" target="_blank" rel="noopener">University of Glasgow GenAI Policy</a> | <a href="https://www.gla.ac.uk/myglasgow/disability/" target="_blank" rel="noopener">Disability Service</a> | <a href="https://www.w3.org/WAI/WCAG21/quickref/" target="_blank" rel="noopener">WCAG 2.1 Quick Reference</a></p>
         </footer>
     </div>
 </body>

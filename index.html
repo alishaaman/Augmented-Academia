@@ -19,6 +19,7 @@
             --font-main: 'Segoe UI', Arial, sans-serif;
             --border-radius: 8px;
             --shadow: 0 2px 8px rgba(0,0,0,0.08);
+            --brand-logo-height: 48px;
         }
 
         * {
@@ -248,6 +249,35 @@
             margin-right: 0.5rem;
         }
 
+        .brand-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            margin: 0 auto 1rem auto;
+            max-width: 900px;
+        }
+
+        .brand-logo {
+            height: var(--brand-logo-height);
+            width: auto;
+            flex-shrink: 0;
+            object-fit: contain;
+        }
+
+        .brand-logo.uog { height: var(--brand-logo-height); }
+        .brand-logo.hubs { height: var(--brand-logo-height); }
+        .brand-logo.rsb  { background: #fff; padding: 4px; border-radius: 8px; }
+
+        @media (max-width: 768px) {
+            .brand-bar {
+                justify-content: center;
+                gap: 10px;
+            }
+            .brand-logo { height: 40px; }
+            :root { --brand-logo-height: 40px; }
+        }
+
         @media (max-width: 768px) {
             .header h1 {
                 font-size: 2em;
@@ -266,10 +296,23 @@
             }
         }
     </style>
+        <!-- Google tag (gtag.js) -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-PN5VH96Y0Y"></script>
+        <script>
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-PN5VH96Y0Y');
+        </script>
 </head>
 <body>
     <header class="header">
         <div class="container">
+            <div class="brand-bar" aria-label="Partner logos">
+                <img src="https://sfdora.org/wp-content/uploads/2024/03/UoG_keyline.png" alt="University of Glasgow" class="brand-logo uog" loading="lazy">
+                <img src="./assets/hubs-logo.png" alt="HUBS Early Career Lecturers in Biosciences" class="brand-logo hubs" loading="lazy">
+                <img src="https://srf-reproduction.org/wp-content/uploads/2023/04/RSB-logo-clear.png" alt="Royal Society of Biology" class="brand-logo rsb" loading="lazy">
+            </div>
             <h1>Augmented Academia</h1>
             <p>University of Glasgow GenAI Training for Biology Education</p>
             <div class="accessibility-badge">Accessible & Inclusive Design</div>
