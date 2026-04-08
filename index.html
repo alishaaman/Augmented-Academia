@@ -2,436 +2,945 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Augmented Academia - University of Glasgow GenAI Training</title>
+    <title>Augmented Academia | AI Workshop Resources – Dr Alisha Aman</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="University of Glasgow GenAI training workshops for biology education. Learn advanced AI prompting, lecture creation, and accessible content design.">
-    <meta name="author" content="Dr Alisha Aman, University of Glasgow">
-    <meta name="copyright" content="© 2025 University of Glasgow. All rights reserved.">
-    <meta name="license" content="All Rights Reserved - University of Glasgow Proprietary Material">
+    <meta name="description" content="Augmented Academia: open workshop workbooks and teaching resources on using Generative AI in higher education, created by Dr Alisha Aman.">
+    <meta name="author" content="Dr Alisha Aman">
+    <meta name="copyright" content="© 2026 Dr Alisha Aman. All rights reserved.">
     <meta name="robots" content="index, follow">
+    <link rel="sitemap" type="application/xml" href="sitemap.xml" />
+    <!--
+    COPYRIGHT NOTICE:
+    This work is protected by copyright and is the exclusive property of Dr Alisha Aman.
+    Author: Dr Alisha Aman
+    All rights reserved. No part of this publication may be reproduced, distributed, or transmitted
+    in any form or by any means without the prior written permission of Dr Alisha Aman.
+    -->
     <style>
         :root {
-            --primary: #21808d;
-            --accent: #fbc02d;
-            --bg: #f5f7fa;
-            --header: #2c3e50;
-            --uog-blue: #011451;
-            --font-main: 'Segoe UI', Arial, sans-serif;
-            --border-radius: 8px;
-            --shadow: 0 2px 8px rgba(0,0,0,0.08);
-            --brand-logo-height: 80px;
+            --navy:   #011451;
+            --teal:   #21808d;
+            --yellow: #fbc02d;
+            --bg:     #f5f7fa;
+            --white:  #ffffff;
+            --gray:   #6c757d;
+            --light:  #f8f9fa;
+            --border: #e9ecef;
+            --radius: 10px;
+            --shadow: 0 3px 12px rgba(0,0,0,0.09);
+            --font:   'Segoe UI', Arial, sans-serif;
         }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        *, *::before, *::after { box-sizing: border-box; }
+
+        html { scroll-behavior: smooth; }
 
         body {
-            font-family: var(--font-main);
+            margin: 0;
+            font-family: var(--font);
             background: var(--bg);
-            color: var(--header);
+            color: #1a1a2e;
             line-height: 1.6;
-            min-height: 100vh;
         }
 
-        .header {
-            background: var(--uog-blue);
-            color: white;
-            padding: 2rem 0;
-            text-align: center;
-            box-shadow: var(--shadow);
-        }
-
-        .header h1 {
-            font-size: 2.5em;
-            margin-bottom: 0.5rem;
-            color: white;
-        }
-
-        .header p {
-            font-size: 1.2em;
-            opacity: 0.9;
-            max-width: 600px;
-            margin: 0 auto;
-            padding: 0 1rem;
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 2rem 1rem;
-        }
-
-        .workshops-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
-            gap: 2rem;
-            margin: 2rem 0;
-        }
-
-        .workshop-card {
-            background: white;
-            border-radius: var(--border-radius);
-            padding: 2rem;
-            box-shadow: var(--shadow);
-            border: 1px solid #e9ecef;
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .workshop-card:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 16px rgba(0,0,0,0.12);
-        }
-
-        .workshop-card::before {
-            content: '';
+        /* ── Skip link ── */
+        .skip-link {
             position: absolute;
-            top: 0;
+            top: -40px;
             left: 0;
-            right: 0;
-            height: 4px;
-            background: linear-gradient(90deg, var(--primary), var(--accent));
-        }
-
-        .workshop-number {
-            display: inline-block;
-            background: var(--uog-blue);
-            color: white;
-            padding: 0.5rem 1rem;
-            border-radius: 20px;
-            font-size: 0.9em;
-            font-weight: 600;
-            margin-bottom: 1rem;
-        }
-
-        .workshop-card h2 {
-            color: var(--uog-blue);
-            font-size: 1.8em;
-            margin-bottom: 1rem;
-        }
-
-        .workshop-description {
-            color: #666;
-            margin-bottom: 1.5rem;
-            font-size: 1.1em;
-        }
-
-        .workshop-topics {
-            list-style: none;
-            margin-bottom: 1.5rem;
-        }
-
-        .workshop-topics li {
-            padding: 0.5rem 0;
-            color: var(--header);
-            position: relative;
-            padding-left: 1.5rem;
-        }
-
-        .workshop-topics li::before {
-            content: '✓';
-            position: absolute;
-            left: 0;
-            color: var(--primary);
-            font-weight: bold;
-        }
-
-        .workshop-link {
-            display: inline-block;
-            background: var(--uog-blue);
-            color: white;
+            background: var(--yellow);
+            color: var(--navy);
+            padding: 8px 16px;
+            font-weight: 700;
+            z-index: 9999;
             text-decoration: none;
-            padding: 0.75rem 1.5rem;
-            border-radius: var(--border-radius);
-            font-weight: 600;
-            transition: background 0.2s ease;
-            margin-top: 1rem;
+            border-radius: 0 0 var(--radius) 0;
+            transition: top 0.2s;
         }
+        .skip-link:focus { top: 0; }
 
-        .workshop-link:hover {
-            background: #0a1340;
-            transform: translateY(-1px);
-        }
-
-        .workshop-link:focus {
-            outline: 3px solid var(--accent);
-            outline-offset: 2px;
-        }
-
-        .info-section {
-            background: white;
-            border-radius: var(--border-radius);
-            padding: 2rem;
-            margin: 2rem 0;
-            box-shadow: var(--shadow);
-        }
-
-        .info-section h2 {
-            color: var(--uog-blue);
-            margin-bottom: 1rem;
-            font-size: 1.5em;
-        }
-
-        .policy-highlights {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 1rem;
-            margin: 1rem 0;
-        }
-
-        .policy-item {
-            background: #f8f9fa;
-            padding: 1rem;
-            border-radius: var(--border-radius);
-            border-left: 4px solid var(--primary);
-        }
-
-        .policy-item strong {
-            color: var(--uog-blue);
-        }
-
-        .footer {
-            background: var(--uog-blue);
+        /* ── Top nav ── */
+        .top-nav {
+            background: var(--navy);
             color: white;
-            text-align: center;
-            padding: 2rem 1rem;
-            margin-top: 3rem;
-        }
-
-        .footer p {
-            margin: 0.5rem 0;
-        }
-
-        .feedback-section {
-            background: #e8f4fd;
-            border: 2px solid var(--primary);
-            border-radius: var(--border-radius);
-            padding: 1.5rem;
-            margin: 2rem 0;
-            text-align: center;
-        }
-
-        .feedback-button {
-            display: inline-block;
-            background: var(--accent);
-            color: var(--uog-blue);
-            text-decoration: none;
-            padding: 0.75rem 1.5rem;
-            border-radius: var(--border-radius);
-            font-weight: 600;
-            margin-top: 1rem;
-            transition: all 0.2s ease;
-        }
-
-        .feedback-button:hover {
-            background: #e6a800;
-            transform: translateY(-1px);
-        }
-
-        .accessibility-badge {
-            display: inline-block;
-            background: rgba(255, 255, 255, 0.95);
-            color: var(--uog-blue);
-            padding: 0.5rem 1rem;
-            border-radius: 20px;
-            font-size: 0.9em;
-            font-weight: 600;
-            margin: 1rem 0;
-            box-shadow: var(--shadow);
-        }
-
-        .accessibility-badge::before {
-            content: '♿ ';
-            margin-right: 0.5rem;
-        }
-
-        .brand-bar {
+            padding: 14px 32px;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            gap: 12px;
-            margin: 0 auto 1rem auto;
-            max-width: 900px;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.18);
+            gap: 16px;
         }
 
-        .brand-logo {
-            height: var(--brand-logo-height);
+        .nav-brand {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            text-decoration: none;
+            color: white;
+        }
+
+        .nav-brand-text {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .nav-brand-title {
+            font-size: 1.4em;
+            font-weight: 700;
+            letter-spacing: -0.3px;
+            line-height: 1.1;
+        }
+
+        .nav-brand-sub {
+            font-size: 0.72em;
+            color: rgba(255,255,255,0.75);
+            font-weight: 400;
+        }
+
+        .uog-logo {
+            height: 46px;
             width: auto;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .nav-link {
+            color: rgba(255,255,255,0.88);
+            text-decoration: none;
+            font-size: 0.85em;
+            padding: 5px 12px;
+            border-radius: 4px;
+            transition: background 0.2s, color 0.2s;
+            white-space: nowrap;
+        }
+
+        .nav-link:hover, .nav-link:focus {
+            background: rgba(255,255,255,0.15);
+            color: white;
+            outline: none;
+        }
+
+        .nav-link:focus-visible {
+            outline: 2px solid var(--yellow);
+            outline-offset: 2px;
+        }
+
+        .nav-link.github {
+            background: rgba(255,255,255,0.12);
+            border: 1px solid rgba(255,255,255,0.25);
+        }
+
+        /* ── Hero ── */
+        .hero {
+            background: linear-gradient(135deg, var(--navy) 0%, #06285e 60%, #083a6b 100%);
+            color: white;
+            padding: 70px 32px 60px;
+            text-align: center;
+        }
+
+        .hero-tag {
+            display: inline-block;
+            background: var(--yellow);
+            color: var(--navy);
+            font-size: 0.78em;
+            font-weight: 700;
+            padding: 4px 14px;
+            border-radius: 20px;
+            margin-bottom: 18px;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+
+        .hero h1 {
+            font-size: clamp(2em, 5vw, 3em);
+            margin: 0 0 16px;
+            color: white;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+        }
+
+        .hero h1 span {
+            color: var(--yellow);
+        }
+
+        .hero-sub {
+            font-size: 1.08em;
+            color: rgba(255,255,255,0.85);
+            max-width: 680px;
+            margin: 0 auto 32px;
+        }
+
+        .hero-stats {
+            display: flex;
+            justify-content: center;
+            gap: 36px;
+            flex-wrap: wrap;
+            margin-top: 16px;
+        }
+
+        .hero-stat {
+            text-align: center;
+        }
+
+        .hero-stat-num {
+            font-size: 2em;
+            font-weight: 800;
+            color: var(--yellow);
+            line-height: 1;
+        }
+
+        .hero-stat-label {
+            font-size: 0.8em;
+            color: rgba(255,255,255,0.75);
+            margin-top: 2px;
+        }
+
+        /* ── Page wrapper ── */
+        .page-wrap {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        /* ── Section headers ── */
+        .section-header {
+            margin: 56px 0 28px;
+            display: flex;
+            align-items: baseline;
+            gap: 12px;
+            border-bottom: 3px solid var(--teal);
+            padding-bottom: 10px;
+        }
+
+        .section-header h2 {
+            color: var(--navy);
+            font-size: 1.5em;
+            margin: 0;
+        }
+
+        .section-header .badge {
+            background: var(--teal);
+            color: white;
+            font-size: 0.7em;
+            font-weight: 700;
+            padding: 3px 10px;
+            border-radius: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.4px;
+        }
+
+        /* ── Workbook cards ── */
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 24px;
+            margin-bottom: 8px;
+        }
+
+        .workbook-card {
+            background: var(--white);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            border: 1px solid var(--border);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .workbook-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 24px rgba(0,0,0,0.13);
+        }
+
+        .card-header {
+            background: var(--navy);
+            padding: 18px 20px 14px;
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+        }
+
+        .card-icon {
+            font-size: 1.8em;
+            line-height: 1;
             flex-shrink: 0;
-            object-fit: contain;
+            margin-top: 2px;
         }
 
-        .brand-logo.uog { height: var(--brand-logo-height); }
-        .brand-logo.hubs { height: var(--brand-logo-height); }
-        .brand-logo.rsb  { background: #fff; padding: 4px; border-radius: 8px; }
-
-        @media (max-width: 768px) {
-            .brand-bar {
-                justify-content: center;
-                gap: 10px;
-            }
-            .brand-logo { height: 80px; }
-            :root { --brand-logo-height: 80px; }
+        .card-header-text h3 {
+            color: white;
+            font-size: 1em;
+            margin: 0 0 4px;
+            font-weight: 700;
+            line-height: 1.3;
         }
 
-        @media (max-width: 768px) {
-            .header h1 {
-                font-size: 2em;
-            }
-            
-            .workshops-grid {
-                grid-template-columns: 1fr;
-            }
-            
-            .workshop-card {
-                padding: 1.5rem;
-            }
-            
-            .policy-highlights {
-                grid-template-columns: 1fr;
-            }
+        .card-header-text .card-repo {
+            font-size: 0.72em;
+            color: rgba(255,255,255,0.6);
+            font-family: 'Courier New', monospace;
+        }
+
+        .card-body {
+            padding: 18px 20px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .card-desc {
+            font-size: 0.9em;
+            color: #3a3a5c;
+            margin: 0;
+            flex: 1;
+        }
+
+        .card-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+
+        .tag {
+            background: #e8f4fd;
+            color: var(--navy);
+            font-size: 0.72em;
+            font-weight: 600;
+            padding: 3px 9px;
+            border-radius: 12px;
+            border: 1px solid #c3daef;
+        }
+
+        .card-actions {
+            padding: 14px 20px;
+            border-top: 1px solid var(--border);
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-size: 0.83em;
+            font-weight: 600;
+            text-decoration: none;
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: all 0.18s;
+            white-space: nowrap;
+            font-family: var(--font);
+        }
+
+        .btn:focus-visible {
+            outline: 3px solid var(--yellow);
+            outline-offset: 2px;
+        }
+
+        .btn-primary {
+            background: var(--navy);
+            color: white;
+            border-color: var(--navy);
+        }
+
+        .btn-primary:hover {
+            background: #06285e;
+            border-color: #06285e;
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: var(--navy);
+            border-color: var(--navy);
+        }
+
+        .btn-outline:hover {
+            background: var(--navy);
+            color: white;
+        }
+
+        .btn-teal {
+            background: var(--teal);
+            color: white;
+            border-color: var(--teal);
+        }
+
+        .btn-teal:hover {
+            background: #1a6a76;
+            border-color: #1a6a76;
+        }
+
+        .btn-yellow {
+            background: var(--yellow);
+            color: var(--navy);
+            border-color: var(--yellow);
+        }
+
+        .btn-yellow:hover {
+            background: #e5ac20;
+            border-color: #e5ac20;
+        }
+
+        /* Coming soon card */
+        .card-coming-soon {
+            border: 2px dashed var(--border);
+            background: var(--light);
+            box-shadow: none;
+        }
+
+        .card-coming-soon:hover {
+            transform: none;
+            box-shadow: none;
+        }
+
+        .card-coming-soon .card-header {
+            background: #dee2e8;
+        }
+
+        .card-coming-soon .card-header-text h3 {
+            color: var(--gray);
+        }
+
+        /* ── Resources section ── */
+        .resource-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 18px;
+        }
+
+        .resource-card {
+            background: var(--white);
+            border-radius: var(--radius);
+            border: 1px solid var(--border);
+            box-shadow: var(--shadow);
+            padding: 20px;
+            display: flex;
+            gap: 14px;
+            align-items: flex-start;
+            transition: box-shadow 0.2s;
+        }
+
+        .resource-card:hover {
+            box-shadow: 0 6px 18px rgba(0,0,0,0.11);
+        }
+
+        .resource-icon {
+            font-size: 2em;
+            flex-shrink: 0;
+            line-height: 1;
+        }
+
+        .resource-info { flex: 1; }
+
+        .resource-info h4 {
+            color: var(--navy);
+            font-size: 0.95em;
+            margin: 0 0 5px;
+            font-weight: 700;
+        }
+
+        .resource-info p {
+            font-size: 0.82em;
+            color: var(--gray);
+            margin: 0 0 12px;
+        }
+
+        .resource-meta {
+            font-size: 0.72em;
+            color: var(--gray);
+            margin-top: 4px;
+        }
+
+        /* ── How to use banner ── */
+        .how-to-banner {
+            background: #e8f4fd;
+            border: 1px solid #c3daef;
+            border-left: 5px solid var(--teal);
+            border-radius: var(--radius);
+            padding: 20px 24px;
+            margin: 40px 0 0;
+        }
+
+        .how-to-banner h3 {
+            color: var(--navy);
+            margin: 0 0 8px;
+            font-size: 1em;
+        }
+
+        .how-to-banner ol {
+            margin: 0;
+            padding-left: 20px;
+            font-size: 0.88em;
+            color: #2a3a5c;
+        }
+
+        .how-to-banner ol li { margin: 5px 0; }
+
+        /* ── About section ── */
+        .about-section {
+            background: var(--white);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border);
+            padding: 32px 36px;
+            margin: 0 0 56px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 32px;
+            align-items: start;
+        }
+
+        .about-section h2 {
+            color: var(--navy);
+            font-size: 1.3em;
+            margin: 0 0 12px;
+        }
+
+        .about-section p {
+            font-size: 0.9em;
+            color: #3a3a5c;
+            margin: 0 0 10px;
+        }
+
+        .about-section ul {
+            font-size: 0.88em;
+            color: #3a3a5c;
+            margin: 0;
+            padding-left: 18px;
+        }
+
+        .about-section li { margin: 5px 0; }
+
+        /* ── Footer ── */
+        footer {
+            background: var(--navy);
+            color: rgba(255,255,255,0.8);
+            padding: 36px 32px;
+            text-align: center;
+            margin-top: 64px;
+        }
+
+        footer .footer-inner {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        footer a {
+            color: var(--yellow);
+            text-decoration: none;
+        }
+
+        footer a:hover { text-decoration: underline; }
+
+        footer .footer-links {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 8px 20px;
+            margin: 14px 0;
+            font-size: 0.85em;
+        }
+
+        footer .footer-copy {
+            font-size: 0.8em;
+            color: rgba(255,255,255,0.55);
+            margin-top: 12px;
+        }
+
+        /* ── Responsive ── */
+        @media (max-width: 820px) {
+            .top-nav { padding: 12px 16px; gap: 10px; }
+            .nav-links { gap: 4px; }
+            .nav-link { padding: 4px 8px; font-size: 0.78em; }
+            .hero { padding: 48px 16px 44px; }
+            .page-wrap { padding: 0 16px; }
+            .about-section { grid-template-columns: 1fr; }
+            .uog-logo { height: 36px; }
+        }
+
+        @media (max-width: 560px) {
+            .hero-stats { gap: 20px; }
+            .nav-brand-title { font-size: 1.1em; }
+            .card-grid { grid-template-columns: 1fr; }
+            .resource-grid { grid-template-columns: 1fr; }
         }
     </style>
-        <!-- Google tag (gtag.js) -->
-        <script async src="https://www.googletagmanager.com/gtag/js?id=G-PN5VH96Y0Y"></script>
-        <script>
-            window.dataLayer = window.dataLayer || [];
-            function gtag(){dataLayer.push(arguments);}
-            gtag('js', new Date());
-            gtag('config', 'G-PN5VH96Y0Y');
-        </script>
+    <script>
+        // Workshop access control - change to true when ready to enable access
+        const INCLUSIVE_WORKSHOP_ENABLED = false; // Set to true on April 9th
+        
+        function checkWorkshopAccess(event, workshopId) {
+            if (workshopId === 'inclusive' && !INCLUSIVE_WORKSHOP_ENABLED) {
+                event.preventDefault();
+                alert('This workshop will be available on April 9th, 2026. Please check back then!');
+                return false;
+            }
+            return true;
+        }
+    </script>
 </head>
 <body>
-    <header class="header">
-        <div class="container">
-            <div class="brand-bar" aria-label="Partner logos">
-                <img src="https://sfdora.org/wp-content/uploads/2024/03/UoG_keyline.png" alt="University of Glasgow" class="brand-logo uog" loading="lazy">
-                <img src="./assets/hubs-logo.png" alt="HUBS Early Career Lecturers in Biosciences" class="brand-logo hubs" loading="lazy">
-                <img src="https://srf-reproduction.org/wp-content/uploads/2023/04/RSB-logo-clear.png" alt="Royal Society of Biology" class="brand-logo rsb" loading="lazy">
+
+    <!-- Skip navigation -->
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
+    <!-- Top nav -->
+    <nav class="top-nav" role="navigation" aria-label="Site navigation">
+        <a href="#" class="nav-brand" aria-label="Augmented Academia – home">
+            <div class="nav-brand-text">
+                <span class="nav-brand-title">Augmented Academia</span>
+                <span class="nav-brand-sub">Dr Alisha Aman</span>
             </div>
-            <h1>Augmented Academia</h1>
-            <p>University of Glasgow GenAI Training for Biology Education</p>
-            <div class="accessibility-badge">Accessible & Inclusive Design</div>
+        </a>
+
+        <div class="nav-links" role="list">
+            <a href="#workbooks" class="nav-link" role="listitem">Workbooks</a>
+            <a href="#about" class="nav-link" role="listitem">About</a>
+            <a href="https://github.com/alishaaman" class="nav-link github" target="_blank" rel="noopener noreferrer" role="listitem" aria-label="Visit alishaaman on GitHub (opens in new tab)">
+                <!-- GitHub icon SVG -->
+                <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+                    <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38
+                    0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13
+                    -.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87
+                    2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95
+                    0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82
+                    .64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82
+                    2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15
+                    0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48
+                    0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/>
+                </svg>
+                GitHub
+            </a>
+        </div>
+    </nav>
+
+    <!-- Hero -->
+    <header class="hero" role="banner">
+        <div class="hero-tag">Leveraging Generative AI for Higher Education</div>
+        <h1>Augmented <span>Academia</span></h1>
+        <p class="hero-sub">
+            Interactive workbooks and teaching resources exploring how Generative AI can support
+            learning, teaching, and research in Higher Education, designed with inclusion and accessibility at the core.
+        </p>
+        <div class="hero-stats" role="list" aria-label="Site statistics">
+            <div class="hero-stat" role="listitem">
+                <div class="hero-stat-num">5</div>
+                <div class="hero-stat-label">Workbooks</div>
+            </div>
+            <div class="hero-stat" role="listitem">
+                <div class="hero-stat-num">Free</div>
+                <div class="hero-stat-label">Open Access</div>
+            </div>
+            <div class="hero-stat" role="listitem">
+                <div class="hero-stat-num">ARIA</div>
+                <div class="hero-stat-label">Accessible</div>
+            </div>
         </div>
     </header>
 
-    <main class="container">
-        <section class="workshops-grid" role="main">
-            <article class="workshop-card">
-                <div class="workshop-number">Workshop 1</div>
-                <h2>Introduction to GenAI in Education</h2>
-                <p class="workshop-description">
-                    Get started with Generative AI tools and learn the fundamentals of prompt engineering for educational content creation.
-                </p>
-                <ul class="workshop-topics" role="list">
-                    <li>GenAI basics and University policy</li>
-                    <li>Essential prompting techniques</li>
-                    <li>Content creation fundamentals</li>
-                    <li>Academic integrity guidelines</li>
-                </ul>
-                <a href="./workshop-1/index.html" class="workshop-link" aria-label="Access Workshop 1: Introduction to GenAI">
-                    Access Workshop 1 →
-                </a>
-            </article>
+    <!-- Main content -->
+    <main id="main-content" class="page-wrap" role="main">
 
-            <article class="workshop-card">
-                <div class="workshop-number">Workshop 2</div>
-                <h2>Advanced AI Prompting & Lecture Creation</h2>
-                <p class="workshop-description">
-                    Master advanced prompting techniques and create engaging, interactive biology content with accessibility best practices.
-                </p>
-                <ul class="workshop-topics" role="list">
-                    <li>Chain-of-thought prompting</li>
-                    <li>Laboratory content creation</li>
-                    <li>PowerPoint transformation</li>
-                    <li>Accessibility integration</li>
-                    <li>Interactive learning design</li>
-                </ul>
-                <a href="./workshop-2/workshop_2_workbook.html" class="workshop-link" aria-label="Access Workshop 2: Advanced AI Prompting">
-                    Access Workshop 2 →
-                </a>
-            </article>
-            <article class="workshop-card">
-                <div class="workshop-number">Workshop 3</div>
-                <h2>Practical GenAI for Assessment Design</h2>
-                <p class="workshop-description">
-                    Generate assessment briefs, audit accessibility and real-world relevance, and create rubrics with Copilot and GenAI tools.
-                </p>
-                <ul class="workshop-topics" role="list">
-                    <li>Assessment brief generation</li>
-                    <li>Accessibility and relevance audit</li>
-                    <li>Rubric creation with Copilot</li>
-                    <li>Practical GenAI applications</li>
-                </ul>
-                <a href="./workshop-3/workshop_3_workbook.html" class="workshop-link" aria-label="Access Workshop 3: Practical GenAI for Assessment Design">
-                    Access Workshop 3 →
-                </a>
-            </article>
+        <!-- How to use banner -->
+        <div class="how-to-banner" role="note" aria-label="How to use these resources">
+            <h3>📋 Using these resources in a workshop</h3>
+            <ol>
+                <li>Share the direct workbook link with participants — no download or sign-in required.</li>
+                <li>Participants open the workbook in any browser and work through it alongside their AI tool (e.g. Microsoft Copilot).</li>
+                <li>All workbooks are mobile-friendly and screen-reader accessible.</li>
+                <li>These resources are based on workshops conducted for various institutions and conferences.</li>
+            </ol>
+        </div>
+
+        <!-- Workbooks section -->
+        <section id="workbooks" aria-labelledby="workbooks-heading">
+            <div class="section-header">
+                <h2 id="workbooks-heading">Workshop Workbooks</h2>
+                <span class="badge">Live</span>
+            </div>
+
+            <!-- Workshop intro -->
+            <div style="background: #f0f7ff; border: 1px solid #b8d4f0; border-left: 5px solid var(--teal); border-radius: var(--radius); padding: 20px 24px; margin: 0 0 32px;">
+                <p style="margin: 0; font-size: 0.9em; color: #2a4a6b;">These workbooks were developed for workshops conducted at various institutions and conferences. Most resources are from the <strong>"Augmented Academia: AI in Life Sciences Teaching & Research"</strong> workshop series (<a href="https://www.eventbrite.com/e/augmented-academia-ai-in-life-sciences-teaching-research-tickets-1443044076679" target="_blank" rel="noopener noreferrer">2024 workshop</a>) with an updated 2026 version coming soon. The inclusive teaching workbook was created for the <a href="https://www.sebiology.org/events/gen-ai-symposium.html" target="_blank" rel="noopener noreferrer">RSB GenAI Symposium</a>.</p>
+            </div>
+
+            <div class="card-grid" role="list">
+
+                <!-- Augmented Academia 2024 Workshop Series -->
+                <div style="grid-column: 1 / -1; margin-bottom: 20px;">
+                    <h3 style="color: var(--navy); font-size: 1.2em; margin: 0 0 8px; padding-bottom: 8px; border-bottom: 2px solid var(--yellow);">🔬 Augmented Academia: AI in Life Sciences (2024)</h3>
+                    <p style="font-size: 0.85em; color: var(--gray); margin: 0;">Workshop series exploring GenAI applications in life sciences teaching and research. <em>2026 version coming soon!</em></p>
+                </div>
+
+                <!-- Workbook 1: Prompt Engineering -->
+                <article class="workbook-card" role="listitem">
+                    <div class="card-header">
+                        <div class="card-icon" aria-hidden="true">💡</div>
+                        <div class="card-header-text">
+                            <h3>Prompt Engineering Fundamentals</h3>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <p class="card-desc">
+                            Learn the fundamentals of crafting effective prompts for GenAI tools. Covers prompt structure, techniques for better outputs, and practical examples for academic use cases.
+                        </p>
+                        <div class="card-tags" aria-label="Topics">
+                            <span class="tag">Prompt Engineering</span>
+                            <span class="tag">Fundamentals</span>
+                            <span class="tag">GenAI</span>
+                            <span class="tag">Academic Writing</span>
+                        </div>
+                    </div>
+                    <div class="card-actions">
+                        <a href="Prompt_eng/index.html"
+                           class="btn btn-primary"
+                           target="_blank"
+                           rel="noopener noreferrer"
+                           aria-label="Open the Prompt Engineering workbook (opens in new tab)">
+                            Open Workbook ↗
+                        </a>
+                    </div>
+                </article>
+
+                <!-- Workbook 2: Automation -->
+                <article class="workbook-card" role="listitem">
+                    <div class="card-header">
+                        <div class="card-icon" aria-hidden="true">⚙️</div>
+                        <div class="card-header-text">
+                            <h3>AI-Powered Automation in Education</h3>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <p class="card-desc">
+                            Explore how GenAI can automate routine educational tasks, from content creation to assessment feedback. Practical workflows for streamlining teaching processes.
+                        </p>
+                        <div class="card-tags" aria-label="Topics">
+                            <span class="tag">Automation</span>
+                            <span class="tag">Teaching Efficiency</span>
+                            <span class="tag">Content Creation</span>
+                            <span class="tag">Assessment</span>
+                        </div>
+                    </div>
+                    <div class="card-actions">
+                        <a href="Automation/workshop_2_workbook.html"
+                           class="btn btn-primary"
+                           target="_blank"
+                           rel="noopener noreferrer"
+                           aria-label="Open the Automation workbook (opens in new tab)">
+                            Open Workbook ↗
+                        </a>
+                    </div>
+                </article>
+
+                <!-- Workbook 3: Content Creation -->
+                <article class="workbook-card" role="listitem">
+                    <div class="card-header">
+                        <div class="card-icon" aria-hidden="true">📝</div>
+                        <div class="card-header-text">
+                            <h3>AI-Enhanced Content Creation</h3>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <p class="card-desc">
+                            Master the art of using GenAI for creating educational content, from lecture materials to interactive exercises. Best practices for content quality and originality.
+                        </p>
+                        <div class="card-tags" aria-label="Topics">
+                            <span class="tag">Content Creation</span>
+                            <span class="tag">Educational Materials</span>
+                            <span class="tag">Interactive Learning</span>
+                            <span class="tag">Quality Assurance</span>
+                        </div>
+                    </div>
+                    <div class="card-actions">
+                        <a href="Content_creation/workshop_3_workbook.html"
+                           class="btn btn-primary"
+                           target="_blank"
+                           rel="noopener noreferrer"
+                           aria-label="Open the Content Creation workbook (opens in new tab)">
+                            Open Workbook ↗
+                        </a>
+                    </div>
+                </article>
+
+                <!-- Workbook 4: Genetics Example -->
+                <article class="workbook-card" role="listitem">
+                    <div class="card-header">
+                        <div class="card-icon" aria-hidden="true">🧬</div>
+                        <div class="card-header-text">
+                            <h3>GenAI in Genetics Education</h3>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <p class="card-desc">
+                            Created by Dr Denise Hough of the University of Glasgow, this is a practical case study demonstrating how GenAI can support genetics education, with specific examples for creating explanations, diagrams, and assessment questions.
+                        </p>
+                        <div class="card-tags" aria-label="Topics">
+                            <span class="tag">Genetics</span>
+                            <span class="tag">Life Sciences</span>
+                            <span class="tag">Case Study</span>
+                            <span class="tag">Assessment</span>
+                        </div>
+                    </div>
+                    <div class="card-actions">
+                        <a href="Content_creation/genetics_example.html"
+                           class="btn btn-primary"
+                           target="_blank"
+                           rel="noopener noreferrer"
+                           aria-label="Open the Genetics Example workbook (opens in new tab)">
+                            Open Workbook ↗
+                        </a>
+                    </div>
+                </article>
+
+                <!-- RSB GenAI Symposium -->
+                <div style="grid-column: 1 / -1; margin: 32px 0 20px;">
+                    <h3 style="color: var(--navy); font-size: 1.2em; margin: 0 0 8px; padding-bottom: 8px; border-bottom: 2px solid var(--yellow);">♿The Society for Experimental Biology GenAI Symposium</h3>
+                    <p style="font-size: 0.85em; color: var(--gray); margin: 0;">Workshop focused on inclusive and accessible approaches to GenAI in higher education.</p>
+                </div>
+
+                <!-- Workbook 5: Inclusive Teaching -->
+                <article class="workbook-card" role="listitem">
+                    <div class="card-header">
+                        <div class="card-icon" aria-hidden="true">♿</div>
+                        <div class="card-header-text">
+                            <h3>GenAI for Inclusive &amp; Accessible Learning and Teaching</h3>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <p class="card-desc">
+                            Designed for university teaching staff who want to use Generative AI to create, adapt, and review
+                            teaching materials that are inclusive and accessible. Covers the UDL framework, what an inclusive
+                            university looks like, and hands-on prompting practice.
+                        </p>
+                        <div class="card-tags" aria-label="Topics">
+                            <span class="tag">UDL</span>
+                            <span class="tag">Accessibility</span>
+                            <span class="tag">Inclusive Teaching</span>
+                            <span class="tag">Prompt Writing</span>
+                            <span class="tag">Staff CPD</span>
+                        </div>
+                    </div>
+                    <div class="card-actions">
+                        <a href="L&T_Conference_workshop_Nottingham/Inclusive_LearningTeaching/Inclusive_Teaching.html"
+                           class="btn btn-primary"
+                           target="_blank"
+                           rel="noopener noreferrer"
+                           onclick="return checkWorkshopAccess(event, 'inclusive')"
+                           aria-label="Open the Inclusive Teaching workbook (opens in new tab)">
+                            <span id="inclusive-btn-text">Available April 9th ⏰</span>
+                        </a>
+                    </div>
+                    
+                    <script>
+                        // Update button text based on availability
+                        document.addEventListener('DOMContentLoaded', function() {
+                            const btnText = document.getElementById('inclusive-btn-text');
+                            const btn = btnText.parentElement;
+                            
+                            if (INCLUSIVE_WORKSHOP_ENABLED) {
+                                btnText.textContent = 'Open Workbook ↗';
+                                btn.classList.remove('btn-disabled');
+                            } else {
+                                btnText.textContent = 'Available April 9th ⏰';
+                                btn.classList.add('btn-disabled');
+                                btn.style.opacity = '0.6';
+                                btn.style.cursor = 'not-allowed';
+                            }
+                        });
+                    </script>
+                </article>
+
+            </div>
         </section>
 
-        <section class="info-section">
-            <h2>University of Glasgow GenAI Policy</h2>
-            <p>These workshops align with University of Glasgow guidelines for responsible AI use in education.</p>
-            
-            <div class="policy-highlights">
-                <div class="policy-item">
-                    <strong>Transparency:</strong> Always disclose AI use in your work
-                </div>
-                <div class="policy-item">
-                    <strong>Accuracy:</strong> Verify all AI-generated content
-                </div>
-                <div class="policy-item">
-                    <strong>Privacy:</strong> Protect student and staff data
-                </div>
-                <div class="policy-item">
-                    <strong>Security:</strong> Use approved AI tools when possible
+
+
+        <!-- About section -->
+        <section id="about" aria-labelledby="about-heading" style="margin-top:56px;">
+            <div class="section-header">
+                <h2 id="about-heading">About Augmented Academia</h2>
+            </div>
+
+            <div class="about-section">
+                <div>
+                    <h2>The Project</h2>
+                    <p>
+                        Augmented Academia is a collection of open, interactive workshop workbooks created by
+                        <strong>Dr Alisha Aman</strong> to support staff and students in
+                        using Generative AI effectively, ethically, and inclusively. <br><br>
+                        Dr Aman is a Lecturer and Program Director of MSc MedTech Innovation, and focuses on Education Technology development and the use of GenAI in higher education.  
+                        She has developed and delivered workshops on GenAI in academia nationally for various institutions and conferences, including universities, the Royal Society of Biology, and the Society for Experimental Biology.
+                    </p>
+b                   
                 </div>
             </div>
-            
-            <p>
-                <a href="https://www.gla.ac.uk/myglasgow/learningandteaching/af-aiguidance/" 
-                   target="_blank" 
-                   rel="noopener"
-                   style="color: var(--primary); text-decoration: none; font-weight: 600;">
-                    Read the full GenAI policy →
-                </a>
-            </p>
         </section>
 
-        <section class="info-section">
-            <h2>Workshop Learning Outcomes</h2>
-            <p>By completing these workshops, you will be able to:</p>
-            <ul style="margin: 1rem 0; padding-left: 2rem;">
-                <li>Apply University of Glasgow GenAI policies in your teaching practice</li>
-                <li>Create comprehensive, scientifically accurate biology content using AI tools</li>
-                <li>Design accessible learning materials that meet WCAG 2.1 AA standards</li>
-                <li>Transform traditional lectures into interactive, engaging experiences</li>
-                <li>Develop quality control processes for AI-generated educational content</li>
-                <li>Integrate advanced prompting techniques for laboratory preparation and safety protocols</li>
-            </ul>
+        <!-- Contact section -->
+        <section id="contact" aria-labelledby="contact-heading" style="margin-top:56px;">
+            <div class="section-header">
+                <h2 id="contact-heading">Get in Touch</h2>
+            </div>
+
+            <div class="about-section" style="grid-template-columns: 1fr; text-align: center; padding: 40px 36px;">
+                <div>
+                    <h2>Collaborations & Future Workshops</h2>
+                    <p style="font-size: 1em; margin-bottom: 20px;">
+                        Get in touch for collaborations or to discuss future workshops. I'm always interested in 
+                        developing new GenAI resources and delivering workshops for educational institutions.
+                    </p>
+                    <div style="display: flex; gap: 12px; justify-content: center; align-items: center; flex-wrap: wrap;">
+                        <a href="mailto:alisha.aman@glasgow.ac.uk" 
+                           class="btn btn-primary" 
+                           style="margin-top:8px; display:inline-flex; font-size: 0.9em;">
+                            📧 Email
+                        </a>
+                        <a href="https://www.linkedin.com/in/alisha-aman/" 
+                           class="btn btn-teal" 
+                           target="_blank"
+                           rel="noopener noreferrer"
+                           style="margin-top:8px; display:inline-flex; font-size: 0.9em;">
+                            💼 Connect on LinkedIn
+                        </a>
+                    </div>
+                    <p style="font-size: 0.85em; color: var(--gray); margin-top: 16px;">
+                        Lecturer & Program Director · MedTech Innovation
+                    </p>
+
+                </div>
+            </div>
         </section>
 
-        <section class="feedback-section">
-            <h2>Your Feedback Matters</h2>
-            <p>Help us improve these workshops by sharing your experience and suggestions.</p>
-            <a href="https://forms.office.com/e/VLjD0cqTnK" 
-               class="feedback-button" 
-               target="_blank" 
-               aria-label="Provide feedback on Augmented Academia workshops">
-                💬 Provide Feedback
-            </a>
-        </section>
     </main>
 
-    <footer class="footer" role="contentinfo">
-        <div class="container">
-            <p><strong>© 2025 University of Glasgow - Augmented Academia GenAI Training</strong></p>
-            <p>Created by Dr Alisha Aman | All Rights Reserved | Proprietary Educational Material</p>
+    <!-- Footer -->
+    <footer role="contentinfo">
+        <div class="footer-inner">
+            <p style="margin:0 0 4px; font-size:0.9em;">
+                <strong style="color:white;">Augmented Academia</strong> · Dr Alisha Aman
+            </p>
+            <div class="footer-links">
+                <a href="https://github.com/alishaaman" target="_blank" rel="noopener">GitHub</a>
+                <a href="https://www.w3.org/WAI/WCAG21/quickref/" target="_blank" rel="noopener">WCAG 2.1</a>
+            </div>
+            <p class="footer-copy">
+                © 2026 Dr Alisha Aman. All rights reserved.
+            </p>
         </div>
     </footer>
+
 </body>
 </html>

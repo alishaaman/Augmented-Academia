@@ -1,0 +1,2490 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Generative AI for Inclusive and Accessible Learning and Teaching</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="University of Glasgow workbook on using Generative AI in academia to design inclusive and accessible learning and teaching through UDL-informed practice.">
+    <meta name="author" content="Dr Alisha Aman, University of Glasgow">
+    <meta name="copyright" content="© 2026 University of Glasgow. All rights reserved.">
+    <meta name="license" content="All Rights Reserved - University of Glasgow Proprietary Material">
+    <meta name="creation-date" content="2025-08-04">
+    <meta name="version" content="2.0">
+    <meta name="institutional-affiliation" content="University of Glasgow">
+    <meta name="robots" content="index, follow">
+    <!-- 
+    COPYRIGHT NOTICE:
+    This work is protected by copyright and is the exclusive property of the University of Glasgow.
+    Author: Dr Alisha Aman
+    Created: August 2025
+    All rights reserved. No part of this publication may be reproduced, distributed, or transmitted 
+    in any form or by any means without the prior written permission of the University of Glasgow.
+    -->
+    <style>
+        :root {
+            --primary: #21808d;
+            --accent: #fbc02d;
+            --bg: #f5f7fa;
+            --header: #2c3e50;
+            --gray: #7f8c8d;
+            --error: #e74c3c;
+            --success: #27ae60;
+            --font-main: 'Segoe UI', Arial, sans-serif;
+            --sidebar-bg: #f8f9fa;
+            --sidebar-width: 260px;
+            --sidebar-right-width: 320px;
+            --main-bg: #fff;
+            --border-radius: 8px;
+            --shadow: 0 2px 8px rgba(0,0,0,0.08);
+            --nav-height: 110px;
+            --brand-title-size: 1.8em;
+            --brand-logo-height: 51px;
+            --hubs-logo-height: 76px;
+        }
+        html {
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            margin: 0;
+            font-family: var(--font-main);
+            background: var(--bg);
+            color: var(--header);
+            overflow-x: auto;
+            padding: 0 0 2em 0;
+            min-width: 320px;
+        }
+        .app-container {
+            width: 100%;
+            min-height: 100vh;
+        }
+        .top-nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: #011451;
+            color: white;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            padding: 9px 30px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            z-index: 1000;
+            height: auto;
+            min-height: var(--nav-height);
+        }
+        .top-nav-left {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+        .top-nav-center {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            flex: 1;
+            margin: 0 20px;
+        }
+        .top-nav-header {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+        .top-nav-header h2 {
+            margin: 0;
+            color: white;
+            font-size: var(--brand-title-size);
+        }
+        .top-nav-header .subtitle {
+            font-size: 0.8em;
+            color: rgba(255,255,255,0.85);
+            margin-top: 2px;
+        }
+        .nav-tabs-horizontal {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+        .nav-tab {
+            background: white;
+            border: 1px solid #ddd;
+            color: #011451;
+            border-radius: 4px;
+            padding: 3px 10px;
+            font-size: 0.8em;
+            cursor: pointer;
+            transition: background 0.2s, color 0.2s;
+            white-space: nowrap;
+        }
+        .nav-tab:hover {
+            background: #011451;
+            color: white;
+        }
+        .nav-tab:focus {
+            outline: 3px solid #fbc02d;
+            outline-offset: 2px;
+            background: #011451;
+            color: white;
+        }
+        .nav-tab.active {
+            background: #011451;
+            color: white;
+            font-weight: bold;
+        }
+
+        .tab-content {
+            display: none !important;
+        }
+        .tab-content.active {
+            display: block !important;
+        }
+        
+        
+        .main-content {
+            margin-top: var(--nav-height);
+            margin-left: var(--sidebar-width);
+            padding: 20px 40px 20px 40px;
+            max-width: calc(100% - var(--sidebar-width));
+            min-height: calc(100vh - 75px);
+            position: relative;
+            width: calc(100% - var(--sidebar-width));
+            box-sizing: border-box;
+        }
+        
+        .sidebar {
+            position: fixed;
+            top: var(--nav-height);
+            left: 0;
+            width: var(--sidebar-width);
+            height: calc(100vh - var(--nav-height));
+            background: var(--sidebar-bg);
+            border-right: 1px solid #e9ecef;
+            overflow-y: auto;
+            z-index: 900;
+            padding: 20px 15px;
+            box-sizing: border-box;
+        }
+        
+        .sidebar h2 {
+            color: var(--header);
+            font-size: 1.1em;
+            margin: 0 0 15px 0;
+            padding-bottom: 8px;
+            border-bottom: 2px solid var(--primary);
+        }
+        
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border: 0;
+        }
+        
+        .sidebar ul {
+            list-style: none;
+            padding: 0;
+            margin: 0 0 25px 0;
+        }
+        
+        .sidebar li {
+            margin: 0;
+        }
+        
+        .sidebar a {
+            display: block;
+            padding: 8px 12px;
+            color: var(--header);
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+            transition: background 0.2s, color 0.2s;
+        }
+        
+        .sidebar a:hover {
+            background: var(--primary);
+            color: white;
+        }
+        
+        .sidebar a:focus {
+            outline: 2px solid var(--accent);
+            outline-offset: 2px;
+        }
+        .uog-logo {
+            height: var(--brand-logo-height);
+            width: auto;
+            z-index: 1002;
+        }
+        .accessibility-badge {
+            background: rgba(255, 255, 255, 0.95);
+            color: #011451;
+            padding: 3px 8px;
+            border-radius: 8px;
+            font-size: 0.7em;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 3px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+            z-index: 1001;
+        }
+        .accessibility-badge::before {
+            content: '♿';
+            font-size: 0.9em;
+        }
+
+        .brand-logo {
+            height: 44px;
+            width: auto;
+            flex-shrink: 0;
+            object-fit: contain;
+        }
+
+        .brand-logo.hubs {
+            height: var(--hubs-logo-height);
+        }
+        .brand-logo.rsb  { background: #fff; padding: 4px; border-radius: 8px; }
+
+        .top-nav-center .brand-strip {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 4px;
+            justify-content: center;
+        }
+
+        /* HUBS desktop override */
+
+        @media (max-width: 820px) {
+            .top-nav-center .brand-strip {
+                gap: 8px;
+            }
+            .brand-logo { height: 36px; }
+            :root { --brand-logo-height: 36px; --hubs-logo-height: 48px; }
+        }
+        
+        .feedback-button {
+            background: #fbc02d;
+            color: #011451;
+            border: 2px solid #011451;
+            padding: 6px 12px;
+            border-radius: 8px;
+            font-size: 0.75em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+            z-index: 1001;
+        }
+        .feedback-button:hover {
+            background: #011451;
+            color: #fbc02d;
+            transform: translateY(-1px);
+            box-shadow: 0 3px 8px rgba(0,0,0,0.2);
+        }
+        .feedback-button::before {
+            content: "💬";
+            font-size: 1em;
+        }
+        
+        .top-nav-right {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 6px;
+        }
+
+        .logo-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .cta-stack {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 4px;
+        }
+        
+        h1, h2, h3, h4, h5, h6 {
+            color: #011451;
+        }
+        .workflow-header {
+            color: white;
+            background: #011451;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 30px 0 20px 0;
+            font-size: 1.6em;
+        }
+        
+        blockquote {
+            background: #e8f4fd;
+            border-left: 4px solid #011451;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
+            font-style: italic;
+        }
+        
+        .center {
+            text-align: center;
+            font-size: 1.1em;
+            font-weight: bold;
+            color: #011451;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        th {
+            background: #011451;
+            color: white;
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+        }
+        
+        td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #e9ecef;
+        }
+        
+        tr:nth-child(even) {
+            background: #f8f9fa;
+        }
+        
+        tr:hover {
+            background: #e8f4fd;
+        }
+        
+        h3 {
+            color: #2c5530;
+            font-size: 1.4em;
+            margin-top: 30px;
+            margin-bottom: 15px;
+        }
+        
+        h4 {
+            color: #4a5568;
+            font-size: 1.2em;
+            margin-top: 25px;
+            margin-bottom: 10px;
+        }
+        
+        ul, ol {
+            margin: 15px 0;
+            padding-left: 25px;
+        }
+        
+        li {
+            margin: 8px 0;
+        }
+        
+        .code-container {
+            position: relative;
+            background: white;
+            border: 2px solid #011451;
+            border-radius: 8px;
+            margin: 20px 0;
+            overflow: hidden;
+            max-height: 500px;
+            overflow-y: auto;
+            box-shadow: 0 2px 8px rgba(1, 20, 81, 0.1);
+        }
+        
+        .copy-button {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: #011451;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+            z-index: 10;
+            font-family: var(--font-main);
+        }
+        
+        .copy-button:hover, .copy-button:focus {
+            background: #2c5530;
+            outline: 2px solid #fbc02d;
+            outline-offset: 2px;
+        }
+        
+        pre {
+            margin: 0;
+            padding: 20px 50px 20px 20px;
+            background: white;
+            overflow-x: auto;
+            overflow-y: auto;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            font-family: var(--font-main);
+            font-size: 14px;
+            line-height: 1.5;
+            max-height: 450px;
+            border: none;
+        }
+        
+        code {
+            background: white;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: var(--font-main);
+            font-size: 14px;
+            line-height: 1.5;
+            border: 1px solid #e9ecef;
+        }
+        
+        textarea {
+            width: 100%;
+            min-height: 120px;
+            padding: 15px;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            font-family: inherit;
+            font-size: 14px;
+            resize: vertical;
+            box-sizing: border-box;
+        }
+        
+        textarea:focus {
+            outline: none;
+            border-color: #011451;
+            box-shadow: 0 0 0 3px rgba(1, 20, 81, 0.1);
+        }
+
+        .field-label {
+            display: block;
+            font-weight: 600;
+            color: #011451;
+            margin: 12px 0 8px 0;
+        }
+        
+        .exercise-box {
+            background: #fff3cd;
+            border: 2px solid #fbc02d;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 25px 0;
+        }
+        
+        .exercise-box h4 {
+            color: #856404;
+            margin-top: 0;
+        }
+        
+        .success-criteria {
+            background: #d4edda;
+            border: 1px solid #c3e6cb;
+            border-radius: 6px;
+            padding: 15px;
+            margin: 15px 0;
+        }
+        
+        details {
+            background: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 20px 0;
+        }
+        
+        summary {
+            cursor: pointer;
+            font-weight: bold;
+            color: #011451;
+            padding: 10px;
+            margin: -15px -15px 15px -15px;
+            background: #e9ecef;
+            border-radius: 8px 8px 0 0;
+        }
+        
+        summary:hover {
+            background: #dee2e6;
+        }
+        
+        footer {
+            background: #f8f9fa;
+            border: 2px solid #011451;
+            border-radius: 8px;
+            padding: 20px;
+            margin-top: 40px;
+            text-align: center;
+            color: #6c757d;
+        }
+        
+        .notes-status {
+            font-size: 0.9em;
+            color: #666;
+            margin-top: 10px;
+        }
+        
+        /* Desktop sidebar toggle */
+        .sidebar {
+            transform: translateX(0);
+            transition: transform 0.3s ease;
+            z-index: 1100;
+        }
+        
+        .sidebar.hidden {
+            transform: translateX(-100%);
+        }
+        
+        .main-content {
+            margin-left: var(--sidebar-width);
+            transition: margin-left 0.3s ease, width 0.3s ease;
+        }
+        
+        .main-content.expanded {
+            margin-left: 0;
+            width: 100%;
+            max-width: 100%;
+        }
+        
+        .menu-toggle {
+            display: block;
+            background: var(--accent);
+            color: var(--header);
+            border: none;
+            padding: 8px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.8em;
+            font-weight: 600;
+            z-index: 1200;
+        }
+        
+        .menu-toggle:hover {
+            background: #e6a800;
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+            
+            .sidebar.show {
+                transform: translateX(0);
+            }
+            
+            .main-content {
+                margin-left: 0;
+                margin-top: 75px;
+                width: 100%;
+                max-width: 100%;
+                padding: 20px;
+            }
+            
+            .main-content.expanded {
+                margin-left: 0;
+                width: 100%;
+            }
+            
+            .top-nav {
+                padding: 9px 15px;
+            }
+            
+            .top-nav-center {
+                margin: 0 10px;
+            }
+            
+            .top-nav-header h1 {
+                font-size: 1.4em;
+            }
+            
+            .nav-tabs-horizontal {
+                gap: 4px;
+            }
+            
+            .nav-tab {
+                padding: 2px 6px;
+                font-size: 0.7em;
+            }
+            
+            h1 {
+                font-size: 1.8em;
+            }
+            
+            h2 {
+                font-size: 1.5em;
+            }
+        }
+        
+        .sidebar-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1050;
+        }
+        
+        @media (max-width: 768px) {
+            .sidebar-overlay.show {
+                display: block;
+            }
+        }
+
+        /* Ensure consistent text formatting */
+        p {
+            line-height: 1.6;
+            margin: 15px 0;
+        }
+        
+        /* Fix text center class that was missing */
+        .text-center {
+            text-align: center;
+        }
+        
+        /* Ensure consistent table formatting */
+        .table-copy-container {
+            position: relative;
+        }
+        
+        /* editable code focus styles */
+        .code-container code[contenteditable="true"] {
+            outline: 1px dashed #011451;
+            caret-color: #011451;
+        }
+        .code-container code[contenteditable="true"]:focus {
+            outline: 2px solid var(--accent);
+            background: #fffef4;
+        }
+
+        /* ADD: nested indent for generated TOC items */
+        .sidebar ul ul { margin-left: 14px; padding-left: 10px; border-left: 2px solid #e9ecef; }
+    </style>
+
+    <script>
+        function copyCode(button) {
+            const codeBlock = button.nextElementSibling;
+            const text = codeBlock.textContent;
+            
+            // Announce to screen readers
+            button.setAttribute('aria-label', 'Copying code to clipboard');
+            
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(text).then(() => {
+                    const originalText = button.textContent;
+                    button.textContent = 'Copied!';
+                    button.style.background = '#28a745';
+                    button.setAttribute('aria-label', 'Code copied to clipboard successfully');
+                    
+                    setTimeout(() => {
+                        button.textContent = originalText;
+                        button.style.background = '#011451';
+                        button.setAttribute('aria-label', 'Copy code to clipboard');
+                    }, 2000);
+                }).catch(err => {
+                    console.error('Failed to copy text: ', err);
+                    fallbackCopyTextToClipboard(text, button);
+                });
+            } else {
+                fallbackCopyTextToClipboard(text, button);
+            }
+        }
+        
+        function fallbackCopyTextToClipboard(text, button) {
+            const textArea = document.createElement("textarea");
+            textArea.value = text;
+            textArea.style.position = "fixed";
+            textArea.style.left = "-999999px";
+            textArea.style.top = "-999999px";
+            document.body.appendChild(textArea);
+            textArea.focus();
+            textArea.select();
+            
+            try {
+                const successful = document.execCommand('copy');
+                if (successful) {
+                    const originalText = button.textContent;
+                    button.textContent = 'Copied!';
+                    button.style.background = '#28a745';
+                    button.setAttribute('aria-label', 'Code copied to clipboard successfully');
+                    
+                    setTimeout(() => {
+                        button.textContent = originalText;
+                        button.style.background = '#011451';
+                        button.setAttribute('aria-label', 'Copy code to clipboard');
+                    }, 2000);
+                } else {
+                    throw new Error('Fallback copy failed');
+                }
+            } catch (err) {
+                console.error('Fallback copy failed: ', err);
+                button.textContent = 'Copy failed';
+                button.setAttribute('aria-label', 'Failed to copy code to clipboard');
+                setTimeout(() => {
+                    button.textContent = 'Copy';
+                    button.setAttribute('aria-label', 'Copy code to clipboard');
+                }, 2000);
+            }
+            
+            document.body.removeChild(textArea);
+        }
+        
+        function showTab(tabName) {
+            // Hide all tab contents and update ARIA attributes
+            const tabs = document.querySelectorAll('.tab-content');
+            tabs.forEach(tab => {
+                tab.classList.remove('active');
+                tab.setAttribute('aria-hidden', 'true');
+            });
+            
+            // Remove active class from all nav tabs and update ARIA attributes
+            const navTabs = document.querySelectorAll('.nav-tab');
+            navTabs.forEach(tab => {
+                tab.classList.remove('active');
+                tab.setAttribute('aria-selected', 'false');
+            });
+            
+            // Show the selected tab content and update ARIA attributes
+            const selectedTab = document.getElementById(tabName + '-tab');
+            if (selectedTab) {
+                selectedTab.classList.add('active');
+                selectedTab.setAttribute('aria-hidden', 'false');
+            }
+            
+            // Add active class to the clicked nav tab and update ARIA attributes
+            const clickedNavTab = document.querySelector(`[onclick="showTab('${tabName}')"]`);
+            if (clickedNavTab) {
+                clickedNavTab.classList.add('active');
+                clickedNavTab.setAttribute('aria-selected', 'true');
+            }
+
+            const tabStatus = document.getElementById('tab-status');
+            if (tabStatus && clickedNavTab) {
+                tabStatus.textContent = `${clickedNavTab.textContent.trim()} tab opened`;
+            }
+            
+            // Close sidebar on mobile after selection
+            if (window.innerWidth <= 768) {
+                const sidebar = document.getElementById('sidebar');
+                if (sidebar) {
+                    sidebar.classList.remove('show');
+                }
+            }
+            // ADD: Rebuild sidebar TOC after switching tabs to ensure links are populated
+            if (typeof buildSidebarTOC === 'function') {
+                setTimeout(buildSidebarTOC, 0);
+            }
+        }
+        
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const mainContent = document.querySelector('.main-content');
+            const overlay = document.getElementById('sidebar-overlay');
+            const menuButton = document.querySelector('.menu-toggle');
+            
+            if (window.innerWidth <= 768) {
+                // Mobile behavior
+                if (sidebar && overlay) {
+                    const isOpen = sidebar.classList.contains('show');
+                    sidebar.classList.toggle('show');
+                    overlay.classList.toggle('show');
+                    
+                    // Update ARIA attributes
+                    sidebar.setAttribute('aria-hidden', isOpen ? 'true' : 'false');
+                    overlay.setAttribute('aria-hidden', isOpen ? 'true' : 'false');
+                    menuButton.setAttribute('aria-expanded', isOpen ? 'false' : 'true');
+                }
+            } else {
+                // Desktop behavior
+                if (sidebar && mainContent) {
+                    const isHidden = sidebar.classList.contains('hidden');
+                    sidebar.classList.toggle('hidden');
+                    mainContent.classList.toggle('expanded');
+                    
+                    // Update ARIA attributes
+                    sidebar.setAttribute('aria-hidden', isHidden ? 'false' : 'true');
+                    menuButton.setAttribute('aria-expanded', isHidden ? 'true' : 'false');
+                }
+            }
+        }
+        
+        function scrollToSection(sectionId) {
+            if (sectionId) {
+                setTimeout(() => {
+                    const element = document.getElementById(sectionId);
+                    if (element) {
+                        element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                        // Announce to screen readers
+                        element.setAttribute('aria-live', 'polite');
+                        element.setAttribute('aria-atomic', 'true');
+                    }
+                }, 100);
+            }
+            
+            // Close sidebar on mobile after selection only
+            if (window.innerWidth <= 768) {
+                const sidebar = document.getElementById('sidebar');
+                const overlay = document.getElementById('sidebar-overlay');
+                if (sidebar && overlay) {
+                    sidebar.classList.remove('show');
+                    overlay.classList.remove('show');
+                    sidebar.setAttribute('aria-hidden', 'true');
+                    overlay.setAttribute('aria-hidden', 'true');
+                }
+            }
+        }
+        
+        // Close sidebar when clicking on overlay
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize copy button accessibility
+            const copyButtons = document.querySelectorAll('.copy-button');
+            copyButtons.forEach(button => {
+                button.setAttribute('aria-label', 'Copy code to clipboard');
+            });
+            
+            loadNotes();
+            // Show guide tab by default
+            showTab('guide');
+
+            // ADD: build dynamic sidebar TOC from headings
+            buildSidebarTOC();
+
+            // enable editable code after DOM is ready
+            makeCodeBlocksEditable();
+
+            // Initialize focus management for accessibility
+            const overlay = document.getElementById('sidebar-overlay');
+            if (overlay) {
+                overlay.addEventListener('click', function() {
+                    const sidebar = document.getElementById('sidebar');
+                    if (sidebar) {
+                        sidebar.classList.remove('show');
+                        overlay.classList.remove('show');
+                        
+                        // Return focus to menu toggle button
+                        const menuToggle = document.querySelector('.menu-toggle');
+                        if (menuToggle) {
+                            menuToggle.focus();
+                        }
+                    }
+                });
+            }
+        });
+        
+        function saveNotes(textareaId, statusId) {
+            const textarea = document.getElementById(textareaId);
+            const status = document.getElementById(statusId);
+            
+            if (textarea && status) {
+                localStorage.setItem(textareaId, textarea.value);
+                status.textContent = 'Notes saved automatically';
+                status.style.color = '#28a745';
+                
+                // Announce to screen readers
+                status.setAttribute('aria-live', 'polite');
+                
+                setTimeout(() => {
+                    status.textContent = '';
+                }, 3000);
+            }
+        }
+        
+        function loadNotes() {
+            const textareas = document.querySelectorAll('textarea[id]');
+            textareas.forEach(textarea => {
+                const saved = localStorage.getItem(textarea.id);
+                if (saved) {
+                    textarea.value = saved;
+                }
+                
+                textarea.addEventListener('input', () => {
+                    const statusId = 'status-' + textarea.id.replace('textarea-', '');
+                    saveNotes(textarea.id, statusId);
+                });
+            });
+        }
+
+        // helper to make code blocks editable
+        function makeCodeBlocksEditable() {
+            document.querySelectorAll('.code-container pre code').forEach(code => {
+                code.setAttribute('contenteditable', 'true');
+                code.setAttribute('spellcheck', 'false');
+                code.setAttribute('role', 'textbox');
+                code.setAttribute('aria-multiline', 'true');
+                code.setAttribute('tabindex', '0');
+            });
+        }
+
+        // ADD: utilities to slugify and assign unique IDs within a container
+        function slugifyText(text) {
+          return text.trim().toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
+        }
+        function ensureHeadingIds(container) {
+          const counts = new Map();
+          const hs = container.querySelectorAll('h2, h3, h4');
+          hs.forEach(h => {
+            const base = slugifyText(h.textContent);
+            const n = counts.get(base) || 0;
+            counts.set(base, n + 1);
+            const id = n === 0 ? base : `${base}-${n+1}`;
+            h.id = h.id || id; // don't override existing ids
+          });
+        }
+
+        // ADD: build sidebar lists per tab from headings (H3 + H4 nested)
+        function buildSidebarTOC() {
+          const sections = [
+            { tab: 'guide',     containerId: 'guide-tab',     listId: 'toc-guide' },
+            { tab: 'accessibility', containerId: 'accessibility-tab', listId: 'toc-accessibility' },
+            { tab: 'content-creation', containerId: 'content-creation-tab', listId: 'toc-content-creation' },
+            { tab: 'assessment', containerId: 'assessment-tab', listId: 'toc-assessment' },
+            { tab: 'eal-support', containerId: 'eal-support-tab', listId: 'toc-eal-support' },
+            { tab: 'neurodiversity', containerId: 'neurodiversity-tab', listId: 'toc-neurodiversity' },
+            { tab: 'workflow1', containerId: 'workflow1-tab', listId: 'toc-workflow1' }
+          ];
+          sections.forEach(s => {
+            const container = document.getElementById(s.containerId);
+            const list = document.getElementById(s.listId);
+            if (!container || !list) return;
+
+            // Ensure IDs for headings
+            ensureHeadingIds(container);
+
+            // Collect headings in flow
+            const h3s = Array.from(container.querySelectorAll('h3'));
+            const h4sByH3 = new Map();
+            // map h4 under the nearest preceding h3
+            let currentH3 = null;
+            Array.from(container.querySelectorAll('h3, h4')).forEach(h => {
+              if (h.tagName === 'H3') {
+                currentH3 = h;
+                if (!h4sByH3.has(h)) h4sByH3.set(h, []);
+              } else if (h.tagName === 'H4' && currentH3) {
+                h4sByH3.get(currentH3).push(h);
+              }
+            });
+
+            // Build list
+            list.innerHTML = '';
+            h3s.forEach(h3 => {
+              const li = document.createElement('li');
+              const a = document.createElement('a');
+              a.href = `#${h3.id}`;
+              a.textContent = h3.textContent;
+              a.addEventListener('click', (e) => {
+                e.preventDefault();
+                showTab(s.tab);
+                setTimeout(() => scrollToSection(h3.id), 60);
+              });
+              li.appendChild(a);
+
+              const children = h4sByH3.get(h3) || [];
+              if (children.length) {
+                const ul = document.createElement('ul');
+                children.forEach(h4 => {
+                  const li2 = document.createElement('li');
+                  const a2 = document.createElement('a');
+                  a2.href = `#${h4.id}`;
+                  a2.textContent = h4.textContent;
+                  a2.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    showTab(s.tab);
+                    setTimeout(() => scrollToSection(h4.id), 60);
+                  });
+                  li2.appendChild(a2);
+                  ul.appendChild(li2);
+                });
+                li.appendChild(ul);
+              }
+              list.appendChild(li);
+            });
+          });
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+          // ...existing code...
+          loadNotes();
+          showTab('guide');
+
+          // ADD: build dynamic sidebar TOC from headings
+          buildSidebarTOC();
+
+          // ...existing code...
+        });
+        window.addEventListener('load', function() {
+          if (typeof buildSidebarTOC === 'function') buildSidebarTOC();
+        });
+    </script>
+    <style>
+    /* Keep editable code blocks visually calm but preserve keyboard focus */
+  .code-container code[contenteditable="true"],
+  .code-container code[contenteditable="true"]:focus {
+        background: #fff !important;
+    }
+    .code-container code[contenteditable="true"]:focus {
+        outline: 2px solid #fbc02d !important;
+        box-shadow: 0 0 0 2px rgba(1, 20, 81, 0.15) !important;
+  }
+</style>
+        <!-- Google tag (gtag.js) -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-PN5VH96Y0Y"></script>
+        <script>
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-PN5VH96Y0Y');
+        </script>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Top Navigation -->
+        <nav class="top-nav" role="banner" aria-label="Main navigation">
+            <div class="top-nav-left">
+                <button class="menu-toggle" onclick="toggleSidebar()" aria-label="Toggle sidebar navigation" aria-expanded="true" aria-controls="sidebar">☰ Menu</button>
+            </div>
+            <div class="top-nav-center">
+                <div class="top-nav-header">
+                    <h2>Generative AI for Inclusive Learning and Teaching</h2>
+                </div>
+                <div class="nav-tabs-horizontal" role="tablist" aria-label="Workshop sections">
+                    <button class="nav-tab" onclick="showTab('guide')" role="tab" aria-controls="guide-tab" aria-selected="true" id="guide-tab-button">📚 Foundations</button>
+                    <button class="nav-tab" onclick="showTab('accessibility')" role="tab" aria-controls="accessibility-tab" aria-selected="false" id="accessibility-tab-button">♿ Accessibility</button>
+                    <button class="nav-tab" onclick="showTab('content-creation')" role="tab" aria-controls="content-creation-tab" aria-selected="false" id="content-creation-tab-button">📝 Content Creation</button>
+                    <button class="nav-tab" onclick="showTab('assessment')" role="tab" aria-controls="assessment-tab" aria-selected="false" id="assessment-tab-button">📋 Assessment</button>
+                    <button class="nav-tab" onclick="showTab('eal-support')" role="tab" aria-controls="eal-support-tab" aria-selected="false" id="eal-support-tab-button">🌍 EAL Support</button>
+                    <button class="nav-tab" onclick="showTab('neurodiversity')" role="tab" aria-controls="neurodiversity-tab" aria-selected="false" id="neurodiversity-tab-button">🧠 Neurodiversity</button>
+                    <button class="nav-tab" onclick="showTab('workflow1')" role="tab" aria-controls="workflow1-tab" aria-selected="false" id="workflow1-tab-button">⚡ Practice</button>
+                </div>
+            </div>
+            <div class="top-nav-right">
+                <div class="logo-row" aria-label="Right logos">
+                    <img src="https://sfdora.org/wp-content/uploads/2024/03/UoG_keyline.png" alt="University of Glasgow Logo" class="uog-logo" />
+                </div>
+                <div class="cta-stack">
+                    <a href="https://forms.office.com/e/VLjD0cqTnK" class="feedback-button" target="_blank" aria-label="Provide feedback on this workbook">Feedback</a>
+                    <div class="accessibility-badge" title="This workbook includes comprehensive ARIA labels for screen readers and assistive technologies">
+                        ARIA Accessible
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Sidebar Overlay for mobile -->
+        <div class="sidebar-overlay" id="sidebar-overlay" aria-hidden="true"></div>
+
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar" id="sidebar" role="navigation" aria-label="Workshop Navigation" aria-hidden="false">
+            <h2>📚 Foundations</h2>
+            <ul role="list" id="toc-guide"></ul>
+            <div id="guide-desc" class="sr-only">Foundations for using Generative AI in higher education teaching and learning</div>
+
+            <h2>♿ Accessibility</h2>
+            <ul role="list" id="toc-accessibility"></ul>
+            <div id="accessibility-desc" class="sr-only">Universal Design for Learning, accessibility, and inclusive university environments</div>
+
+            <h2>📝 Content Creation</h2>
+            <ul role="list" id="toc-content-creation"></ul>
+            <div id="content-creation-desc" class="sr-only">Creating accessible materials and multiple versions of content</div>
+
+            <h2>📋 Assessment</h2>
+            <ul role="list" id="toc-assessment"></ul>
+            <div id="assessment-desc" class="sr-only">Inclusive assessment design and alternative formats</div>
+
+            <h2>🌍 EAL Support</h2>
+            <ul role="list" id="toc-eal-support"></ul>
+            <div id="eal-support-desc" class="sr-only">Supporting English as Additional Language learners and international students</div>
+
+            <h2>🧠 Neurodiversity</h2>
+            <ul role="list" id="toc-neurodiversity"></ul>
+            <div id="neurodiversity-desc" class="sr-only">Supporting neurodiverse and disabled students</div>
+
+            <h2>⚡ Practice</h2>
+            <ul role="list" id="toc-workflow1"></ul>
+            <div id="workflow1-desc" class="sr-only">Hands-on practice with prompt patterns and material creation</div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content" role="main">
+            <!-- Screen reader instructions -->
+            <div class="sr-only" aria-live="polite">
+                <p>This interactive workbook contains multiple workflow tabs. Use the tab navigation above to switch between sections, or use the sidebar navigation to jump to specific content.</p>
+            </div>
+            <div id="tab-status" class="sr-only" role="status" aria-live="polite"></div>
+            
+            <div class="text-center">
+                <p><strong>Inclusive and Accessible Learning and Teaching with Generative AI</strong></p>
+                <p>This workbook is designed for university teaching staff who want to use Generative AI to create, adapt, and review teaching materials in ways that are inclusive, accessible, and practical across disciplines.</p>
+                <p>It introduces the UDL framework, explores what an inclusive university environment looks like for students, and shows how GenAI can help staff build better materials from the outset rather than retrofit them later.</p>
+                <p><em><strong>You can work directly in Copilot or another approved AI tool while using the workbook.</strong></em></p>
+            </div>
+            <hr>
+
+            <!-- GUIDE TAB -->
+            <div id="guide-tab" class="tab-content active" role="tabpanel" aria-labelledby="guide-tab-button" aria-hidden="false">
+                <h2 class="workflow-header">📚 GenAI in Academia</h2>
+                <p>Generative AI can support academic staff with drafting, adapting, reviewing, and restructuring teaching materials. Used well, it can reduce routine workload and make it easier to design learning experiences that are clearer, more flexible, and more accessible for students.</p>
+                
+                <blockquote>
+                    <p class="center">Use GenAI to remove barriers, not add them.</p>
+                    <p>The key question for learning and teaching is not whether AI can generate content quickly. It is whether that content helps more students participate, understand, and demonstrate learning in equitable ways.</p>
+                    <p><strong>Academic judgment remains essential.</strong> GenAI can suggest, scaffold, summarise, and transform content, but staff remain responsible for accuracy, ethics, accessibility, and pedagogic fit.</p>
+                </blockquote>
+
+                <h3 id="inclusive-by-design">Why Inclusive-by-Design?</h3>
+                
+                <div class="success-criteria">
+                    <h4>The Core Principle</h4>
+                    <p>Inclusive teaching means designing your materials, assessments, and activities so that <strong>no student needs to disclose a personal need in order to access them equitably</strong>. This is not about lowering standards — it is about removing unnecessary barriers so that every student can demonstrate what they actually know.</p>
+                </div>
+
+                <p>The University of Glasgow's Accessible & Inclusive Learning Policy (AILP) commits to exceeding the requirements of the Equality Act 2010, aiming for a learning environment where "individual interventions are the exception and not the rule." The Equality Act 2010 places an <strong>anticipatory duty</strong> on universities — the obligation to proactively remove barriers before a disabled student enrols, rather than retrofitting support after the fact.</p>
+
+                <h4>Universal Design for Learning (UDL) Framework</h4>
+                <p>UDL gives us a practical framework for inclusive design. It is built on three core principles:</p>
+                
+                <table role="table" aria-label="Universal Design for Learning principles">
+                    <caption class="sr-only">The three core principles of Universal Design for Learning and their applications</caption>
+                    <thead>
+                        <tr>
+                            <th>UDL Principle</th>
+                            <th>Focus</th>
+                            <th>What It Means</th>
+                            <th>Examples</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Multiple Means of Engagement</strong></td>
+                            <td>The <em>why</em> of learning</td>
+                            <td>Offering choice, relevance, and connection to motivate all learners</td>
+                            <td>Varied examples, culturally responsive content, student choice in topics</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Multiple Means of Representation</strong></td>
+                            <td>The <em>what</em> of learning</td>
+                            <td>Presenting content in varied formats so every learner can access it</td>
+                            <td>Text, audio, visual, interactive materials; glossaries; transcripts</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Multiple Means of Action and Expression</strong></td>
+                            <td>The <em>how</em> of learning</td>
+                            <td>Allowing students to demonstrate understanding in different ways</td>
+                            <td>Choice in assessment formats, scaffolded tasks, clear success criteria</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h4>Where GenAI Fits</h4>
+                <p>Generative AI tools can act as a time-saving co-designer, helping you produce multiple versions of your content without tripling your workload. Research confirms that GenAI can support UDL implementation by rapidly generating alternative formats, inclusive language checks, leveled texts, glossaries, and culturally responsive materials.</p>
+                
+                <div class="success-criteria">
+                    <h4>⚠️ A Note on Limitations</h4>
+                    <p>GenAI models are predominantly trained on Western, English-language datasets. Their outputs can reproduce cultural biases and may not reflect diverse student contexts. <strong>Always review and edit AI-generated content.</strong> Your contextual knowledge of your students is irreplaceable.</p>
+                </div>
+
+                <h3 id="ethical-use">Ethical and Responsible Use of GenAI</h3>
+                
+                <h4>What GenAI Cannot Do</h4>
+                <p>GenAI tools are powerful co-designers, but they have important limitations that matter especially in the context of inclusion:</p>
+                
+                <ul>
+                    <li>They may reproduce <strong>biases</strong> from their training data, including racial, gender, cultural, and ableist biases</li>
+                    <li>They cannot <strong>know your students</strong> — you provide that contextual knowledge</li>
+                    <li>They may produce <strong>culturally homogenised</strong> content that centres Western norms by default</li>
+                    <li>They may <strong>hallucinate</strong> facts, names, or references, especially in less-documented areas</li>
+                    <li>They raise <strong>data privacy concerns</strong> — never input identifiable student data or confidential university content</li>
+                </ul>
+
+                <h4>Ethical Prompt Checklist</h4>
+                <p>Before sharing any AI-generated content with students, ask yourself:</p>
+                
+                <table role="table" aria-label="Ethical checklist for AI-generated content">
+                    <caption class="sr-only">Questions to ask before using AI-generated content with students</caption>
+                    <thead>
+                        <tr>
+                            <th>Question</th>
+                            <th>Why It Matters</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Have I reviewed this output for accuracy?</td>
+                            <td>AI can hallucinate facts, especially in specialized domains</td>
+                        </tr>
+                        <tr>
+                            <td>Have I checked for cultural biases or assumptions?</td>
+                            <td>AI often defaults to Western, English-speaking perspectives</td>
+                        </tr>
+                        <tr>
+                            <td>Have I verified named references, statistics, or examples?</td>
+                            <td>AI may generate plausible but false citations</td>
+                        </tr>
+                        <tr>
+                            <td>Have I ensured no student data was used in my prompts?</td>
+                            <td>Privacy and GDPR compliance requirements</td>
+                        </tr>
+                        <tr>
+                            <td>Does this content reflect my academic judgement?</td>
+                            <td>You remain responsible for pedagogic decisions</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h4>Being Transparent with Students</h4>
+                <p>The University encourages transparency about GenAI use in course design. Consider adding a brief statement to your module guide:</p>
+                
+                <div class="code-container">
+                    <button class="copy-button" onclick="copyCode(this)">Copy</button>
+                    <pre><code><strong>Example Transparency Statement:</strong>
+
+"Some elements of this module — including glossaries, reading level summaries, 
+and accessibility notes — have been created with the assistance of Generative AI tools 
+and reviewed by the module coordinator. If you notice any errors or cultural 
+inaccuracies, please let us know."</code></pre>
+                </div>
+
+                <h4>Prompt for Identifying AI Bias</h4>
+                <div class="code-container">
+                    <button class="copy-button" onclick="copyCode(this)">Copy</button>
+                    <pre><code>The following text was generated by an AI tool for use in a university module.
+Critically evaluate it for:
+- Potential cultural biases (whose perspectives are centred?)
+- Assumptions about the 'default' student (which student is implicitly imagined?)
+- Any language that may inadvertently disadvantage or exclude certain groups
+- Any factual claims that should be verified independently
+
+[PASTE AI-GENERATED TEXT HERE]</code></pre>
+                </div>
+
+                <p><em>This prompt uses AI to interrogate AI — a useful quality-assurance step.</em></p>
+<h3 id="uog-policy">Responsible use in teaching and learning</h3>
+<p>The University of Glasgow supports responsible and transparent use of Generative AI in teaching, learning, and research. In a learning and teaching context, that means using AI to assist thoughtful design rather than outsourcing professional responsibility. GenAI models are predominantly trained on Western, English-language datasets. Their outputs can reproduce cultural biases and may not reflect diverse student contexts. Always review and edit AI-generated content. Your contextual knowledge of your students is irreplaceable.</p>
+
+<ul>
+    <li>✅ <strong>Be transparent:</strong> Make clear when GenAI has supported your material design or redrafting.</li>
+    <li>✅ <strong>Check accuracy:</strong> Review outputs for subject correctness, clarity, and institutional alignment.</li>
+    <li>✅ <strong>Protect privacy:</strong> Never place identifiable student, staff, or assessment data into public tools.</li>
+    <li>✅ <strong>Keep professional control:</strong> Use AI to assist your teaching practice, not to replace pedagogic judgment.</li>
+    <li>✅ <strong>Use approved tools where possible:</strong> Prefer secure, institutionally supported platforms.</li>
+    <li>❌ <strong>Avoid uncritical reuse:</strong> Do not lift AI output into teaching materials without checking bias, tone, and accessibility.</li>
+</ul>
+
+
+<div class="success-criteria">
+    <h4>Quick check before you use AI output</h4>
+    <ul>
+        <li>Have I checked the output against disciplinary expectations and current guidance?</li>
+        <li>Have I removed any confidential, personal, or assessment-sensitive information?</li>
+        <li>Have I reviewed this material for accessibility and inclusive language?</li>
+        <li>Would I be comfortable explaining how AI was used to a colleague or student?</li>
+    </ul>
+</div>
+
+                <h2 class="workflow-header" id="prompt-writing">Why design for inclusion from the start?</h2>
+
+                <h3>From retrofit to inclusive-by-design practice</h3>
+                <p>Many teaching materials become inaccessible because accessibility is treated as a final compliance check rather than a design principle. GenAI can help staff build alternative explanations, clearer structure, multiple formats, and plain-language supports earlier in the process.</p>
+
+                <blockquote>
+                    <p>Inclusive design is more efficient when it is built into the first draft. GenAI is useful when it helps you generate options, not just speed.</p>
+                </blockquote>
+
+                <h4>Where GenAI can help</h4>
+
+                <p>In practice, GenAI can help you:</p>
+                <ul>
+                    <li>rewrite dense slides into clearer teaching notes</li>
+                    <li>generate alternative formats such as summaries, glossaries, or transcript-ready text</li>
+                    <li>identify barriers in an assessment brief or online learning page</li>
+                    <li>produce multiple versions of the same concept for different entry points into learning</li>
+                </ul>
+
+                <h4>Inclusive-by-design compared with retrofit practice</h4>
+
+                <table role="table" aria-label="Comparison of retrofit and inclusive-by-design approaches to teaching materials">
+                    <caption class="sr-only">This table compares a retrofit approach with an inclusive-by-design approach when creating teaching materials with Generative AI.</caption>
+                    <thead>
+                        <tr>
+                            <th>Approach</th>
+                            <th>Typical staff workflow</th>
+                            <th>Likely student experience</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Retrofit</td>
+                            <td>Create the main material first, then add captions, alt text, summaries, and clarifications later if time allows.</td>
+                            <td>Students encounter uneven access, inconsistent structure, and fewer options for engaging with the content.</td>
+                        </tr>
+                        <tr>
+                            <td>Inclusive by design</td>
+                            <td>Use AI prompts that request clarity, structure, multiple representations, and accessibility features as part of the first draft.</td>
+                            <td>Students get clearer pathways into the material and more than one way to engage, prepare, and respond.</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h3 id="frameworks">Prompt foundations for academic staff</h3>
+                <p>A strong prompt tells the AI what you are trying to teach, who the learners are, what barriers you want to reduce, and what form the output should take.</p>
+                <p>These prompt ingredients are useful across disciplines:</p>
+
+                <table role="table" aria-label="Prompt ingredients for university teaching staff using Generative AI">
+                    <caption class="sr-only">This table describes practical prompt ingredients for academic staff using Generative AI to create inclusive and accessible teaching materials.</caption>
+                    <thead>
+                        <tr>
+                            <th>Prompt ingredient</th>
+                            <th>What to specify</th>
+                            <th>Cross-discipline example</th>
+                            <th>Useful for</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Audience</strong></td>
+                            <td>Who the material is for, including level and likely prior knowledge</td>
+                            <td>"First-year students encountering theory-heavy reading for the first time"</td>
+                            <td>Making explanations and examples more appropriately pitched</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Teaching purpose</strong></td>
+                            <td>What the material is meant to do in the learning sequence</td>
+                            <td>"This is a pre-seminar guide intended to prepare students for discussion"</td>
+                            <td>Aligning outputs with learning design rather than generic content generation</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Barriers to reduce</strong></td>
+                            <td>Which access, comprehension, or participation barriers to address</td>
+                            <td>"Reduce jargon load, add structure, and provide an alternative to a dense PDF"</td>
+                            <td>Embedding inclusion and accessibility from the first draft</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Output format</strong></td>
+                            <td>What form the response should take</td>
+                            <td>"Produce slide text, speaker notes, alt text, and a 150-word student summary"</td>
+                            <td>Generating reusable materials across different teaching formats</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Quality criteria</strong></td>
+                            <td>
+                                State expectations such as readability, tone, accessibility, or alignment with policy
+                            </td>
+                            <td>"Use plain language, clear headings, and include a short glossary for unfamiliar terms"</td>
+                            <td>Improving consistency and accessibility in AI outputs</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- ACCESSIBILITY TAB -->
+            <div id="accessibility-tab" class="tab-content" role="tabpanel" aria-labelledby="accessibility-tab-button" aria-hidden="true">
+                <h2 class="workflow-header">♿ UDL, Inclusion, and Accessibility</h2>
+
+                <h3 id="accessibility-overview">What does an inclusive university environment look like?</h3>
+                <p>An inclusive university environment is one in which students can access information, participate in learning, and demonstrate understanding without avoidable barriers created by format, language, assumptions, or inflexible teaching design.</p>
+
+                <blockquote>
+                    <p><strong>Accessibility is both a legal and pedagogic responsibility.</strong> Under the Equality Act 2010, higher education providers must make reasonable adjustments. In practice, inclusive learning design means planning for learner diversity before barriers appear.</p>
+                </blockquote>
+
+                <div class="success-criteria">
+                    <h4>Characteristics of an inclusive learning environment</h4>
+                    <ul>
+                        <li>✅ Learning materials are structured, readable, and navigable.</li>
+                        <li>✅ Students have more than one way to access key ideas and instructions.</li>
+                        <li>✅ Activities and assessments do not rely on hidden assumptions about confidence, background, or mode of participation.</li>
+                        <li>✅ Accessibility features such as captions, alt text, headings, and descriptive links are built in as standard practice.</li>
+                        <li>✅ Staff give clear expectations, routes to support, and enough guidance for students to act on feedback.</li>
+                    </ul>
+                </div>
+
+                <h3 id="wcag-integration">The UDL framework in practice</h3>
+                <p>Universal Design for Learning helps staff design courses and materials that provide multiple ways for students to access, engage with, and respond to learning. GenAI is especially useful when it helps you generate options across these three dimensions.</p>
+
+                <table role="table" aria-label="Universal Design for Learning principles and teaching applications">
+                    <caption class="sr-only">This table explains the three UDL principles and shows how Generative AI can support staff in applying them to teaching materials.</caption>
+                    <thead>
+                        <tr>
+                            <th>UDL principle</th>
+                            <th>What it means</th>
+                            <th>What it looks like in teaching materials</th>
+                            <th>How GenAI can help</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Multiple means of representation</strong></td>
+                            <td>Students can encounter ideas in more than one form.</td>
+                            <td>Structured notes, glossaries, diagrams with alt text, transcripts, summaries, and chunked explanations.</td>
+                            <td>Generate alternative explanations, simplify complex wording, draft captions, or convert lecture notes into summary sheets.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Multiple means of engagement</strong></td>
+                            <td>Students have more than one route into participation and motivation.</td>
+                            <td>Choice of examples, staged activities, clear relevance, low-stakes preparation tasks, and varied discussion formats.</td>
+                            <td>Draft scenario-based questions, discussion prompts, preparatory tasks, and options for individual or group engagement.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Multiple means of action and expression</strong></td>
+                            <td>Students can demonstrate learning in different, well-supported ways.</td>
+                            <td>Clear rubrics, scaffolded tasks, alternative formats where appropriate, and explicit success criteria.</td>
+                            <td>Redraft assessment guidance, create step-by-step submission guidance, and generate model structures or checklists.</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h4>AI prompting for UDL-aligned and accessible content</h4>
+                <div class="code-container">
+                    <button class="copy-button" onclick="copyCode(this)">Copy</button>
+                    <pre><code><strong>Inclusive Design Prompt:</strong>
+
+You are supporting a university lecturer to redesign a teaching resource so it is more inclusive and accessible.
+
+Resource type: [lecture slides / Moodle page / reading guide / assessment brief / seminar worksheet]
+Audience: [student level and discipline]
+Purpose: [what the resource is meant to help students do]
+
+Please revise the material so it:
+- aligns with UDL by offering multiple means of representation, engagement, and action/expression
+- uses clear structure with headings, short sections, and signposting
+- identifies specialist terminology and adds short explanations where needed
+- suggests alternatives to dense text, such as summary bullets, glossary items, examples, or short activities
+- includes accessibility features such as descriptive alt text, captions/transcript guidance, descriptive links, and readable formatting
+- preserves academic rigor while improving clarity
+
+Output format:
+1. Short diagnosis of barriers in the original material
+2. Revised version of the material
+3. Accessibility and UDL improvements made
+4. Optional alternative format ideas for students who need different entry points</code></pre>
+                </div>
+
+                <h3 id="content-audit">Auditing barriers in teaching materials</h3>
+                <p>GenAI can also be used as a structured reviewer. This is useful for checking whether a worksheet, slide deck, reading guide, or assessment brief creates avoidable barriers for students.</p>
+
+                <div class="code-container">
+                    <button class="copy-button" onclick="copyCode(this)">Copy</button>
+                    <pre><code><strong>Barrier Audit Prompt:</strong>
+
+Review this teaching material for barriers to inclusion and accessibility.
+
+[Paste the material here]
+
+Analyse it under these headings:
+
+1. Structure and readability
+- Is the hierarchy of headings clear?
+- Are instructions easy to follow?
+- Are there overly dense sections or unexplained terms?
+
+2. Representation
+- Does the material rely on a single format?
+- Where could summary, example, glossary, visual description, or transcript-style support help?
+
+3. Engagement
+- Does the material assume one kind of learner confidence, prior knowledge, or participation style?
+- Where could choice, scaffolding, or staged activities help?
+
+4. Accessibility
+- Identify likely issues involving alt text, captions, descriptive links, contrast, keyboard access, and document structure.
+
+5. Priority improvements
+- List the three most important changes staff should make first and explain why.</code></pre>
+                </div>
+
+                <h3 id="technology-tools">What accessible teaching materials look like</h3>
+                <p>Accessible materials are not only technically compliant. They are also easier to navigate, easier to prepare from, and clearer for students using a wide range of devices, software, and study strategies.</p>
+
+                <h4>Examples across common teaching resources</h4>
+                <table role="table" aria-label="Examples of accessible teaching material features and AI support">
+                    <caption class="sr-only">This table lists common teaching resources, the features that make them more inclusive and accessible, and how Generative AI can support staff to produce them.</caption>
+                    <thead>
+                        <tr>
+                            <th>Teaching resource</th>
+                            <th>Inclusive and accessible features</th>
+                            <th>How GenAI can support staff</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Lecture slides</td>
+                            <td>Reduced text density, clear headings, descriptive visuals, speaker notes, and a downloadable summary.</td>
+                            <td>Redraft slide text, generate summary notes, and suggest alt text or diagram descriptions.</td>
+                        </tr>
+                        <tr>
+                            <td>Reading lists and preparatory reading guides</td>
+                            <td>Context for why readings matter, key questions, glossary support, and estimated workload.</td>
+                            <td>Create plain-language reading guides, discussion questions, and keyword summaries.</td>
+                        </tr>
+                        <tr>
+                            <td>Assessment briefs</td>
+                            <td>Clear task wording, success criteria, staged instructions, and examples of what is expected.</td>
+                            <td>Reformat dense briefs, draft checklists, and identify ambiguous instructions.</td>
+                        </tr>
+                        <tr>
+                            <td>Seminar or lab activities</td>
+                            <td>Step-by-step sequencing, alternatives for participation, clear timings, and concise instructions.</td>
+                            <td>Generate activity instructions in multiple formats and create facilitation prompts.</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h3 id="practical-exercises">Reflection activity</h3>
+
+                <div class="exercise-box">
+                    <h4>Exercise: identify a barrier in one of your materials</h4>
+                    <p><strong>Challenge:</strong> Think of a lecture slide deck, Moodle page, reading guide, or assessment brief that students often find hard to navigate or interpret.</p>
+
+                    <p><strong>Your task:</strong> Write a prompt asking GenAI to identify the main barriers and propose an inclusive, UDL-aligned revision.</p>
+                    <label for="textarea-accessible-protocol" class="field-label">Draft your barrier-audit prompt</label>
+                    <textarea id="textarea-accessible-protocol" placeholder="Write your accessibility and UDL-focused prompt here..." aria-describedby="status-accessible-protocol"></textarea>
+                    <div class="notes-status" id="status-accessible-protocol" role="status" aria-live="polite"></div>
+                </div>
+
+                <h3 id="language-inclusion">Inclusive communication for multilingual cohorts</h3>
+                <p>Many students in UK universities are learning through English as an additional language. A common barrier is not a lack of ability, but differences in how key words are interpreted across disciplines, cultures, and educational backgrounds.</p>
+                <p>GenAI can help lecturers check whether assessment briefs and lecture materials are clear, unambiguous, and interpreted as intended by students who may map terms differently.</p>
+
+                <div class="success-criteria">
+                    <h4>Where misunderstandings often happen</h4>
+                    <ul>
+                        <li>Words with discipline-specific meanings such as "critical", "evaluate", "discuss", or "analyse".</li>
+                        <li>Implicit expectations not explained in the brief, for example assumed structure, tone, or evidence standards.</li>
+                        <li>Fast transitions between abstract theory and applied tasks without signposting.</li>
+                        <li>Lecture slides that introduce many new terms without short definitions or examples.</li>
+                    </ul>
+                </div>
+
+                <div class="code-container">
+                    <button class="copy-button" onclick="copyCode(this)">Copy</button>
+                    <pre><code><strong>Prompt for clarity checking across language backgrounds:</strong>
+
+You are helping a university lecturer review an assessment brief for a linguistically diverse student cohort in a UK university.
+
+Task:
+1. Identify words or phrases that could be interpreted differently by students for whom English is not their first language.
+2. Explain at least two likely interpretations for each flagged term.
+3. Rewrite the brief to preserve academic standards while making expectations explicit.
+4. Add a short glossary of key terms used in the brief.
+5. Add a student-facing checklist that clarifies what a strong submission should include.
+
+Output format:
+- Ambiguous terms table (term, possible interpretations, risk)
+- Revised brief
+- Glossary
+- Submission checklist</code></pre>
+                </div>
+
+                <label for="textarea-language-inclusive" class="field-label">Draft your own prompt to check language clarity in a brief or lecture resource</label>
+                <textarea id="textarea-language-inclusive" placeholder="Write your multilingual-inclusion prompt here..." aria-describedby="status-language-inclusive"></textarea>
+                <div class="notes-status" id="status-language-inclusive" role="status" aria-live="polite"></div>
+
+                <details>
+                    <summary>Resources for UDL and accessibility</summary>
+                    <ul>
+                        <li><a href="https://www.gla.ac.uk/myglasgow/disability/" target="_blank">University of Glasgow Disability Service</a></li>
+                        <li><a href="https://udlguidelines.cast.org/" target="_blank" rel="noopener">CAST UDL Guidelines</a></li>
+                        <li><a href="https://www.w3.org/WAI/WCAG21/quickref/" target="_blank">WCAG 2.1 Quick Reference</a></li>
+                        <li><a href="https://webaim.org/resources/contrastchecker/" target="_blank">WebAIM Color Contrast Checker</a></li>
+                        <li><a href="https://www.nvaccess.org/download/" target="_blank">NVDA Screen Reader (Free)</a></li>
+                    </ul>
+                </details>
+            </div>
+
+            <!-- WORKFLOW 1 TAB -->
+            <div id="workflow1-tab" class="tab-content" role="tabpanel" aria-labelledby="workflow1-tab-button" aria-hidden="true">
+                <h2 class="workflow-header">🧠 Designing Teaching Materials with GenAI (Learn by Doing)</h2>
+
+                <h3>Workflow overview</h3>
+                
+                <p><strong>Key outcome:</strong> Use prompt design strategically so GenAI produces teaching materials that are clear, inclusive, and genuinely useful in higher education contexts.</p>
+
+        <h3 id="three-frameworks">Prompt patterns for inclusive material design</h3>
+
+        <h4>Pattern 1: Persona, task, context, and format</h4>
+        
+        <p><strong>What it is:</strong> A simple way to tell AI who it is helping, what needs to be produced, what learning context matters, and what kind of output you want.</p>
+        
+        <p><strong>Why it works in learning and teaching:</strong> It reduces generic outputs and makes it easier to ask for discipline-aware, student-ready materials with the right structure and tone.</p>
+
+        <div class="code-container">
+            <button class="copy-button" onclick="copyCode(this)">Copy</button>
+            <pre><code><strong>Prompt Pattern:</strong>
+You are supporting a university lecturer.
+
+Task: Redesign this [resource type].
+Context: [module level, student cohort, teaching week, learning outcome].
+Priority: Improve clarity, inclusion, and accessibility.
+Format: Return the result as [slides / summary sheet / Moodle page / checklist / seminar guide].
+
+Also include:
+- where students may encounter barriers
+- what changes were made to reduce those barriers
+- one alternative format for the same content</code></pre>
+        </div>
+
+        <h4>Pattern 2: Ask for alternatives, not just one version</h4>
+        <p><strong>What it is:</strong> A prompt approach that asks the model to produce more than one representation or pathway into the same idea.</p>
+        <p><strong>Why it works:</strong> It maps directly to UDL and helps you avoid designing only for confident, fast-reading, text-oriented learners.</p>
+
+        <div class="code-container">
+            <button class="copy-button" onclick="copyCode(this)">Copy</button>
+            <pre><code><strong>Prompt Pattern:</strong>
+Using the material below, produce three versions of the same concept:
+1. A concise student-facing explanation in plain language
+2. A more detailed academic explanation with key terminology
+3. A seminar activity or discussion prompt that helps students apply the concept
+
+For each version, note how it supports a different route into learning.</code></pre>
+        </div>
+
+        <h4>Pattern 3: Critique, then improve</h4>
+        <p><strong>What it is:</strong> Ask GenAI to identify barriers before it rewrites the material.</p>
+        <p><strong>Why it works:</strong> This reduces the chance of superficial polishing and encourages more thoughtful revision.</p>
+
+        <div class="code-container">
+            <button class="copy-button" onclick="copyCode(this)">Copy</button>
+            <pre><code><strong>Prompt Pattern:</strong>
+First, identify the main barriers in this teaching material.
+Then revise it.
+
+Evaluate:
+- clarity of instructions
+- structure and signposting
+- unnecessary jargon
+- assumptions about prior knowledge
+- accessibility features that are missing
+
+After the critique, produce a revised version and explain the changes.</code></pre>
+        </div>
+
+        <h3 id="hands-on-scenario">Scenario: redesigning a weekly teaching pack</h3>
+        
+        <div class="exercise-box">
+            <h4>Your challenge: redesign a week 3 teaching pack for a large undergraduate module.</h4>
+            
+            <p><strong>Current problem:</strong> The resource pack contains text-heavy slides, a dense reading list, and a short assessment brief that students often misinterpret.</p>
+            <p><strong>Redesign goals:</strong></p>
+            <ul>
+                <li>Make the weekly expectations clearer</li>
+                <li>Provide more than one route into key concepts</li>
+                <li>Reduce unnecessary reading and navigation barriers</li>
+                <li>Preserve academic standards while making the material easier to use</li>
+            </ul>
+        </div>
+
+        <h4 id="exercise1">Exercise: rewrite a teaching prompt</h4>
+        
+        <p><strong>Standard prompt (ineffective):</strong></p>
+        <div class="code-container">
+            <button class="copy-button" onclick="copyCode(this)">Copy</button>
+            <pre><code>Make this week 3 teaching pack better.</code></pre>
+        </div>
+
+        <p><strong>Your task:</strong> Rewrite this so the AI understands the learners, the teaching purpose, the barriers to reduce, and the output formats you need.</p>
+
+        <div class="code-container">
+            <button class="copy-button" onclick="copyCode(this)">Copy</button>
+            <pre><code><strong>Template to complete:</strong>
+You are assisting a university lecturer to redesign a weekly teaching pack.
+
+Audience: [who the students are]
+Learning context: [module, week, topic, and what students need to do]
+Known barriers: [for example dense slides, unclear task wording, heavy jargon, too much reading]
+
+Please:
+1. identify the main barriers in the current material
+2. redesign it using UDL-informed principles
+3. produce:
+   - a concise slide outline
+   - a student summary sheet
+   - a short reading guide
+   - one optional activity for seminar preparation
+4. include accessibility features such as headings, descriptive links, and alternative text suggestions where relevant
+
+Keep the academic level appropriate and explain the design decisions briefly.</code></pre>
+        </div>
+
+        <p><strong>Practice space:</strong></p>
+        <label for="textarea-exercise1" class="field-label">Draft your teaching-material redesign prompt</label>
+        <textarea id="textarea-exercise1" placeholder="Write your prompt for redesigning a teaching material here..." aria-describedby="status-exercise1"></textarea>
+        <div class="notes-status" id="status-exercise1" role="status" aria-live="polite"></div>
+
+        <details>
+            <summary>View solution example</summary>
+            <div class="code-container">
+                <button class="copy-button" onclick="copyCode(this)">Copy</button>
+                <pre><code>You are assisting a university lecturer to redesign a week 3 teaching pack for first-year students.
+
+Audience: A mixed cohort with varied prior knowledge and confidence in academic reading.
+Learning context: Students need to prepare for a seminar by understanding key concepts, completing a reading, and arriving ready to contribute.
+Known barriers: text-heavy slides, unclear weekly tasks, too many unexplained terms, and no short overview of what matters most.
+
+Please:
+1. identify the main barriers in the current pack
+2. redesign it using UDL-informed principles
+3. produce:
+   - a concise 6-slide outline with speaker notes
+   - a 200-word student summary sheet
+   - a reading guide with 3 focus questions and a mini glossary
+   - one optional low-stakes preparation task
+4. include accessibility features such as heading structure, descriptive link text, and alt text suggestions for any visuals
+
+Preserve the academic intent of the original material and explain the design decisions in a short final note.</code></pre>
+            </div>
+        </details>
+
+        <h4>Pattern 4: Bias and inclusion check</h4>
+    <p><strong>What it is:</strong> A prompt that asks the model to review examples, language, and assumptions for exclusion or imbalance.</p>
+    <p><strong>Why it matters:</strong> AI outputs can reproduce narrow cultural, disciplinary, or normative assumptions unless you ask for a critical check.</p>
+
+    <div class="code-container">
+        <button class="copy-button" onclick="copyCode(this)">Copy</button>
+        <pre><code><strong>Prompt Pattern:</strong>
+Review this draft teaching material for bias, exclusion, and hidden assumptions.
+
+Check for:
+- examples that assume a narrow cultural or social norm
+- language that may alienate or unnecessarily position students as deficient
+- instructions that assume confidence, prior knowledge, or access to specific technology
+- missing routes for students who need alternatives
+
+Suggest revisions that improve inclusion without making the material vague.</code></pre>
+    </div>
+
+    <h3>Pattern 5: Few-shot prompting for consistency</h3>
+    <p><strong>What it is:</strong> Provide short examples of the tone or structure you want, then ask GenAI to follow them.</p>
+    <p><strong>Why it works in education:</strong> It helps when you want consistent student-facing language across weekly materials, module pages, and assessment guidance.</p>
+
+    <div class="code-container">
+        <button class="copy-button" onclick="copyCode(this)">Copy</button>
+        <pre><code><strong>Example style prompt:</strong>
+Here are two examples of the tone I want for weekly student guidance:
+
+Example 1:
+This week introduces the core concept and shows how it will be used later in the module. Start with the short overview, then complete the reading guide before the seminar.
+
+Example 2:
+Focus on the key terms in bold and use the glossary if any are unfamiliar. You do not need to master every detail before class; come ready with one question and one example.
+
+Now rewrite the following module page in the same tone: [paste content]</code></pre>
+    </div>
+
+    <h3 id="integrated-practice">Integrated prompts and activities while you design</h3>
+    <p><strong>Key outcome:</strong> Practise prompt design as you build materials, instead of separating "learning" from "activity".</p>
+
+    <h3 id="activity-transform">Activity 1: Transform a dense slide deck</h3>
+    <p><strong>Task:</strong> Transform an existing lecture slide deck into a more usable learning set using GenAI.</p>
+    <ul>
+        <li>Reduce text density and improve structure.</li>
+        <li>Build accessibility and inclusion into the first revision.</li>
+        <li>Create support materials for students who need different entry points.</li>
+    </ul>
+
+    <h4>Prompting for transformation</h4>
+    <div class="code-container">
+        <button class="copy-button" onclick="copyCode(this)">Copy</button>
+        <pre><code><strong>Transformation Prompt:</strong>
+
+Revise the following teaching material to create a more inclusive and accessible learning resource.
+
+SOURCE MATERIAL:
+[Paste your slide text, Moodle content, handout, or assessment guidance here]
+
+TRANSFORMATION GOALS:
+- reduce unnecessary text density
+- improve heading structure and signposting
+- identify where examples, glossary support, or summaries would help
+- include accessibility features such as alt text guidance, descriptive links, and caption/transcript notes where relevant
+- suggest one low-stakes interactive element that supports engagement without excluding quieter or less confident students
+
+OUTPUT FORMAT:
+1. Revised content
+2. Student-facing summary
+3. Accessibility and UDL improvements
+4. Optional follow-up activity</code></pre>
+    </div>
+
+    <h3 id="activity-alternatives">Activity 2: Build alternatives from one source</h3>
+    <p><strong>Your task:</strong> Use one source document and ask GenAI to create several complementary versions of it.</p>
+    <ul>
+        <li>A student summary for pre-class preparation.</li>
+        <li>A seminar prompt sheet.</li>
+        <li>A glossary of key terms.</li>
+        <li>Speaker notes or transcript-ready text.</li>
+    </ul>
+
+    <h4>Prompt template for multi-format outputs</h4>
+    <div class="code-container">
+        <button class="copy-button" onclick="copyCode(this)">Copy</button>
+        <pre><code><strong>Multi-format Prompt:</strong>
+
+Using the source material below, create four aligned outputs for students:
+1. A 150-word overview
+2. A bullet-point preparation checklist
+3. A mini glossary of 5 to 8 terms
+4. Two seminar discussion prompts
+
+Keep the outputs consistent with each other, use clear language, and avoid removing important academic concepts.</code></pre>
+    </div>
+
+    <h3 id="activity-language">Activity 3: Language interpretation check for assessment and lecture materials</h3>
+    <div class="exercise-box">
+        <h4>Prompt studio reflection for multilingual classrooms</h4>
+        <p><strong>Challenge:</strong> Select one assessment brief or lecture resource and identify where wording could be interpreted differently across language backgrounds.</p>
+        <label for="textarea-student-journey" class="field-label">Draft a prompt that checks for ambiguous terms, implicit assumptions, and unclear instructions</label>
+        <textarea id="textarea-student-journey" placeholder="Write your language-clarity review prompt here..." aria-describedby="status-student-journey"></textarea>
+        <div class="notes-status" id="status-student-journey" role="status" aria-live="polite"></div>
+    </div>
+
+    <details>
+        <summary>Facilitator debrief prompts</summary>
+        <ul>
+            <li>Which terms were interpreted in multiple ways by the AI review?</li>
+            <li>Which changes improved clarity without lowering academic expectations?</li>
+            <li>How will you check language clarity earlier in your design process next time?</li>
+        </ul>
+    </details>
+            </div>
+
+            <!-- CONTENT CREATION TAB -->
+            <div id="content-creation-tab" class="tab-content" role="tabpanel" aria-labelledby="content-creation-tab-button" aria-hidden="true">
+                <h2 class="workflow-header">📝 Creating Accessible Content & Multiple Versions</h2>
+                
+                <blockquote>
+                    <p class="center">Rather than providing a single version of content and asking students who struggle to seek individual support, inclusive-by-design means offering <strong>layered access</strong> from the outset.</p>
+                    <p>GenAI makes producing multiple versions of the same content much faster — reducing this from hours to minutes.</p>
+                </blockquote>
+
+                <h3 id="accessible-content">Making Content Accessible to All</h3>
+                <p>Accessible content means that your lecture slides, reading lists, handouts, and course materials can be used by students regardless of disability, neurodivergence, reading level, or prior familiarity with the subject. Under the University's Accessible & Inclusive Learning Policy, teaching materials should be available to students <strong>in advance</strong> — at least 24 hours before a session, with core reading lists available four weeks before the course begins.</p>
+
+                <h4>Prompt Bank: Accessible Materials</h4>
+                
+                <h5>1. Checking a document for accessibility issues</h5>
+                <div class="code-container">
+                    <button class="copy-button" onclick="copyCode(this)">Copy</button>
+                    <pre><code>You are an accessibility specialist in higher education.
+Review the following [lecture notes / handout / slide transcript / assessment brief]
+and identify any potential barriers for:
+- Students with dyslexia or reading difficulties
+- Students with visual impairments using screen readers
+- Neurodiverse students (e.g., ADHD, autism)
+- Students who are English as an Additional Language (EAL) learners
+
+For each barrier identified, suggest a specific, actionable improvement.
+
+[PASTE YOUR CONTENT HERE]</code></pre>
+                </div>
+
+                <p><strong>What to look for in the response:</strong> Check that suggestions are practical, not generic. Ask follow-up questions such as <em>"Can you rewrite paragraph 3 using your suggestions?"</em></p>
+
+                <h5>2. Creating plain language summaries</h5>
+                <div class="code-container">
+                    <button class="copy-button" onclick="copyCode(this)">Copy</button>
+                    <pre><code>Rewrite the following [academic text / reading / lecture section] in plain language
+suitable for a student encountering this topic for the first time.
+- Use short sentences (under 20 words where possible)
+- Avoid jargon; where technical terms are unavoidable, define them immediately
+- Use active voice
+- Keep the core academic content intact
+
+[PASTE YOUR CONTENT HERE]</code></pre>
+                </div>
+
+                <h5>3. Generating alt text for images</h5>
+                <div class="code-container">
+                    <button class="copy-button" onclick="copyCode(this)">Copy</button>
+                    <pre><code>Act as an accessibility expert. Provide descriptive alt text for the following image
+that I intend to use in a university course on [subject].
+The image shows: [describe what you see]
+The educational purpose of this image is: [what concept it illustrates]
+Follow WCAG 2.1 standards. The alt text will be read aloud by a screen reader
+to a student who cannot see the image.</code></pre>
+                </div>
+
+                <p><strong>⚠️ Important:</strong> Always review AI-generated alt text against your actual image. GenAI cannot see your image unless you upload it to a multimodal tool — provide detailed context in your prompt.</p>
+
+                <h3 id="multiple-versions">Creating Multiple Versions of the Same Content</h3>
+                
+                <h4>Prompt Bank: Differentiated Content</h4>
+                
+                <h5>1. Creating leveled reading versions</h5>
+                <div class="code-container">
+                    <button class="copy-button" onclick="copyCode(this)">Copy</button>
+                    <pre><code>Act as an experienced educational content designer.
+Take the following source text on [topic] and rewrite it into THREE versions:
+
+Version A — Accessible entry level: short sentences, everyday vocabulary,
+key terms defined in brackets, concrete examples from everyday life.
+
+Version B — Standard university level: appropriate academic vocabulary,
+assumes A-level or equivalent background knowledge.
+
+Version C — Advanced extension: assumes familiarity with the discipline,
+uses technical terminology, makes connections to wider debates in the field.
+
+Keep the core concepts consistent across all three versions.
+Do NOT change the title or formatting — all versions should look identical
+except for the text itself, to avoid stigma.
+
+[PASTE YOUR SOURCE TEXT HERE]</code></pre>
+                </div>
+
+                <p><strong>Why three versions look identical:</strong> Ensuring identical formatting across leveled versions prevents stigma — the differentiation should be in the content, not the appearance.</p>
+
+                <h5>2. Creating a tiered glossary</h5>
+                <div class="code-container">
+                    <button class="copy-button" onclick="copyCode(this)">Copy</button>
+                    <pre><code>From the following [lecture transcript / reading / module overview], create a glossary
+of key terms. Organise it into two tiers:
+
+Tier 1 — Core terms: every student needs to understand these.
+Define them in plain, accessible language (max 2 sentences each).
+
+Tier 2 — Extension terms: for students wanting deeper understanding.
+Define these with academic precision and cross-references to related concepts.
+
+[PASTE YOUR CONTENT HERE]</code></pre>
+                </div>
+
+                <h5>3. Creating visual/audio descriptions of concepts</h5>
+                <div class="code-container">
+                    <button class="copy-button" onclick="copyCode(this)">Copy</button>
+                    <pre><code>Explain the concept of [CONCEPT] in THREE different ways for a university audience:
+
+1. A verbal explanation suitable for a podcast or audio recording
+   (no references to visual elements, vivid descriptive language)
+2. A description of a diagram or visual that could illustrate this concept,
+   suitable for a non-specialist illustrator
+3. A worked example showing the concept applied to a real-world scenario
+   relevant to [discipline/context]</code></pre>
+                </div>
+
+                <div class="exercise-box">
+                    <h4>🔧 Practice Activity: Transform Dense Content</h4>
+                    <p>Choose one core concept from a module you teach. Use the leveled reading prompt to produce three versions. Share all three with a colleague and discuss: which version would they have given to students by default?</p>
+                    
+                    <label for="textarea-content-creation" class="field-label">Practice your content transformation prompt here</label>
+                    <textarea id="textarea-content-creation" placeholder="Write your prompt for creating multiple versions of content..." aria-describedby="status-content-creation"></textarea>
+                    <div class="notes-status" id="status-content-creation" role="status" aria-live="polite"></div>
+                    
+                    <p><strong>Reflection:</strong></p>
+                    <ul>
+                        <li>Which version do you currently use as your default?</li>
+                        <li>What assumptions does that make about your students?</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- ASSESSMENT TAB -->
+            <div id="assessment-tab" class="tab-content" role="tabpanel" aria-labelledby="assessment-tab-button" aria-hidden="true">
+                <h2 class="workflow-header">📋 Inclusive Assessment Design</h2>
+                
+                <blockquote>
+                    <p>Traditional assessment often privileges a narrow set of skills — most commonly formal academic writing under time pressure — that are not always central to demonstrating the intended learning outcome.</p>
+                    <p class="center"><strong>Inclusive assessment design asks: what are we actually trying to assess? And then: what is the most equitable way to assess it?</strong></p>
+                </blockquote>
+
+                <p>The University of Glasgow's Learning Through Assessment (LTA) framework defines inclusive assessment as offering equitable opportunities to learn and be assessed, with diverse assessment types, student choice where possible, and assessment that is embedded in the learning process rather than added at the end.</p>
+
+                <h3 id="assessment-audit">Auditing Existing Assessments</h3>
+                
+                <h4>Prompt Bank: Inclusive Assessments</h4>
+                
+                <h5>1. Auditing an existing assessment brief for inclusivity</h5>
+                <div class="code-container">
+                    <button class="copy-button" onclick="copyCode(this)">Copy</button>
+                    <pre><code>You are an expert in inclusive higher education assessment design.
+Review the following assessment brief for [module/course].
+Identify any elements that may:
+- Disadvantage students with disabilities (e.g., dyslexia, mental health conditions,
+  physical disabilities)
+- Disadvantage EAL / international students
+- Assume cultural knowledge specific to one context
+- Reward a narrow format of expression over the learning outcome itself
+- Create unnecessarily high stakes for a single assessment
+
+For each issue, suggest a specific redesign that preserves the academic rigour
+and learning outcomes.
+
+[PASTE ASSESSMENT BRIEF HERE]</code></pre>
+                </div>
+
+                <h5>2. Generating alternative assessment formats</h5>
+                <div class="code-container">
+                    <button class="copy-button" onclick="copyCode(this)">Copy</button>
+                    <pre><code>The learning outcome I want to assess is:
+[PASTE LEARNING OUTCOME]
+
+The current assessment format is:
+[e.g., 2,000-word essay submitted in Week 10]
+
+Suggest FIVE alternative assessment formats that:
+- Assess the same learning outcome with equal rigour
+- Offer different modes of expression (written, oral, visual, practical)
+- Are feasible within a [small / medium / large] cohort size of [N] students
+- Could be offered as a menu of options where students choose their format
+
+For each suggestion, describe: the task, how it would be submitted, and how
+it could be marked consistently across different format choices.</code></pre>
+                </div>
+
+                <h5>3. Writing an assessment brief that is linguistically accessible</h5>
+                <div class="code-container">
+                    <button class="copy-button" onclick="copyCode(this)">Copy</button>
+                    <pre><code>Rewrite the following assessment brief so that:
+- Instructions are numbered and sequenced (one instruction per line)
+- The task, criteria, word count, deadline, and submission method are in
+  clearly labelled sections
+- Jargon is explained or replaced with plain language
+- Sentences are under 20 words where possible
+- The brief passes a plain language readability test
+
+[PASTE ORIGINAL ASSESSMENT BRIEF HERE]</code></pre>
+                </div>
+
+                <p><strong>Why this matters:</strong> Complex assessment brief language is one of the most common barriers for EAL students and students with dyslexia or processing differences. Simplifying the language of <em>instructions</em> does not simplify the academic task itself.</p>
+
+                <h5>4. Designing formative checkpoints</h5>
+                <div class="code-container">
+                    <button class="copy-button" onclick="copyCode(this)">Copy</button>
+                    <pre><code>I am designing a [module name] module assessed by [final assessment description].
+Suggest THREE low-stakes formative checkpoints that:
+- Give students practice with the skills needed for the final assessment
+- Allow students to demonstrate understanding in different formats
+  (e.g., one written, one verbal/discussion-based, one practical)
+- Provide feedback before the final submission
+- Can be completed by students with different levels of prior knowledge
+
+[ADD ANY CONSTRAINTS: cohort size, delivery mode, subject area]</code></pre>
+                </div>
+
+                <div class="exercise-box">
+                    <h4>🔧 Practice Activity: Assessment Redesign</h4>
+                    <p>Take a current summative assessment brief. Run it through the inclusivity audit prompt. Then generate two alternative formats that assess the same learning outcome.</p>
+                    
+                    <label for="textarea-assessment-design" class="field-label">Practice your assessment redesign prompt here</label>
+                    <textarea id="textarea-assessment-design" placeholder="Write your prompt for redesigning an assessment..." aria-describedby="status-assessment-design"></textarea>
+                    <div class="notes-status" id="status-assessment-design" role="status" aria-live="polite"></div>
+                    
+                    <p><strong>Reflection:</strong></p>
+                    <ul>
+                        <li>Does the original assessment brief privilege certain student groups?</li>
+                        <li>Which redesign option would you most like to pilot?</li>
+                    </ul>
+                </div>
+
+                <h3 id="assessment-alternatives">Alternative Assessment Examples</h3>
+                
+                <table role="table" aria-label="Alternative assessment formats with examples">
+                    <caption class="sr-only">Examples of alternative assessment formats for different learning outcomes</caption>
+                    <thead>
+                        <tr>
+                            <th>Learning Outcome</th>
+                            <th>Traditional Format</th>
+                            <th>Alternative Formats</th>
+                            <th>Inclusive Benefits</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Critically evaluate competing theories</td>
+                            <td>2,000-word essay</td>
+                            <td>Podcast script, annotated bibliography, debate preparation, infographic with rationale</td>
+                            <td>Multiple ways to demonstrate critical thinking; accommodates different communication strengths</td>
+                        </tr>
+                        <tr>
+                            <td>Apply research methods</td>
+                            <td>Research proposal</td>
+                            <td>Video presentation, peer review exercise, method comparison table, mock ethics application</td>
+                            <td>Visual and verbal options; scaffolded practice opportunities</td>
+                        </tr>
+                        <tr>
+                            <td>Synthesize course themes</td>
+                            <td>Final examination</td>
+                            <td>Portfolio with reflection, group presentation, case study analysis, concept mapping</td>
+                            <td>Reduces time pressure; allows for deeper demonstration of understanding</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- EAL SUPPORT TAB -->
+            <div id="eal-support-tab" class="tab-content" role="tabpanel" aria-labelledby="eal-support-tab-button" aria-hidden="true">
+                <h2 class="workflow-header">🌍 Supporting EAL and International Students</h2>
+                
+                <blockquote>
+                    <p>The UK HE student population is linguistically and culturally diverse. International and EAL students bring rich perspectives and intellectual resources, and they also navigate a double challenge: mastering disciplinary content while doing so in an additional language, often within a culturally unfamiliar context.</p>
+                    <p class="center"><strong>Most GenAI models are trained predominantly on Western, English-language datasets.</strong> Your role is to use GenAI to <em>broaden</em> your materials' reach, not to narrow it further.</p>
+                </blockquote>
+
+                <h3 id="cultural-inclusivity">Checking for Cultural Assumptions</h3>
+                
+                <h4>Prompt Bank: EAL and Cultural Inclusivity</h4>
+                
+                <h5>1. Checking for culturally embedded assumptions</h5>
+                <div class="code-container">
+                    <button class="copy-button" onclick="copyCode(this)">Copy</button>
+                    <pre><code>Review the following [lecture / reading / case study / assessment task] for
+culturally embedded assumptions that may disadvantage international or
+EAL students. Specifically, identify:
+
+1. Examples, analogies, or case studies that assume familiarity with
+   UK/US cultural, political, or social contexts
+2. Idioms, slang, or colloquial expressions that may not translate literally
+3. Terms or concepts that carry different meanings in different cultural contexts
+   (e.g., words like "class", "liberal", "state", "welfare" vary significantly)
+4. Assumptions about prior educational systems (e.g., UK school-leaving
+   qualifications, tutorial systems, essay conventions)
+
+For each issue, suggest an alternative that is culturally neutral or
+that explicitly contextualises the UK usage.
+
+[PASTE YOUR CONTENT HERE]</code></pre>
+                </div>
+
+                <p><strong>Key terms to flag:</strong> Words like <em>"class," "liberal," "state," "welfare," "college," "public school," "comprehensive," "seminar,"</em> and <em>"tutorial"</em> carry markedly different meanings across different national contexts.</p>
+
+                <h5>2. Removing idioms and ambiguous phrasing</h5>
+                <div class="code-container">
+                    <button class="copy-button" onclick="copyCode(this)">Copy</button>
+                    <pre><code>Rewrite the following text to remove idioms, colloquialisms, and
+culturally specific expressions that may confuse a student for whom
+English is not a first language. Replace each with plain, literal language.
+Preserve the academic register and all factual content.
+
+Flag any idioms you have replaced in a separate list at the end,
+so the lecturer can review the changes.
+
+[PASTE YOUR CONTENT HERE]</code></pre>
+                </div>
+
+                <h5>3. Creating a cultural context note</h5>
+                <div class="code-container">
+                    <button class="copy-button" onclick="copyCode(this)">Copy</button>
+                    <pre><code>I am teaching [topic/module] to a cohort that includes students from
+[list of countries or regions].
+For the following piece of content, write a brief "Cultural Context Note"
+(max 150 words) that:
+
+- Explains any UK-specific concepts or institutions referenced
+- Notes where perspectives may differ significantly across cultural contexts
+- Invites students to bring their own cultural examples and perspectives
+- Uses welcoming, non-deficit language (i.e., differences are framed
+  as assets, not deficiencies)
+
+[PASTE YOUR CONTENT HERE]</code></pre>
+                </div>
+
+                <div class="success-criteria">
+                    <h4>Example Cultural Context Note</h4>
+                    <p><em>Cultural Context Note: This case study uses the UK benefits system as an example. If you are more familiar with a different national welfare system, the same analytical framework applies — feel free to use an example from your own context in your response. Different welfare models (e.g., Bismarckian, liberal, social democratic) are introduced in Week 4 and will give you a useful comparative lens.</em></p>
+                </div>
+
+                <h5>4. Generating multilingual glossaries</h5>
+                <div class="code-container">
+                    <button class="copy-button" onclick="copyCode(this)">Copy</button>
+                    <pre><code>Create a glossary of the 15 most important technical terms from the following
+[lecture / reading / module guide].
+For each term, provide:
+- The term in English
+- A plain English definition (max 2 sentences)
+- An example of the term used in a sentence in an academic context
+- [OPTIONAL] A note on any false friends or common mistranslations
+  for students whose first language is [LANGUAGE]
+
+[PASTE YOUR CONTENT HERE]</code></pre>
+                </div>
+
+                <p><strong>Note:</strong> GenAI can generate glossaries in multiple languages, but always have translations reviewed by a native speaker or via your institution's language support services before sharing with students.</p>
+
+                <h5>5. Offering multiple cultural perspectives</h5>
+                <div class="code-container">
+                    <button class="copy-button" onclick="copyCode(this)">Copy</button>
+                    <pre><code>Provide alternative perspectives drawn from a range of cultural contexts
+to the argument that [INSERT ARGUMENT].
+Include at least one perspective from outside Western Europe and North America.
+Ensure each perspective is accurately represented and not stereotyped.</code></pre>
+                </div>
+
+                <div class="exercise-box">
+                    <h4>🔧 Practice Activity: Cultural Assumption Audit</h4>
+                    <p>Take a core case study or worked example from your module. Run it through the cultural assumptions prompt. How many embedded assumptions did the AI flag?</p>
+                    
+                    <label for="textarea-eal-support" class="field-label">Practice your cultural inclusivity prompt here</label>
+                    <textarea id="textarea-eal-support" placeholder="Write your prompt for checking cultural assumptions..." aria-describedby="status-eal-support"></textarea>
+                    <div class="notes-status" id="status-eal-support" role="status" aria-live="polite"></div>
+                    
+                    <p><strong>Reflection:</strong></p>
+                    <ul>
+                        <li>How often do you use examples that assume UK cultural knowledge?</li>
+                        <li>How could you regularly offer a non-UK parallel example alongside your default one?</li>
+                    </ul>
+                </div>
+
+                <h3 id="language-clarity">Language Clarity for Multilingual Cohorts</h3>
+                
+                <table role="table" aria-label="Common sources of confusion for EAL students">
+                    <caption class="sr-only">Areas where misunderstandings commonly occur for EAL students</caption>
+                    <thead>
+                        <tr>
+                            <th>Source of Confusion</th>
+                            <th>Examples</th>
+                            <th>GenAI Solution</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Discipline-specific meanings</td>
+                            <td>"Critical", "evaluate", "discuss", "analyse"</td>
+                            <td>Generate context-specific definitions with examples</td>
+                        </tr>
+                        <tr>
+                            <td>Implicit expectations</td>
+                            <td>Assumed structure, tone, evidence standards</td>
+                            <td>Create explicit checklists and success criteria</td>
+                        </tr>
+                        <tr>
+                            <td>Dense terminology</td>
+                            <td>Multiple new terms without definition</td>
+                            <td>Generate tiered glossaries with progressive complexity</td>
+                        </tr>
+                        <tr>
+                            <td>Cultural references</td>
+                            <td>UK-specific institutions, historical events</td>
+                            <td>Add context notes and alternative examples</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- NEURODIVERSITY TAB -->
+            <div id="neurodiversity-tab" class="tab-content" role="tabpanel" aria-labelledby="neurodiversity-tab-button" aria-hidden="true">
+                <h2 class="workflow-header">🧠 Supporting Neurodiverse and Disabled Students</h2>
+                
+                <blockquote>
+                    <p>Neurodiverse students — including those with dyslexia, ADHD, autism spectrum conditions, dyscalculia, and others — make up a significant proportion of university cohorts. Many have not been formally assessed or do not disclose their needs.</p>
+                    <p class="center"><strong>Inclusive-by-design means your materials work for them by default, not by exception.</strong></p>
+                </blockquote>
+
+                <p>GenAI can help you proactively design content that reduces cognitive load, provides clearer structure, and offers multiple entry points. This benefits not only neurodiverse students but all learners — cognitive load reduction and clear structure are universal gains.</p>
+
+                <h3 id="cognitive-load">Reducing Cognitive Load</h3>
+                
+                <h4>Prompt Bank: Neurodiversity and Disability Support</h4>
+                
+                <h5>1. Reducing cognitive load in written materials</h5>
+                <div class="code-container">
+                    <button class="copy-button" onclick="copyCode(this)">Copy</button>
+                    <pre><code>Rewrite the following content to reduce cognitive load for a student
+with dyslexia or ADHD. Apply these specific strategies:
+- Break long paragraphs into shorter ones (max 4 sentences)
+- Add clear sub-headings every 3-4 paragraphs
+- Use numbered steps for any process or sequence
+- Bold the single most important idea per section
+- Move background context to a separate "Further Reading" section
+  so the core content is uncluttered
+- Replace passive voice with active voice throughout
+
+[PASTE YOUR CONTENT HERE]</code></pre>
+                </div>
+
+                <h5>2. Writing content advisories</h5>
+                <p>The University of Glasgow's Inclusive Learning guidance asks staff to consider content advice for challenging material, enabling students to prepare in advance and seek support where needed.</p>
+                
+                <div class="code-container">
+                    <button class="copy-button" onclick="copyCode(this)">Copy</button>
+                    <pre><code>Write a brief content advisory (max 80 words) for a lecture or reading
+that covers [TOPIC].
+The advisory should:
+- Clearly state what challenging content will appear and where
+- Be written in neutral, non-sensationalising language
+- Affirm the educational value of engaging with the material
+- Signpost relevant student support services without being prescriptive
+- Not discourage engagement — frame preparation, not avoidance</code></pre>
+                </div>
+
+                <div class="success-criteria">
+                    <h4>Example Content Advisory</h4>
+                    <p><em>Content Advisory: This session includes a case study involving workplace discrimination and discussion of mental health in organisational contexts. You may wish to review the session materials in advance (available on Moodle). Student wellbeing support is available through the University Counselling Service. The educational purpose of this content is to apply theoretical frameworks to real institutional challenges.</em></p>
+                </div>
+
+                <h5>3. Creating structured note templates</h5>
+                <div class="code-container">
+                    <button class="copy-button" onclick="copyCode(this)">Copy</button>
+                    <pre><code>Create a structured note-taking template for a lecture on [TOPIC].
+The template should:
+- Mirror the structure of the lecture (provide the lecture outline/headings)
+- Include space for key definitions, main arguments, and examples
+- Include a "Questions I have" box per section
+- Include a "Links to other modules/concepts" box
+- Use clear visual hierarchy (headings, sub-headings, ruled boxes)
+- Be screen reader compatible (no merged cells, clear heading order)
+
+This will be shared with all students as a lecture companion document.</code></pre>
+                </div>
+
+                <h5>4. Audio and podcast scripts</h5>
+                <div class="code-container">
+                    <button class="copy-button" onclick="copyCode(this)">Copy</button>
+                    <pre><code>Convert the following lecture notes into a script for a 5-minute
+audio summary. The script should:
+- Be written to be listened to, not read (shorter sentences, no complex syntax)
+- Signpost structure verbally ("First... second... finally...")
+- Not reference any visual elements
+- Define all technical terms the first time they appear
+- End with three key takeaways stated clearly
+
+[PASTE YOUR LECTURE NOTES HERE]</code></pre>
+                </div>
+
+                <div class="exercise-box">
+                    <h4>🔧 Practice Activity: Structured Support</h4>
+                    <p>Create a note-taking template for your next lecture using the prompt above. Distribute it to all students at the start of the session.</p>
+                    
+                    <label for="textarea-neurodiversity" class="field-label">Practice your neurodiversity support prompt here</label>
+                    <textarea id="textarea-neurodiversity" placeholder="Write your prompt for creating neurodiversity-friendly materials..." aria-describedby="status-neurodiversity"></textarea>
+                    <div class="notes-status" id="status-neurodiversity" role="status" aria-live="polite"></div>
+                    
+                    <p><strong>Reflection:</strong></p>
+                    <ul>
+                        <li>What does providing structured notes tell students about how you value their diverse learning needs?</li>
+                        <li>Does providing this scaffold reduce the challenge of the intellectual content?</li>
+                    </ul>
+                </div>
+
+                <h3 id="universal-supports">Universal Supports That Benefit Everyone</h3>
+                
+                <table role="table" aria-label="Universal supports that benefit neurodiverse students and all learners">
+                    <caption class="sr-only">Design features that support neurodiverse students while benefiting all learners</caption>
+                    <thead>
+                        <tr>
+                            <th>Design Feature</th>
+                            <th>How It Helps Neurodiverse Students</th>
+                            <th>How It Benefits All Students</th>
+                            <th>GenAI Prompt Support</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Clear headings and structure</td>
+                            <td>Reduces working memory load, improves navigation</td>
+                            <td>Easier to find information, better for review</td>
+                            <td>"Add clear headings every 3-4 paragraphs"</td>
+                        </tr>
+                        <tr>
+                            <td>Numbered steps and checklists</td>
+                            <td>Supports executive function, reduces anxiety</td>
+                            <td>Clearer instructions, less confusion</td>
+                            <td>"Convert this into numbered steps"</td>
+                        </tr>
+                        <tr>
+                            <td>Key terms defined immediately</td>
+                            <td>Reduces cognitive load from unfamiliar vocabulary</td>
+                            <td>Better comprehension for all backgrounds</td>
+                            <td>"Define technical terms in brackets when first used"</td>
+                        </tr>
+                        <tr>
+                            <td>Multiple ways to access content</td>
+                            <td>Accommodates different processing preferences</td>
+                            <td>More flexible study options</td>
+                            <td>"Create three versions: visual, audio, and text"</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h3 id="learning-objectives">Making Learning Objectives Inclusive</h3>
+                
+                <div class="code-container">
+                    <button class="copy-button" onclick="copyCode(this)">Copy</button>
+                    <pre><code>Review the following module learning objectives for a [Level / Year]
+university course in [subject].
+Assess whether they:
+- Use language accessible to students at this level (not assuming prior expertise)
+- Are achievable by students with a range of prior educational backgrounds
+- Allow for diverse means of demonstrating achievement
+- Are free from cultural assumptions
+- Align with the Equality Act 2010 anticipatory duty and UDL principles
+
+Suggest rewritten versions of any objectives that could be made more inclusive.
+
+[PASTE LEARNING OBJECTIVES HERE]</code></pre>
+                </div>
+            </div>
+
+    <!-- References and further reading -->
+    <section id="references" aria-labelledby="references-title" style="margin-top:32px;">
+      <h2 class="workflow-header" id="references-title">📚 References and Further Reading</h2>
+      
+      <h3>Policy and Framework References</h3>
+      <ul>
+        <li>University of Glasgow. Accessible & Inclusive Learning Policy (AILP). Available at: <a href="https://www.gla.ac.uk/myglasgow/disability/" target="_blank" rel="noopener">University of Glasgow Disability Service</a></li>
+        <li>Equality Act 2010. UK Government Legislation. <a href="https://www.legislation.gov.uk/ukpga/2010/15/contents" target="_blank" rel="noopener">Link</a></li>
+        <li>CAST. Universal Design for Learning Guidelines version 2.2. <a href="https://udlguidelines.cast.org/" target="_blank" rel="noopener">Link</a></li>
+        <li>University of Glasgow. Learning Through Assessment (LTA) Framework. <a href="https://www.gla.ac.uk/myglasgow/learningandteaching/" target="_blank" rel="noopener">Link</a></li>
+      </ul>
+      
+      <h3>Accessibility and Inclusive Design</h3>
+      <ul>
+        <li>W3C Web Accessibility Initiative. Web Content Accessibility Guidelines (WCAG) 2.1. <a href="https://www.w3.org/WAI/WCAG21/quickref/" target="_blank" rel="noopener">Link</a></li>
+        <li>WebAIM. Color Contrast Checker. <a href="https://webaim.org/resources/contrastchecker/" target="_blank" rel="noopener">Link</a></li>
+        <li>NVDA Screen Reader (Free). <a href="https://www.nvaccess.org/download/" target="_blank" rel="noopener">Link</a></li>
+        <li>Advance HE. Inclusive curriculum design. <a href="https://www.advance-he.ac.uk/knowledge-hub/inclusive-curriculum" target="_blank" rel="noopener">Link</a></li>
+      </ul>
+      
+      <h3>GenAI and Educational Technology Research</h3>
+      <ul>
+        <li>Brown, T. B., Mann, B., Ryder, N., et al. (2020). Language Models are Few-Shot Learners. NeurIPS 2020. <a href="https://proceedings.neurips.cc/paper/2020/file/1457c0d6bfcb4967418bfb8ac142f64a-Paper.pdf" target="_blank" rel="noopener">Link</a></li>
+        <li>Wei, J., Xia, C., Kozareva, Z., et al. (2022). Chain-of-Thought Prompting Elicits Reasoning in Large Language Models. NeurIPS 2022. <a href="https://proceedings.neurips.cc/paper_files/paper/2022/hash/5d2692bfd0d0c53d53f6af6cf8ab5554-Abstract-Conference.html" target="_blank" rel="noopener">Link</a></li>
+        <li>Liu, P., Yuan, W., Fu, J., et al. (2023). Pre-train, Prompt, and Predict: A Systematic Survey of Prompting Methods in NLP. ACM Computing Surveys, 55(9), 1–35. <a href="https://doi.org/10.1145/3560815" target="_blank" rel="noopener">DOI</a></li>
+        <li>Ouyang, L., Wu, J., Jiang, X., et al. (2022). Training Language Models to Follow Instructions with Human Feedback. NeurIPS 2022. <a href="https://proceedings.neurips.cc/paper_files/paper/2022/hash/b1efde53be364a73914f2f405dfb4f0a-Abstract-Conference.html" target="_blank" rel="noopener">Link</a></li>
+      </ul>
+      
+      <h3>EAL and Multicultural Education</h3>
+      <ul>
+        <li>University of Glasgow. English as an Additional Language (EAL) Support. <a href="https://www.gla.ac.uk/myglasgow/students/academicdevelopment/" target="_blank" rel="noopener">Link</a></li>
+        <li>British Council. Understanding cultural differences in education. <a href="https://www.britishcouncil.org/education" target="_blank" rel="noopener">Link</a></li>
+        <li>QAA. Guidance on assessment of students whose first language is not English. <a href="https://www.qaa.ac.uk/" target="_blank" rel="noopener">Link</a></li>
+      </ul>
+      
+      <h3>Neurodiversity and Disabilities</h3>
+      <ul>
+        <li>British Dyslexia Association. Style guide for creating learning materials. <a href="https://www.bdadyslexia.org.uk/" target="_blank" rel="noopener">Link</a></li>
+        <li>ADHD Foundation. Creating ADHD-friendly learning environments. <a href="https://www.adhdfoundation.org.uk/" target="_blank" rel="noopener">Link</a></li>
+        <li>National Autistic Society. Autism-friendly environments. <a href="https://www.autism.org.uk/" target="_blank" rel="noopener">Link</a></li>
+      </ul>
+      
+      <h3>GenAI Policy and Ethics</h3>
+      <ul>
+        <li>University of Glasgow. Guidance on AI in learning and teaching. <a href="https://www.gla.ac.uk/myglasgow/learningandteaching/af-aiguidance/" target="_blank" rel="noopener">Link</a></li>
+        <li>QAA. Guidance on AI and academic integrity. <a href="https://www.qaa.ac.uk/news-events/news/qaa-publishes-guidance-on-ai" target="_blank" rel="noopener">Link</a></li>
+        <li>Advance HE. Responsible use of AI in higher education. <a href="https://www.advance-he.ac.uk/" target="_blank" rel="noopener">Link</a></li>
+      </ul>
+    </section>
+
+    <!-- Enhanced Footer with Legal Information -->
+    <footer>
+            <p>© 2026 University of Glasgow. All rights reserved.</p>
+            <p><a href="https://www.gla.ac.uk/myglasgow/learningandteaching/af-aiguidance/" target="_blank" rel="noopener">University of Glasgow GenAI Policy</a> | <a href="https://www.gla.ac.uk/myglasgow/disability/" target="_blank" rel="noopener">Disability Service</a> | <a href="https://www.w3.org/WAI/WCAG21/quickref/" target="_blank" rel="noopener">WCAG 2.1 Quick Reference</a></p>
+        </footer>
+    </div>
+</body>
+</html>
