@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Augmented Academia | AI Workshop Resources – Dr Alisha Aman</title>
+    <title>Augmented Academia | AI Workshop Resources</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="Augmented Academia: open workshop workbooks and teaching resources on using Generative AI in higher education, created by Dr Alisha Aman.">
     <meta name="author" content="Dr Alisha Aman">
@@ -567,19 +567,6 @@
             .resource-grid { grid-template-columns: 1fr; }
         }
     </style>
-    <script>
-        // Workshop access control - change to true when ready to enable access
-        const INCLUSIVE_WORKSHOP_ENABLED = false; // Set to true on April 9th
-        
-        function checkWorkshopAccess(event, workshopId) {
-            if (workshopId === 'inclusive' && !INCLUSIVE_WORKSHOP_ENABLED) {
-                event.preventDefault();
-                alert('This workshop will be available on April 9th, 2026. Please check back then!');
-                return false;
-            }
-            return true;
-        }
-    </script>
 </head>
 <body>
 
@@ -591,7 +578,6 @@
         <a href="#" class="nav-brand" aria-label="Augmented Academia – home">
             <div class="nav-brand-text">
                 <span class="nav-brand-title">Augmented Academia</span>
-                <span class="nav-brand-sub">Dr Alisha Aman</span>
             </div>
         </a>
 
@@ -609,19 +595,6 @@
             Resources exploring how Generative AI can support
             learning, teaching, and research in Higher Education, designed with inclusion and accessibility at the core.
         </p>
-        <div class="hero-stats" role="list" aria-label="Site statistics">
-            <div class="hero-stat" role="listitem">
-                <div class="hero-stat-num">5</div>
-                <div class="hero-stat-label">Workbooks</div>
-            </div>
-            <div class="hero-stat" role="listitem">
-                <div class="hero-stat-num">Free</div>
-                <div class="hero-stat-label">Open Access</div>
-            </div>
-            <div class="hero-stat" role="listitem">
-                <div class="hero-stat-num">ARIA</div>
-                <div class="hero-stat-label">Accessible</div>
-            </div>
         </div>
     </header>
 
@@ -637,16 +610,17 @@
 
             <!-- Workshop intro -->
             <div style="background: #f0f7ff; border: 1px solid #b8d4f0; border-left: 5px solid var(--teal); border-radius: var(--radius); padding: 20px 24px; margin: 0 0 32px;">
-                <p style="margin: 0; font-size: 0.9em; color: #2a4a6b;">These workbooks were developed for workshops conducted at various institutions and conferences. Most resources are from the <strong>"Augmented Academia: AI in Life Sciences Teaching & Research"</strong> workshop series (<a href="https://www.eventbrite.com/e/augmented-academia-ai-in-life-sciences-teaching-research-tickets-1443044076679" target="_blank" rel="noopener noreferrer">2024 workshop</a>) with an updated 2026 version coming soon. The inclusive teaching workbook was created for the <a href="https://www.sebiology.org/events/gen-ai-symposium.html" target="_blank" rel="noopener noreferrer">RSB GenAI Symposium</a>.</p>
+                <p style="margin: 0; font-size: 0.9em; color: #2a4a6b;">These workbooks were developed for workshops conducted at various institutions and conferences. Most resources are from the <strong>"Augmented Academia: AI in Life Sciences Teaching & Research"</strong> workshop series (<a href="https://www.eventbrite.com/e/augmented-academia-ai-in-life-sciences-teaching-research-tickets-1443044076679" target="_blank" rel="noopener noreferrer">2025 workshop</a>) . The inclusive teaching workbook was created for the <a href="https://www.sebiology.org/events/gen-ai-symposium.html" target="_blank" rel="noopener noreferrer">Society of Experimental Biologists GenAI Symposium</a>.</p>
             </div>
 
             <div class="card-grid" role="list">
 
                 <!-- Augmented Academia 2024 Workshop Series -->
                 <div style="grid-column: 1 / -1; margin-bottom: 20px;">
-                    <h3 style="color: var(--navy); font-size: 1.2em; margin: 0 0 8px; padding-bottom: 8px; border-bottom: 2px solid var(--yellow);">🔬 Augmented Academia: AI in Life Sciences (2024)</h3>
-                    <p style="font-size: 0.85em; color: var(--gray); margin: 0;">Workshop series exploring GenAI applications in life sciences teaching and research. <em>2026 version coming soon!</em></p>
+                    <h3 style="color: var(--navy); font-size: 1.2em; margin: 0 0 8px; padding-bottom: 8px; border-bottom: 2px solid var(--yellow);">🔬 Augmented Academia: AI in Life Sciences (2025)</h3>
+                    <p style="font-size: 0.85em; color: var(--gray); margin: 0;">Workshop series exploring GenAI applications in life sciences teaching and research, delivered in 2025 for the University of Glasgow (GAINEd), and the Royal Society of Biology Early Career Lecturers in Biosciences group of the HUBS institutions <em>2026 version coming soon!</em></p>
                 </div>
+
 
                 <!-- Workbook 1: Prompt Engineering -->
                 <article class="workbook-card" role="listitem">
@@ -658,7 +632,7 @@
                     </div>
                     <div class="card-body">
                         <p class="card-desc">
-                            Learn the fundamentals of crafting effective prompts for GenAI tools. Covers prompt structure, techniques for better outputs, and practical examples for academic use cases.
+                            Author: Dr Alisha Aman. Covers prompt structure, techniques for better outputs, and practical examples for academic use cases.
                         </p>
                         <div class="card-tags" aria-label="Topics">
                             <span class="tag">Prompt Engineering</span>
@@ -688,8 +662,7 @@
                     </div>
                     <div class="card-body">
                         <p class="card-desc">
-                            Explore how GenAI can automate routine educational tasks, from content creation to assessment feedback. Practical workflows for streamlining teaching processes.
-                        </p>
+                            Author: Dr Alisha Aman. This workbook explores how GenAI can automate routine academic tasks
                         <div class="card-tags" aria-label="Topics">
                             <span class="tag">Automation</span>
                             <span class="tag">Teaching Efficiency</span>
@@ -713,13 +686,12 @@
                     <div class="card-header">
                         <div class="card-icon" aria-hidden="true">📝</div>
                         <div class="card-header-text">
-                            <h3>AI-Enhanced Content Creation</h3>
+                            <h3>Content Creation</h3>
                         </div>
                     </div>
                     <div class="card-body">
                         <p class="card-desc">
-                            Master the art of using GenAI for creating educational content, from lecture materials to interactive exercises. Best practices for content quality and originality.
-                        </p>
+                            Author: Dr Alisha Aman. This workbook focuses on using GenAI for creating and adapting educational content, with practical examples for generating explanations, diagrams, and interactive materials.
                         <div class="card-tags" aria-label="Topics">
                             <span class="tag">Content Creation</span>
                             <span class="tag">Educational Materials</span>
@@ -748,7 +720,7 @@
                     </div>
                     <div class="card-body">
                         <p class="card-desc">
-                            Created by Dr Denise Hough of the University of Glasgow, this is a practical case study demonstrating how GenAI can support genetics education, with specific examples for creating explanations, diagrams, and assessment questions.
+                           Author: Dr Denise Hough. This is a practical case study demonstrating how GenAI can support genetics education, with specific examples for creating explanations, diagrams, and assessment questions.
                         </p>
                         <div class="card-tags" aria-label="Topics">
                             <span class="tag">Genetics</span>
@@ -768,7 +740,7 @@
                     </div>
                 </article>
 
-                <!-- RSB GenAI Symposium -->
+                <!-- SEB GenAI Symposium -->
                 <div style="grid-column: 1 / -1; margin: 32px 0 20px;">
                     <h3 style="color: var(--navy); font-size: 1.2em; margin: 0 0 8px; padding-bottom: 8px; border-bottom: 2px solid var(--yellow);">♿The Society for Experimental Biology GenAI Symposium</h3>
                     <p style="font-size: 0.85em; color: var(--gray); margin: 0;">Workshop focused on inclusive and accessible approaches to GenAI in higher education.</p>
@@ -784,7 +756,7 @@
                     </div>
                     <div class="card-body">
                         <p class="card-desc">
-                            Designed for university teaching staff who want to use Generative AI to create, adapt, and review
+                           Author: Dr Alisha Aman. Designed for university teaching staff who want to use Generative AI to create, adapt, and review
                             teaching materials that are inclusive and accessible. Covers the UDL framework, what an inclusive
                             university looks like, and hands-on prompting practice.
                         </p>
@@ -801,29 +773,10 @@
                            class="btn btn-primary"
                            target="_blank"
                            rel="noopener noreferrer"
-                           onclick="return checkWorkshopAccess(event, 'inclusive')"
                            aria-label="Open the Inclusive Teaching workbook (opens in new tab)">
-                            <span id="inclusive-btn-text">Available April 9th ⏰</span>
+                            <span id="inclusive-btn-text">Open Workbook ↗</span>
                         </a>
                     </div>
-                    
-                    <script>
-                        // Update button text based on availability
-                        document.addEventListener('DOMContentLoaded', function() {
-                            const btnText = document.getElementById('inclusive-btn-text');
-                            const btn = btnText.parentElement;
-                            
-                            if (INCLUSIVE_WORKSHOP_ENABLED) {
-                                btnText.textContent = 'Open Workbook ↗';
-                                btn.classList.remove('btn-disabled');
-                            } else {
-                                btnText.textContent = 'Available April 9th ⏰';
-                                btn.classList.add('btn-disabled');
-                                btn.style.opacity = '0.6';
-                                btn.style.cursor = 'not-allowed';
-                            }
-                        });
-                    </script>
                 </article>
 
             </div>
@@ -841,13 +794,12 @@
                 <div>
                     <h2>The Project</h2>
                     <p>
-                        Augmented Academia is a collection of open, interactive workshop workbooks created by
-                        <strong>Dr Alisha Aman</strong> to support staff and students in
+                        Augmented Academia is a collection of open, interactive workshop series created by
+                        <strong>Dr Alisha Aman</strong>, as part of her role in the Generative AI in Education Network (GAINEd). These workshops are designed to support staff and students in
                         using Generative AI effectively, ethically, and inclusively. <br><br>
                         Dr Aman is a Lecturer and Program Director of MSc MedTech Innovation, and focuses on Education Technology development and the use of GenAI in higher education.  
                         She has developed and delivered workshops on GenAI in academia nationally for various institutions and conferences, including universities, the Royal Society of Biology, and the Society for Experimental Biology.
-                    </p>
-b                   
+                    </p>                 
                 </div>
             </div>
         </section>
@@ -895,11 +847,8 @@ b
             <p style="margin:0 0 4px; font-size:0.9em;">
                 <strong style="color:white;">Augmented Academia</strong> · Dr Alisha Aman
             </p>
-            <div class="footer-links">
-                <a href="https://www.w3.org/WAI/WCAG21/quickref/" target="_blank" rel="noopener">WCAG 2.1</a>
-            </div>
             <p class="footer-copy">
-                © 2026 Dr Alisha Aman. All rights reserved.
+                © 2026 University of Glasgow. All rights reserved.
             </p>
         </div>
     </footer>
