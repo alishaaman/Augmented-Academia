@@ -1,0 +1,1130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GenAI Basics: Foundations & Best Practices | Augmented Academia</title>
+    <meta name="description" content="Essential introduction to Generative AI concepts, capabilities, limitations, and ethical considerations for academic staff.">
+    
+    <style>
+        :root {
+            --primary-color: #21808d;
+            --primary-dark: #1a6b75;
+            --accent-color: #fbc02d;
+            --header-color: #2c3e50;
+            --nav-color: #011451;
+            --text-color: #333;
+            --bg-light: #f8f9fa;
+            --border-color: #dee2e6;
+            --success-color: #27ae60;
+            --shadow: 0 2px 4px rgba(0,0,0,0.1);
+            --transition: all 0.3s ease;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            color: var(--text-color);
+            background: var(--bg-light);
+        }
+
+        header {
+            background: linear-gradient(135deg, var(--nav-color) 0%, var(--header-color) 100%);
+            color: white;
+            padding: 1.5rem 0;
+            box-shadow: var(--shadow);
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+
+        .header-content h1 {
+            margin: 0;
+            font-size: 2.2rem;
+            font-weight: 700;
+        }
+
+        .header-content .subtitle {
+            margin: 0.5rem 0 0 0;
+            font-size: 1.1rem;
+            opacity: 0.9;
+            font-weight: 300;
+        }
+
+        .top-nav {
+            background: var(--nav-color);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .tab-buttons {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: center;
+            padding: 0 1rem;
+        }
+
+        .tab-btn {
+            background: transparent;
+            color: white;
+            border: none;
+            padding: 1rem 1.5rem;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 500;
+            border-bottom: 3px solid transparent;
+            transition: var(--transition);
+            white-space: nowrap;
+        }
+
+        .tab-btn:hover {
+            background: rgba(255,255,255,0.1);
+            border-bottom-color: var(--accent-color);
+        }
+
+        .tab-btn.active {
+            background: rgba(255,255,255,0.1);
+            border-bottom-color: var(--accent-color);
+        }
+
+        .tab-btn:focus {
+            outline: 2px solid var(--accent-color);
+            outline-offset: -2px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem 1rem;
+            display: flex;
+            gap: 2rem;
+            min-height: calc(100vh - 200px);
+        }
+
+        .sidebar {
+            width: 280px;
+            flex-shrink: 0;
+            background: white;
+            border-radius: 8px;
+            padding: 1.5rem;
+            box-shadow: var(--shadow);
+            height: fit-content;
+            position: sticky;
+            top: 100px;
+        }
+
+        .sidebar h3 {
+            margin-top: 0;
+            color: var(--primary-color);
+            font-size: 1.1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--border-color);
+        }
+
+        .sidebar ul {
+            list-style: none;
+            padding: 0;
+            margin: 0.5rem 0;
+        }
+
+        .sidebar li {
+            margin: 0.3rem 0;
+        }
+
+        .sidebar a {
+            color: var(--text-color);
+            text-decoration: none;
+            padding: 0.3rem 0.5rem;
+            border-radius: 4px;
+            display: block;
+            font-size: 0.9rem;
+            transition: var(--transition);
+        }
+
+        .sidebar a:hover {
+            background: var(--bg-light);
+            color: var(--primary-color);
+        }
+
+        .main-content {
+            flex: 1;
+            background: white;
+            border-radius: 8px;
+            box-shadow: var(--shadow);
+            overflow: hidden;
+        }
+
+        .tab-panel {
+            display: none;
+            padding: 2rem;
+            animation: fadeIn 0.3s ease-in-out;
+        }
+
+        .tab-panel.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        h2 {
+            color: var(--primary-color);
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--border-color);
+        }
+
+        h3 {
+            color: var(--header-color);
+            font-size: 1.4rem;
+            margin: 2rem 0 1rem 0;
+        }
+
+        h4 {
+            color: var(--text-color);
+            font-size: 1.2rem;
+            margin: 1.5rem 0 0.8rem 0;
+        }
+
+        .activity-box {
+            background: linear-gradient(135deg, #f8f9ff 0%, #e8f4f8 100%);
+            border-left: 4px solid var(--primary-color);
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .activity-box h4 {
+            margin-top: 0;
+            color: var(--primary-color);
+        }
+
+        .code-block {
+            background: #f8f9fa;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 1rem;
+            margin: 1rem 0;
+            position: relative;
+            font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+        }
+
+        .copy-btn {
+            position: absolute;
+            top: 0.5rem;
+            right: 0.5rem;
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 0.3rem 0.6rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            transition: var(--transition);
+        }
+
+        .copy-btn:hover {
+            background: var(--primary-dark);
+        }
+
+        .copy-btn:focus {
+            outline: 2px solid var(--accent-color);
+        }
+
+        .framework-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin: 1.5rem 0;
+        }
+
+        .framework-card {
+            background: white;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 1.5rem;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+        }
+
+        .framework-card:hover {
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            transform: translateY(-2px);
+        }
+
+        .framework-card h4 {
+            color: var(--primary-color);
+            margin-top: 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+            box-shadow: var(--shadow);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        th, td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        th {
+            background: var(--primary-color);
+            color: white;
+            font-weight: 600;
+        }
+
+        tbody tr:hover {
+            background: var(--bg-light);
+        }
+
+        .textarea-container {
+            margin: 1.5rem 0;
+        }
+
+        .textarea-container label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--text-color);
+        }
+
+        textarea {
+            width: 100%;
+            min-height: 120px;
+            padding: 1rem;
+            border: 2px solid var(--border-color);
+            border-radius: 6px;
+            font-family: inherit;
+            font-size: 0.95rem;
+            line-height: 1.5;
+            resize: vertical;
+            transition: var(--transition);
+        }
+
+        textarea:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(33, 128, 141, 0.1);
+        }
+
+        .status {
+            font-size: 0.85rem;
+            margin-top: 0.5rem;
+            padding: 0.3rem 0.6rem;
+            border-radius: 4px;
+        }
+
+        .status.success {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .alert {
+            padding: 1rem 1.5rem;
+            border-radius: 6px;
+            margin: 1.5rem 0;
+            border-left: 4px solid;
+        }
+
+        .alert-info {
+            background: #d1ecf1;
+            border-color: #17a2b8;
+            color: #0c5460;
+        }
+
+        .alert-warning {
+            background: #fff3cd;
+            border-color: #ffc107;
+            color: #856404;
+        }
+
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border: 0;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+                padding: 1rem;
+            }
+
+            .sidebar {
+                width: 100%;
+                position: relative;
+                top: 0;
+            }
+
+            .tab-buttons {
+                flex-wrap: wrap;
+            }
+
+            .tab-btn {
+                flex: 1;
+                min-width: 120px;
+            }
+
+            .header-content h1 {
+                font-size: 1.8rem;
+            }
+
+            .framework-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        footer {
+            background: var(--header-color);
+            color: white;
+            padding: 2rem 0;
+            margin-top: 3rem;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
+            text-align: center;
+        }
+
+        .footer-content p {
+            margin: 0.5rem 0;
+        }
+
+        .footer-content a {
+            color: var(--accent-color);
+            text-decoration: none;
+        }
+
+        .footer-content a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+
+<body>
+    <header role="banner">
+        <div class="header-content">
+            <h1>GenAI Basics: Foundations & Best Practices</h1>
+            <p class="subtitle">Essential introduction to Generative AI concepts, capabilities, limitations, and ethical considerations for academic staff</p>
+        </div>
+    </header>
+
+    <nav class="top-nav" role="navigation" aria-label="Workshop sections">
+        <div class="tab-buttons" role="tablist">
+            <button class="tab-btn active" role="tab" aria-controls="fundamentals-panel" aria-selected="true" id="fundamentals-tab" onclick="switchTab(event, 'fundamentals')">
+                🧠 GenAI Fundamentals
+            </button>
+            <button class="tab-btn" role="tab" aria-controls="frameworks-panel" aria-selected="false" id="frameworks-tab" onclick="switchTab(event, 'frameworks')">
+                🛠️ Practical Frameworks
+            </button>
+            <button class="tab-btn" role="tab" aria-controls="inclusive-panel" aria-selected="false" id="inclusive-tab" onclick="switchTab(event, 'inclusive')">
+                ♿ Inclusive Design
+            </button>
+        </div>
+    </nav>
+
+    <div class="container">
+        <aside class="sidebar" role="navigation" aria-label="Page contents">
+            <h3>Contents</h3>
+            <ul id="sidebar-nav" role="list">
+                <!-- Dynamically populated -->
+            </ul>
+            
+            <div class="alert alert-info" style="margin-top: 2rem; font-size: 0.9rem;">
+                <strong>💡 Advanced Learning:</strong> Explore our specialized workshops:
+                <ul style="margin: 0.5rem 0 0 0; padding-left: 1rem;">
+                    <li><a href="../Automation/workshop_2_workbook.html" style="color: #0c5460;">Advanced Prompting</a></li>
+                    <li><a href="../L&T_Conference_workshop_Nottingham/Inclusive_LearningTeaching/Inclusive_Teaching.html" style="color: #0c5460;">Inclusive Teaching</a></li>
+                </ul>
+            </div>
+        </aside>
+
+        <main class="main-content" role="main">
+            <!-- Tab 1: GenAI Fundamentals -->
+            <div id="fundamentals" class="tab-panel active" role="tabpanel" aria-labelledby="fundamentals-tab">
+                <h2>Understanding Generative AI</h2>
+                
+                <h3 id="what-is-genai">What is Generative AI?</h3>
+                <p>Generative Artificial Intelligence (GenAI) refers to AI systems that can create new content—text, images, code, audio, or other media—based on patterns learned from training data. Unlike traditional AI that classifies or predicts, GenAI <strong>generates</strong> original content.</p>
+                
+                <div class="activity-box">
+                    <h4>🔍 Key Characteristics</h4>
+                    <ul>
+                        <li><strong>Pattern Recognition:</strong> Learns from vast amounts of existing content</li>
+                        <li><strong>Content Creation:</strong> Generates new, original outputs based on prompts</li>
+                        <li><strong>Context Awareness:</strong> Understands and responds to specific contexts and instructions</li>
+                        <li><strong>Iterative Improvement:</strong> Can refine outputs based on feedback</li>
+                    </ul>
+                </div>
+
+                <h3 id="capabilities-limitations">Capabilities & Limitations</h3>
+                <table role="table">
+                    <caption class="sr-only">GenAI Capabilities and Limitations Comparison</caption>
+                    <thead>
+                        <tr>
+                            <th scope="col">What GenAI Can Do</th>
+                            <th scope="col">What GenAI Cannot Do</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Generate educational content quickly</td>
+                            <td>Replace human judgment and expertise</td>
+                        </tr>
+                        <tr>
+                            <td>Adapt content for different audiences</td>
+                            <td>Ensure 100% accuracy without verification</td>
+                        </tr>
+                        <tr>
+                            <td>Suggest multiple approaches and formats</td>
+                            <td>Understand your specific student contexts</td>
+                        </tr>
+                        <tr>
+                            <td>Help with accessibility considerations</td>
+                            <td>Replace the need for accessibility expertise</td>
+                        </tr>
+                        <tr>
+                            <td>Provide creative examples and analogies</td>
+                            <td>Guarantee cultural sensitivity without guidance</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h3 id="academic-contexts">AI in Academic Contexts</h3>
+                <p>In educational settings, GenAI can be particularly powerful for:</p>
+
+                <div class="framework-grid">
+                    <div class="framework-card">
+                        <h4>📚 Content Creation</h4>
+                        <ul>
+                            <li>Lecture notes and summaries</li>
+                            <li>Assessment questions</li>
+                            <li>Reading materials at different levels</li>
+                            <li>Visual descriptions for accessibility</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="framework-card">
+                        <h4>🎯 Personalization</h4>
+                        <ul>
+                            <li>Adapting content for different learning styles</li>
+                            <li>Language simplification for EAL students</li>
+                            <li>Multiple format versions (text, lists, diagrams)</li>
+                            <li>Scaffolding for different ability levels</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="framework-card">
+                        <h4>⚡ Efficiency</h4>
+                        <ul>
+                            <li>Quick first drafts to iterate upon</li>
+                            <li>Feedback templates for assessments</li>
+                            <li>Email responses and communications</li>
+                            <li>Administrative task automation</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="alert alert-warning">
+                    <strong>⚠️ Important:</strong> GenAI is a <em>co-pilot</em>, not a replacement. Your expertise, judgment, and understanding of your students' needs remain essential for effective teaching and learning.
+                </div>
+
+                <h3 id="ethics-responsible-use">Ethics & Responsible Use</h3>
+                
+                <h4>Understanding Bias in AI</h4>
+                <p>GenAI systems can perpetuate and amplify biases present in their training data. These biases can affect:</p>
+                <ul>
+                    <li><strong>Cultural representation:</strong> Examples may default to dominant cultural perspectives</li>
+                    <li><strong>Language patterns:</strong> May favor certain linguistic styles or registers</li>
+                    <li><strong>Demographic assumptions:</strong> Could make assumptions about student backgrounds</li>
+                    <li><strong>Disciplinary perspectives:</strong> May reflect established academic hierarchies and viewpoints</li>
+                </ul>
+
+                <div class="activity-box">
+                    <h4>🔍 Bias Detection Prompt</h4>
+                    <div class="code-block">
+                        <button class="copy-btn" onclick="copyToClipboard(this)" aria-label="Copy bias detection prompt">Copy</button>
+                        <pre>Review this content for potential bias:
+
+[PASTE YOUR AI-GENERATED CONTENT HERE]
+
+Please analyze for:
+1. Cultural assumptions or perspectives that may not be universal
+2. Language that may exclude or disadvantage certain groups
+3. Examples that may not represent diverse backgrounds
+4. Implicit assumptions about prior knowledge or experience
+5. Suggestions for making this content more inclusive
+
+Provide specific recommendations for improvement.</pre>
+                    </div>
+                </div>
+
+                <h4>Transparency and Academic Integrity</h4>
+                <p>When using GenAI in educational contexts, transparency is crucial:</p>
+                
+                <div class="code-block">
+                    <button class="copy-btn" onclick="copyToClipboard(this)" aria-label="Copy transparency statement">Copy</button>
+                    <pre><strong>Transparency Statement Template:</strong>
+
+"Parts of this [lecture/material/assessment] were created with assistance from generative AI tools. Specifically, AI was used to:
+- [List specific uses, e.g., "generate initial examples"]
+- [e.g., "suggest alternative explanations"]
+- [e.g., "create accessibility descriptions"]
+
+All AI-generated content has been reviewed, fact-checked, and adapted to ensure accuracy and appropriateness for our learning context."</pre>
+                </div>
+
+                <div class="textarea-container">
+                    <label for="use-case-notes">💭 Your GenAI Use Cases & Considerations</label>
+                    <textarea
+                        id="use-case-notes"
+                        placeholder="Reflect on how you might use GenAI in your teaching context. What are your main interests? What concerns do you have?"
+                        aria-describedby="use-case-status"
+                    ></textarea>
+                    <div id="use-case-status" class="status" aria-live="polite"></div>
+                </div>
+            </div>
+
+            <!-- Tab 2: Practical Frameworks -->
+            <div id="frameworks" class="tab-panel" role="tabpanel" aria-labelledby="frameworks-tab" aria-hidden="true">
+                <h2>Prompt Engineering Frameworks</h2>
+                
+                <p>Effective prompting is the key to getting useful outputs from GenAI. Here are five proven frameworks you can use immediately:</p>
+
+                <h3 id="ptcf-framework">1. P-T-C-F Framework</h3>
+                <div class="framework-card">
+                    <p><strong>Best for:</strong> Content creation, lesson planning, clear task-oriented requests</p>
+                    <ul>
+                        <li><strong>Persona:</strong> Who should the AI be? (e.g., "You are an experienced biology educator")</li>
+                        <li><strong>Task:</strong> What exactly do you want? (e.g., "Create a lesson plan on...")</li>
+                        <li><strong>Context:</strong> Background information (e.g., "For first-year students who struggle with...")</li>
+                        <li><strong>Format:</strong> How should the output look? (e.g., "As a structured outline with activities")</li>
+                    </ul>
+                </div>
+
+                <div class="activity-box">
+                    <h4>📋 P-T-C-F Template</h4>
+                    <div class="code-block">
+                        <button class="copy-btn" onclick="copyToClipboard(this)" aria-label="Copy P-T-C-F template">Copy</button>
+                        <pre><strong>Persona:</strong> You are [role/expertise]
+
+<strong>Task:</strong> [Specific action you want]
+
+<strong>Context:</strong> 
+- Audience: [who are your students/colleagues]
+- Background: [relevant information]
+- Constraints: [any limitations or requirements]
+
+<strong>Format:</strong> Please provide this as [specific format/structure]</pre>
+                    </div>
+                    
+                    <div class="code-block">
+                        <button class="copy-btn" onclick="copyToClipboard(this)" aria-label="Copy P-T-C-F example">Copy</button>
+                        <pre><strong>Example - Creating Accessible Content:</strong>
+
+<strong>Persona:</strong> You are an inclusive education specialist with expertise in Universal Design for Learning.
+
+<strong>Task:</strong> Create an explanation of photosynthesis that can be understood by students with varying learning needs.
+
+<strong>Context:</strong>
+- Audience: First-year undergraduate students in an introductory biology course
+- Background: Mixed abilities, some students have learning differences, English as additional language learners
+- Constraints: Must be scientifically accurate but accessible
+
+<strong>Format:</strong> Provide the explanation in three formats: 1) Simple text summary, 2) Step-by-step process with visual cues, 3) Analogy-based explanation</pre>
+                    </div>
+                </div>
+
+                <h3 id="chain-of-thought">2. Chain-of-Thought</h3>
+                <div class="framework-card">
+                    <p><strong>Best for:</strong> Complex processes, problem-solving, breaking down difficult concepts</p>
+                    <p>Ask the AI to think through problems step-by-step, showing its reasoning process.</p>
+                </div>
+
+                <div class="code-block">
+                    <button class="copy-btn" onclick="copyToClipboard(this)" aria-label="Copy chain-of-thought example">Copy</button>
+                    <pre><strong>Chain-of-Thought Example:</strong>
+
+"I need to explain how enzymes work to students who are struggling with the concept. 
+
+Think through this step-by-step:
+1. First, identify what makes enzymes difficult to understand
+2. Then, consider what analogies or examples might help
+3. Think about potential misconceptions students might have
+4. Finally, design an explanation that addresses these challenges
+
+Please show your thinking process for each step, then provide your final explanation."</pre>
+                </div>
+
+                <h3 id="few-shot-learning">3. Few-Shot Learning</h3>
+                <div class="framework-card">
+                    <p><strong>Best for:</strong> Maintaining consistency, following specific patterns, creating content in your style</p>
+                    <p>Provide 2-3 examples of what you want, then ask for more in the same style.</p>
+                </div>
+
+                <div class="code-block">
+                    <button class="copy-btn" onclick="copyToClipboard(this)" aria-label="Copy few-shot example">Copy</button>
+                    <pre><strong>Few-Shot Example - Accessible Question Writing:</strong>
+
+"I want to create multiple-choice questions that are accessible to all students. Here are examples of my style:
+
+Example 1:
+Question: What is the primary function of chloroplasts in plant cells?
+A) To store water and maintain cell pressure
+B) To convert light energy into chemical energy through photosynthesis
+C) To break down waste materials in the cell
+D) To provide structural support to the cell wall
+
+Example 2:
+Question: Which process allows nutrients to move from the soil into plant roots?
+A) Active transport using energy from the cell
+B) Photosynthesis converting sunlight to energy
+C) Respiration breaking down stored sugars
+D) Transpiration moving water through the plant
+
+Now create 3 more questions about cellular respiration following the same style and accessibility principles."</pre>
+                </div>
+
+                <h3 id="role-based">4. Role-Based Prompting</h3>
+                <div class="framework-card">
+                    <p><strong>Best for:</strong> Expert-level content, authoritative responses, specialized knowledge</p>
+                    <p>Have the AI adopt a specific expert role with defined background and expertise.</p>
+                </div>
+
+                <div class="code-block">
+                    <button class="copy-btn" onclick="copyToClipboard(this)" aria-label="Copy role-based example">Copy</button>
+                    <pre><strong>Role-Based Example:</strong>
+
+"You are Dr. Sarah Chen, a learning disabilities specialist with 15 years of experience in higher education accessibility. You have particular expertise in supporting students with dyslexia, ADHD, and autism in STEM subjects.
+
+A colleague asks you: 'How can I make my biochemistry lectures more accessible for students with attention difficulties?'
+
+Respond as Dr. Chen would, drawing on your specific experience and providing practical, evidence-based recommendations."</pre>
+                </div>
+
+                <h3 id="clear-framework">5. CLEAR Framework</h3>
+                <div class="framework-card">
+                    <p><strong>Best for:</strong> Comprehensive lesson planning, detailed educational content</p>
+                    <ul>
+                        <li><strong>Context:</strong> Background and setting</li>
+                        <li><strong>Length:</strong> How much content you need</li>
+                        <li><strong>Examples:</strong> Include specific examples</li>
+                        <li><strong>Audience:</strong> Who is this for</li>
+                        <li><strong>Role:</strong> What role should AI adopt</li>
+                    </ul>
+                </div>
+
+                <div class="code-block">
+                    <button class="copy-btn" onclick="copyToClipboard(this)" aria-label="Copy CLEAR template">Copy</button>
+                    <pre><strong>CLEAR Template:</strong>
+
+<strong>Context:</strong> [Course, topic, learning objectives]
+<strong>Length:</strong> [Duration/word count needed]
+<strong>Examples:</strong> [Include/reference specific examples needed]
+<strong>Audience:</strong> [Student demographics, level, needs]
+<strong>Role:</strong> [What expertise should AI demonstrate]</pre>
+                </div>
+
+                <div class="textarea-container">
+                    <label for="framework-practice">🛠️ Framework Practice Space</label>
+                    <textarea
+                        id="framework-practice"
+                        placeholder="Try creating a prompt using one of the frameworks above. Start with P-T-C-F for your first attempt..."
+                        aria-describedby="framework-status"
+                    ></textarea>
+                    <div id="framework-status" class="status" aria-live="polite"></div>
+                </div>
+
+                <div class="alert alert-info">
+                    <strong>🚀 Ready for Advanced Techniques?</strong> 
+                    <p>These frameworks are just the beginning! For deeper exploration of prompt engineering, including advanced techniques like prompt chaining, conditional logic, and specialized academic applications, check out our <a href="../Automation/workshop_2_workbook.html">Advanced Prompting Workshop</a>.</p>
+                </div>
+            </div>
+
+            <!-- Tab 3: Inclusive Design -->
+            <div id="inclusive" class="tab-panel" role="tabpanel" aria-labelledby="inclusive-tab" aria-hidden="true">
+                <h2>Inclusive Design with AI</h2>
+                
+                <p>When we design educational content and experiences, we can either build barriers or remove them. GenAI gives us powerful tools to create inclusive learning environments from the start.</p>
+
+                <h3 id="udl-meets-ai">Universal Design for Learning Meets AI</h3>
+                <p>Universal Design for Learning (UDL) is built on three core principles that align perfectly with GenAI capabilities:</p>
+
+                <table role="table">
+                    <caption class="sr-only">UDL Principles and GenAI Applications</caption>
+                    <thead>
+                        <tr>
+                            <th scope="col">UDL Principle</th>
+                            <th scope="col">How GenAI Helps</th>
+                            <th scope="col">Example Applications</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Multiple Means of Engagement</strong><br><em>The "why" of learning</em></td>
+                            <td>Generate diverse examples, cultural contexts, and personal relevance connections</td>
+                            <td>Create examples from different cultural backgrounds, career applications, personal interest connections</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Multiple Means of Representation</strong><br><em>The "what" of learning</em></td>
+                            <td>Transform content into multiple formats, languages, and complexity levels</td>
+                            <td>Convert text to lists, create analogies, simplify language, add visual descriptions</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Multiple Means of Action/Expression</strong><br><em>The "how" of learning</em></td>
+                            <td>Design varied assessment formats and provide scaffolding options</td>
+                            <td>Create alternatives to essays, design rubrics, provide templates and frameworks</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="activity-box">
+                    <h4>🎯 UDL-Focused Prompt Template</h4>
+                    <div class="code-block">
+                        <button class="copy-btn" onclick="copyToClipboard(this)" aria-label="Copy UDL prompt template">Copy</button>
+                        <pre>Create [content/activity] that follows Universal Design for Learning principles:
+
+<strong>Topic:</strong> [Your subject matter]
+<strong>Audience:</strong> [Student demographics and needs]
+
+<strong>Multiple Engagement:</strong> Include diverse examples and cultural connections
+<strong>Multiple Representations:</strong> Provide content in [visual/text/audio/etc.] formats  
+<strong>Multiple Expressions:</strong> Offer [variety of ways students can demonstrate learning]
+
+<strong>Accessibility Requirements:</strong>
+- Language level: [appropriate for audience]
+- Visual descriptions: [for any graphics/diagrams]
+- Cultural sensitivity: [acknowledge diverse backgrounds]
+- Cognitive load: [appropriate complexity and scaffolding]</pre>
+                    </div>
+                </div>
+
+                <h3 id="accessibility-considerations">Web Content Accessibility Guidelines (WCAG)</h3>
+                <p>When creating digital educational content, we follow WCAG 2.1 AA standards. GenAI can help implement these principles:</p>
+
+                <div class="framework-grid">
+                    <div class="framework-card">
+                        <h4>🔤 Perceivable</h4>
+                        <p><strong>Information must be presentable in ways users can perceive</strong></p>
+                        <ul>
+                            <li>Alternative text for images</li>
+                            <li>Captions for videos</li>
+                            <li>High color contrast</li>
+                            <li>Resizable text</li>
+                        </ul>
+                    </div>
+
+                    <div class="framework-card">
+                        <h4>🖱️ Operable</h4>
+                        <p><strong>Interface components must be operable by all users</strong></p>
+                        <ul>
+                            <li>Keyboard navigation</li>
+                            <li>No seizure-inducing flashing</li>
+                            <li>Sufficient time for tasks</li>
+                            <li>Clear navigation</li>
+                        </ul>
+                    </div>
+
+                    <div class="framework-card">
+                        <h4>🧠 Understandable</h4>
+                        <p><strong>Information and UI operation must be understandable</strong></p>
+                        <ul>
+                            <li>Clear, simple language</li>
+                            <li>Predictable functionality</li>
+                            <li>Input assistance and error prevention</li>
+                            <li>Consistent terminology</li>
+                        </ul>
+                    </div>
+
+                    <div class="framework-card">
+                        <h4>💪 Robust</h4>
+                        <p><strong>Content must be robust enough for assistive technologies</strong></p>
+                        <ul>
+                            <li>Valid HTML markup</li>
+                            <li>Compatible with screen readers</li>
+                            <li>Semantic structure</li>
+                            <li>ARIA labels where needed</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="alert alert-info">
+                    <strong>📖 WCAG Evolution:</strong> 
+                    <ul>
+                        <li><strong>WCAG 2.0 (2008):</strong> Established core accessibility principles</li>
+                        <li><strong>WCAG 2.1 (2018):</strong> Added mobile accessibility and cognitive support - <em>current standard</em></li>
+                        <li><strong>WCAG 3.0 (in development):</strong> Will include better testing methods and broader disability coverage</li>
+                    </ul>
+                    <p>For now, focus on WCAG 2.1 AA compliance, which is the legal standard in the UK under the Equality Act 2010.</p>
+                </div>
+
+                <h3 id="designing-for-all">Designing for All Learners</h3>
+                
+                <h4>Inclusive Prompting Strategies</h4>
+                <p>When creating prompts, build inclusion into your requests:</p>
+
+                <div class="code-block">
+                    <button class="copy-btn" onclick="copyToClipboard(this)" aria-label="Copy inclusive assessment prompt">Copy</button>
+                    <pre><strong>Inclusive Assessment Design Prompt:</strong>
+
+Create an assessment for [topic] that provides multiple ways for students to demonstrate their learning:
+
+<strong>Learning Outcomes:</strong> [List specific outcomes]
+<strong>Student Needs:</strong> Consider students who may have:
+- Different language backgrounds (EAL learners)
+- Learning differences (dyslexia, ADHD, autism)
+- Varied cultural experiences and perspectives
+- Different confidence levels with written expression
+
+<strong>Assessment Options:</strong> Provide at least 3 different formats:
+1. [Traditional format, e.g., written report]
+2. [Visual/multimedia option, e.g., infographic + presentation]
+3. [Interactive/practical option, e.g., demonstration + reflection]
+
+<strong>Success Criteria:</strong> Ensure each option allows students to show the same depth of understanding through different means.
+
+<strong>Support Materials:</strong> Include templates, rubrics, and examples for each format.</pre>
+                </div>
+
+                <div class="code-block">
+                    <button class="copy-btn" onclick="copyToClipboard(this)" aria-label="Copy language inclusive prompt">Copy</button>
+                    <pre><strong>Language-Inclusive Content Creation:</strong>
+
+Transform this content to be more accessible for English as Additional Language (EAL) learners:
+
+[PASTE YOUR CONTENT]
+
+<strong>Requirements:</strong>
+- Simplify complex sentences without losing meaning
+- Define technical terms clearly
+- Provide cultural context for UK-specific references
+- Use active voice where possible
+- Include transition words and clear signposting
+- Add examples that connect to diverse cultural experiences
+- Suggest visual aids or diagrams to support understanding
+
+<strong>Output:</strong> Provide the revised content plus a glossary of key terms.</pre>
+                </div>
+
+                <div class="textarea-container">
+                    <label for="inclusive-design-notes">♿ Your Inclusive Design Ideas</label>
+                    <textarea
+                        id="inclusive-design-notes"
+                        placeholder="What barriers might exist in your teaching context? How could AI help you design more inclusive learning experiences?"
+                        aria-describedby="inclusive-status"
+                    ></textarea>
+                    <div id="inclusive-status" class="status" aria-live="polite"></div>
+                </div>
+
+                <div class="alert alert-info">
+                    <strong>🌟 Deep Dive into Inclusive Teaching:</strong> 
+                    <p>Ready to explore specific strategies for accessibility audits, EAL support, and inclusive assessment design? Check out our comprehensive <a href="../L&T_Conference_workshop_Nottingham/Inclusive_LearningTeaching/Inclusive_Teaching.html">Inclusive Teaching with GenAI Workshop</a> for practical tools and detailed guidance.</p>
+                </div>
+
+                <h4>The Anticipatory Duty</h4>
+                <div class="activity-box">
+                    <h4>💡 Key Principle: Design for the Margins</h4>
+                    <p>When we design for students who need the most support—those with learning differences, language barriers, or other challenges—we create solutions that benefit <em>everyone</em>.</p>
+                    <ul>
+                        <li><strong>Clear structure</strong> helps all students navigate content</li>
+                        <li><strong>Multiple formats</strong> give everyone options to play to their strengths</li>
+                        <li><strong>Simple language</strong> improves comprehension for all readers</li>
+                        <li><strong>Cultural examples</strong> create a more welcoming learning environment</li>
+                    </ul>
+                    <p><strong>Result:</strong> Instead of retrofitting accessibility, we build inclusive experiences from the start.</p>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <footer role="contentinfo">
+        <div class="footer-content">
+            <p>&copy; 2026 Augmented Academia | <a href="mailto:contact@augmented-academia.com">Contact</a> | <a href="../index.html">Main Site</a></p>
+            <p>This work is licensed under <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a> - feel free to adapt and share!</p>
+            <p><small>Built with accessibility in mind | WCAG 2.1 AA Compliant</small></p>
+        </div>
+    </footer>
+
+    <script>
+        // Tab switching functionality
+        function switchTab(event, tabName) {
+            // Hide all tab panels
+            const panels = document.querySelectorAll('.tab-panel');
+            panels.forEach(panel => {
+                panel.classList.remove('active');
+                panel.setAttribute('aria-hidden', 'true');
+            });
+
+            // Remove active class from all tab buttons
+            const buttons = document.querySelectorAll('.tab-btn');
+            buttons.forEach(btn => {
+                btn.classList.remove('active');
+                btn.setAttribute('aria-selected', 'false');
+            });
+
+            // Show selected panel
+            const selectedPanel = document.getElementById(tabName);
+            selectedPanel.classList.add('active');
+            selectedPanel.setAttribute('aria-hidden', 'false');
+
+            // Activate clicked button
+            event.target.classList.add('active');
+            event.target.setAttribute('aria-selected', 'true');
+
+            // Update sidebar navigation
+            updateSidebar();
+        }
+
+        // Copy to clipboard functionality
+        function copyToClipboard(button) {
+            const codeBlock = button.parentElement.querySelector('pre');
+            const text = codeBlock.textContent;
+
+            navigator.clipboard.writeText(text).then(function() {
+                const originalText = button.textContent;
+                button.textContent = 'Copied!';
+                button.style.background = '#27ae60';
+                
+                setTimeout(() => {
+                    button.textContent = originalText;
+                    button.style.background = '';
+                }, 2000);
+            }).catch(function() {
+                // Fallback for browsers that don't support clipboard API
+                const textArea = document.createElement('textarea');
+                textArea.value = text;
+                document.body.appendChild(textArea);
+                textArea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textArea);
+                
+                button.textContent = 'Copied!';
+                setTimeout(() => {
+                    button.textContent = 'Copy';
+                }, 2000);
+            });
+        }
+
+        // Auto-save functionality for textareas
+        function setupAutoSave() {
+            const textareas = document.querySelectorAll('textarea');
+            
+            textareas.forEach(textarea => {
+                const key = `genai_basics_${textarea.id}`;
+                
+                // Load saved content
+                const saved = localStorage.getItem(key);
+                if (saved) {
+                    textarea.value = saved;
+                }
+                
+                // Auto-save on input
+                textarea.addEventListener('input', function() {
+                    localStorage.setItem(key, this.value);
+                    const statusId = this.getAttribute('aria-describedby');
+                    if (statusId) {
+                        const statusDiv = document.getElementById(statusId);
+                        if (statusDiv) {
+                            statusDiv.textContent = 'Notes saved automatically';
+                            statusDiv.className = 'status success';
+                        }
+                    }
+                });
+            });
+        }
+
+        // Update sidebar navigation based on active tab
+        function updateSidebar() {
+            const activePanel = document.querySelector('.tab-panel.active');
+            const headings = activePanel.querySelectorAll('h3[id], h4[id]');
+            const sidebarNav = document.getElementById('sidebar-nav');
+            
+            sidebarNav.innerHTML = '';
+            
+            headings.forEach(heading => {
+                const li = document.createElement('li');
+                li.setAttribute('role', 'listitem');
+                
+                const link = document.createElement('a');
+                link.href = '#' + heading.id;
+                link.textContent = heading.textContent;
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    heading.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    
+                    // Focus the heading for screen readers
+                    heading.setAttribute('tabindex', '-1');
+                    heading.focus();
+                });
+                
+                li.appendChild(link);
+                sidebarNav.appendChild(li);
+            });
+        }
+
+        // Initialize everything when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            setupAutoSave();
+            updateSidebar();
+            
+            // Set initial ARIA states
+            document.getElementById('fundamentals-tab').setAttribute('aria-selected', 'true');
+            document.getElementById('frameworks').setAttribute('aria-hidden', 'false');
+            const frameworksPanel = document.getElementById('frameworks');
+            const inclusivePanel = document.getElementById('inclusive');
+            if (frameworksPanel) frameworksPanel.setAttribute('aria-hidden', 'true');
+            if (inclusivePanel) inclusivePanel.setAttribute('aria-hidden', 'true');
+        });
+
+        // Keyboard navigation for tabs
+        document.addEventListener('keydown', function(e) {
+            if (e.target.classList.contains('tab-btn')) {
+                const tabs = Array.from(document.querySelectorAll('.tab-btn'));
+                const currentIndex = tabs.indexOf(e.target);
+                
+                let newIndex;
+                
+                if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+                    newIndex = currentIndex > 0 ? currentIndex - 1 : tabs.length - 1;
+                    e.preventDefault();
+                } else if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
+                    newIndex = currentIndex < tabs.length - 1 ? currentIndex + 1 : 0;
+                    e.preventDefault();
+                }
+                
+                if (newIndex !== undefined) {
+                    tabs[newIndex].focus();
+                }
+                
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    e.target.click();
+                }
+            }
+        });
+    </script>
+</body>
+</html>
